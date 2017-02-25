@@ -1,0 +1,592 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+  <link href="/css/styles.css" rel="stylesheet" type="text/css"></link>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+  <link rel="shortcut icon" href="/cse382/img/favicon2.ico" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>19: compression / encoding</h1>
+          Binary Files | Run-length Encoding | Huffman Coding<br />
+          Ziv-Lempel Code | DEFLATE | Base64 Encoding | Checksums<br />
+          <br />
+        </div>
+        <div class="section">
+        <h2>Binary Files</h2>
+        The basic types of files are binary files and text files.<br />
+        <br />
+        Text File I/O in C++:
+        <div class="code_block">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// text_io.cpp - download <a href="/ads/index.php/dlcode/index/text_io.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">fstream&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">main(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">argc,&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">argv[</div><div class="code_nothing">]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">ofstream&nbsp;</div><div class="code_nothing">fout(</div><div class="code_string">"output.txt"</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">fout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"hello&nbsp;world"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">fout.close(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//output.txt&nbsp;has:</div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//hello&nbsp;world</div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//or&nbsp;using&nbsp;a&nbsp;hex&nbsp;editor</div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//68&nbsp;65&nbsp;6C&nbsp;6C&nbsp;6F&nbsp;20&nbsp;77&nbsp;6F&nbsp;72&nbsp;6C&nbsp;64&nbsp;0A</div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+        Binary File I/O in C++:
+        <div class="code_block">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// binary_io.cpp - download <a href="/ads/index.php/dlcode/index/binary_io.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">fstream&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">main(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">argc,&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">argv[</div><div class="code_nothing">]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">ofstream&nbsp;</div><div class="code_nothing">fout(</div><div class="code_string">"output.bin"</div><div class="code_nothing">,&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">ios:</div><div class="code_nothing">:</div><div class="code_nothing">binary)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">4]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">4;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">fout.write(</div><div class="code_nothing">(</div><div class="code_green">const</div><div class="code_nothing">&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*)</div><div class="code_nothing">array,&nbsp;</div><div class="code_nothing">sizeof(</div><div class="code_green">int</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">4)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">fout.close(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//output.bin&nbsp;has:</div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//</div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//or&nbsp;viewing&nbsp;using&nbsp;a&nbsp;hex&nbsp;editor</div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//01&nbsp;00&nbsp;00&nbsp;00&nbsp;02&nbsp;00&nbsp;00&nbsp;00&nbsp;03&nbsp;00&nbsp;00&nbsp;00&nbsp;04&nbsp;00&nbsp;00&nbsp;00</div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+        <h2>Binary Techniques</h2>
+        <div class="code_block">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// binary_techniques.cpp - download <a href="/ads/index.php/dlcode/index/binary_techniques.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">main(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">argc,&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">argv[</div><div class="code_nothing">]</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">num&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0x12345670;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">num&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0x0000ffff;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//num&nbsp;now&nbsp;is&nbsp;equal&nbsp;to&nbsp;0x00005670</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">num&nbsp;</div><div class="code_nothing">|=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//num&nbsp;now&nbsp;is&nbsp;equal&nbsp;to&nbsp;0x00005671</div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">num&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">4&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">4)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//num&nbsp;now&nbsp;is&nbsp;equal&nbsp;to&nbsp;0x56710000</div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+        </div>
+        <div class="section">
+        <h2>Run-length Encoding</h2>
+        Run-length encoding encodes runs of the same character as a length and the character:
+        <ul>
+          <li>AAAABBBB can be compressed as 4A4B</li>
+        </ul>
+        Encoding using a binary format is a way to make sure you never accidentally get confused
+        <ul>
+          <li>For instance, 11111111111544444 = 1111554 (11 one's, 1 five and 5 fours)</li>
+        </ul>
+        Or you can have a table at the beginning that stores fixed length sizes 
+        <ul>
+          <li>For instance, 11111111111544444 = 011001005-154 (11 one's, 1 five and 5 fours)</li>
+        </ul>
+        </div>
+        <div class="section">
+        <h2>Huffman Coding</h2>
+        Huffman Coding was invented by David Huffman while a PhD student at MIT in 1952 [1]. It is a variable length coding. The algorithm is as follows:
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">huffman(</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">symbol&nbsp;</div><div class="code_nothing">create&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">tree&nbsp;</div><div class="code_nothing">with&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">single&nbsp;</div><div class="code_nothing">root&nbsp;</div><div class="code_nothing">node&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">order&nbsp;</div><div class="code_nothing">all</div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">trees&nbsp;</div><div class="code_nothing">according&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">probability&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">symbol&nbsp;</div><div class="code_nothing">occurance;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">more&nbsp;</div><div class="code_nothing">than&nbsp;</div><div class="code_nothing">one&nbsp;</div><div class="code_nothing">tree&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">left</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">take&nbsp;</div><div class="code_nothing">two&nbsp;</div><div class="code_nothing">trees,&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">t_1&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">t_2)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">with&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">lowest&nbsp;</div><div class="code_nothing">probabilities&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">p_1&nbsp;</div><div class="code_nothing"><=&nbsp;</div><div class="code_nothing">p_2)</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">create&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">new_tree&nbsp;</div><div class="code_nothing">with&nbsp;</div><div class="code_nothing">t_1&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">t_2&nbsp;</div><div class="code_nothing">as&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">children&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">then&nbsp;</div><div class="code_nothing">with</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">new_root&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">probability&nbsp;</div><div class="code_nothing">p_1&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">p_2;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><b>associate</b>&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">with&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">left&nbsp;</div><div class="code_nothing">branch&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">1&nbsp;</div><div class="code_nothing">with&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">right&nbsp;</div><div class="code_nothing">branch;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><b>create</b>&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">unique&nbsp;</div><div class="code_nothing">codeword&nbsp;</div><div class="code_nothing">for_each&nbsp;</div><div class="code_nothing">symbol&nbsp;</div><div class="code_nothing">by&nbsp;</div><div class="code_nothing">traversing&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">tree&nbsp;</div><div class="code_nothing">from&nbsp;</div><div class="code_nothing">the</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">root&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">leaf;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br />        </div>
+        The basic Huffman Coding algorithm needs to know the probability that each input symbol will occur. English language letters have a certain probability, so this can be hard
+        coded. Or you can calculate the probability for a certain file and transmit a table
+        with the file.<br />
+        <br />
+        Example from [5]:
+        <ul>
+          <li>Start:<br />
+            <img src="/ads/img/pict/HuffmanTree_0.bmp" alt="HuffmanTree" />
+          </li>
+          <li>Link D and E:<br />
+            <img src="/ads/img/pict/HuffmanTree_1.bmp" alt="HuffmanTree" />
+          </li>
+          <li>Link D/E and C:<br />
+            <img src="/ads/img/pict/HuffmanTree_2.bmp" alt="HuffmanTree" />
+          </li>
+          <li>Link A and B:<br />
+            <img src="/ads/img/pict/HuffmanTree_3.bmp" alt="HuffmanTree" />
+          </li>
+          <li>Link C/D/E and A/B:<br />
+            <img src="/ads/img/pict/HuffmanTree_4.bmp" alt="HuffmanTree" />
+          </li>
+          <li>Letter left nodes 0 and right nodes 1:<br />
+            <img src="/ads/img/pict/HuffmanTree_5.bmp" alt="HuffmanTree" />
+          </li>
+        </ul>
+        <br />
+        Example of compressing TTTTTSSRQP with huffman:<br />
+        <br />
+        <table class="nice_table">
+          <tr class="grey">
+            <td width="100px">Letter</td>
+            <td width="100px">Code</td>
+          </tr>
+          <tr>
+            <td>T</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>S</td>
+            <td>01</td>
+          </tr>
+          <tr>
+            <td>P</td>
+            <td>001</td>
+          </tr>
+          <tr>
+            <td>Q</td>
+            <td>0001</td>
+          </tr>
+          <tr>
+            <td>R</td>
+            <td>0000</td>
+          </tr>
+        </table>
+        <br />
+        Bytes: 11111010 10000000 1001---- (3 bytes)<br />
+        <br />
+        The same thing with run-length:<br />
+        Characters: 5T2S1R1Q1P<br />
+        <br />
+        Bytes: 00000101 01010100 00000010 01010011 00000001 01010010 00000001 01010001 00000001 01010000<br />
+        <br />
+        Basic run-length takes 10 bytes (the original was 10 bytes).<br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>Ziv-Lempel Code</h2>
+        LZ77 is a method that keeps two buffers of characters, one of things that have been sent and one of things that need to be sent.
+        <ol>
+          <li>First the buffer is initialized to contain 8 copies of the first letter (buffer size is 8). Then the first character is sent and the number of duplicates.
+            <table class="nice_table">
+              <tr bgcolor="e5e5e5">
+                <td width="200px"><b>Input</b></td>
+                <td width="200px"><b>Next Buffer</b></td>
+                <td width="200px"><b>Code Transmitted</b></td>
+              </tr>
+              <tr>
+                <td>aababacbaac</td>
+                <td>aaaa aaaa</td>
+                <td>2a</td>
+              </tr>
+            </table>
+            <br />
+          </li>
+          <li>Then a triple is sent &lt;0, 0, b&gt; representing the position in the buffer that a match was found, the length of the match, and the first character mismatching.    
+            <table class="nice_table">
+              <tr bgcolor="e5e5e5">
+                <td width="200px"><b>Input</b></td>
+                <td width="200px"><b>Next Buffer</b></td>
+                <td width="200px"><b>Code Transmitted</b></td>
+              </tr>
+              <tr>
+                <td>babacbaac</td>
+                <td>aaaa aaab</td>
+                <td>00b</td>
+              </tr>
+            </table>
+            <br />
+          </li>
+          <li>Then starting at position 1, there is a two character match followed by an a.
+            <table class="nice_table">
+              <tr bgcolor="e5e5e5">
+                <td width="200px"><b>Input</b></td>
+                <td width="200px"><b>Next Buffer</b></td>
+                <td width="200px"><b>Code Transmitted</b></td>
+              </tr>
+              <tr>
+                <td>abacbaac</td>
+                <td>aaaa aaba</td>
+                <td>12a</td>
+              </tr>
+            </table>
+            <br />
+          </li>
+          <li>Then there is a zero character match of c
+            <table class="nice_table">
+              <tr bgcolor="e5e5e5">
+                <td width="200px"><b>Input</b></td>
+                <td width="200px"><b>Next Buffer</b></td>
+                <td width="200px"><b>Code Transmitted</b></td>
+              </tr>
+              <tr>
+                <td>cbaac</td>
+                <td>aaaa abac</td>
+                <td>00c</td>
+              </tr>
+            </table>
+            <br />
+          </li>
+          <li>Then there is a two character match starting at position 2, followed by an a.
+            <table class="nice_table">
+              <tr bgcolor="e5e5e5">
+                <td width="200px"><b>Input</b></td>
+                <td width="200px"><b>Next Buffer</b></td>
+                <td width="200px"><b>Code Transmitted</b></td>
+              </tr>
+              <tr>
+                <td>baac</td>
+                <td>aaba cbaa</td>
+                <td>22a</td>
+              </tr>
+            </table>
+            <br />
+          </li>
+          <li>Then there is one character match at 3, followed by a terminate.
+            <table class="nice_table">
+              <tr bgcolor="e5e5e5">
+                <td width="200px"><b>Input</b></td>
+                <td width="200px"><b>Next Buffer</b></td>
+                <td width="200px"><b>Code Transmitted</b></td>
+              </tr>
+              <tr>
+                <td>c</td>
+                <td>abac baac</td>
+                <td>31-</td>
+              </tr>
+            </table>
+            <br />
+          </li>
+        </ol>
+        <h3>LZW method</h3>
+        Compression:
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">LZWCompress(</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">enter&nbsp;</div><div class="code_nothing">all&nbsp;</div><div class="code_nothing">letters&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">table;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">initialize&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">s&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">first&nbsp;</div><div class="code_nothing">letter&nbsp;</div><div class="code_nothing">form&nbsp;</div><div class="code_nothing">input;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">any&nbsp;</div><div class="code_nothing">input&nbsp;</div><div class="code_nothing">left</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">read&nbsp;</div><div class="code_nothing">character&nbsp;</div><div class="code_nothing">c;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">s+c&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">table</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">s&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">s+c</div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">output&nbsp;</div><div class="code_nothing">codeword(</div><div class="code_nothing">s)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">enter&nbsp;</div><div class="code_nothing">s+c&nbsp;</div><div class="code_nothing">into&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">table;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">s&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">c;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">output&nbsp;</div><div class="code_nothing">codeword(</div><div class="code_nothing">s)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br />        </div>
+        Decompression:
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">LZWdecompress(</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">enter&nbsp;</div><div class="code_nothing">all&nbsp;</div><div class="code_nothing">letters&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">table;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">read&nbsp;</div><div class="code_nothing">prior_code_word&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">output&nbsp;</div><div class="code_nothing">one&nbsp;</div><div class="code_nothing">character&nbsp;</div><div class="code_nothing">corresponding&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">it;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">codewords&nbsp;</div><div class="code_nothing">are&nbsp;</div><div class="code_nothing">left</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">read&nbsp;</div><div class="code_nothing">codeword;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">codeword&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">table</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">enter&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">table&nbsp;</div><div class="code_nothing">string(</div><div class="code_nothing">prior_code_word)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">firstchar(</div><div class="code_nothing">string(</div><div class="code_nothing">prior_code_word)</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">output&nbsp;</div><div class="code_nothing">string(</div><div class="code_nothing">prior_code_word)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">firstchar(</div><div class="code_nothing">string(</div><div class="code_nothing">prior_code_word)</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">enter&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">table&nbsp;</div><div class="code_nothing">string(</div><div class="code_nothing">prior_code_word)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">firstchar(</div><div class="code_nothing">string(</div><div class="code_nothing">codeword)</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">output&nbsp;</div><div class="code_nothing">string(</div><div class="code_nothing">codeword)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">prior_code_word&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">codeword;</div><div class="code_nothing"></div><br />        </div>
+        Output of compression:
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_nothing">compressing:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">aababacbaac</div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">match:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_red">for</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">a</div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">adding&nbsp;</div><div class="code_nothing">symbol:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">aa&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">26</div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">match:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_red">for</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">a</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">adding&nbsp;</div><div class="code_nothing">symbol:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ab&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">27</div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">match:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1&nbsp;</div><div class="code_red">for</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">b</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">adding&nbsp;</div><div class="code_nothing">symbol:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ba&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">28</div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">match:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">27&nbsp;</div><div class="code_red">for</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ab</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">adding&nbsp;</div><div class="code_nothing">symbol:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">aba&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">29</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">match:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_red">for</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">a</div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">adding&nbsp;</div><div class="code_nothing">symbol:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ac&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">30</div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">match:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">2&nbsp;</div><div class="code_red">for</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">c</div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">adding&nbsp;</div><div class="code_nothing">symbol:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">cb&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">31</div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">match:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">28&nbsp;</div><div class="code_red">for</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ba</div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">adding&nbsp;</div><div class="code_nothing">symbol:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">baa&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">32</div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">match:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">30&nbsp;</div><div class="code_red">for</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ac</div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">adding&nbsp;</div><div class="code_nothing">symbol:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ac&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">33</div><br />        </div>
+        </div>
+        <div class="section">
+        <h2>DEFLATE [6]</h2>
+        One of the most popular file compression algorithms is DEFLATE.<br />
+        <br />
+        Each block is one of three formats:<br />
+        <br />
+        <table class="nice_table">
+          <tr class="grey">
+            <td>Header Identifier</td>
+            <td>Description</td>
+          </tr>
+          <tr>
+            <td>00</td>
+            <td>Raw bytes</td>
+          </tr>
+          <tr>
+            <td>01</td>
+            <td>Huffman Compressed Block with pre-agreed table</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>Huffman Compressed Block with table given</td>
+          </tr>
+        </table>
+        <br />
+        Once the block is made, LZ77 compression is used to remove repeated duplicates in the block.<br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>Base64-encoding</h2>
+        Base64-encoding is not a compression, but an encoding that lets you transfer binary
+        data over a text channel.<br />
+        <ul>
+          <li>Original Text: <br />
+            <br />
+            Items can be inserted in the middle of a singly linked list without moving all the remaining elements over.<br />
+            <br />
+          </li>
+          <li>Base64 Encoded: <br />
+            <br />
+        SXRlbXMgY2FuIGJlIGluc2VydGVkIGluIHRoZSBtaWRkbGUgb2YgYSBzaW5nbHkgbGlua2VkIGxp
+        c3Qgd2l0aG91dCBtb3ZpbmcgYWxsIHRoZSByZW1haW5pbmcgZWxlbWVudHMgb3Zlci4=
+          </li>
+        </ul>
+        A byte stream is encoded by grouping together tokens as 6 bits and then translated to base64 using a lookup table.<br />
+        <br />
+        Padding characters of '=' are added if the last group does not have 3 input characters.<br />
+        <br />
+        <table class="nice_table">
+          <tr bgcolor="e5e5e5">
+            <td width="200px" bgcolor="efefef">
+              Text Content
+            </td>
+            <td width="100px">I</td>
+            <td width="100px">t</td>
+            <td width="100px">e</td>
+            <td width="100px">m</td>
+            <td width="100px">s</td>
+            <td width="100px">(space)</td>
+          </tr>
+          <tr>
+            <td bgcolor="efefef">
+              ASCII
+            </td>
+            <td>73</td>
+            <td>116</td>
+            <td>101</td>
+            <td>109</td>
+            <td>115</td>
+            <td>32</td>
+          </tr>
+          <tr>
+            <td bgcolor="efefef">
+              Bit pattern
+            </td>
+            <td>0100 1001</td>
+            <td>0111 0100</td>
+            <td>0110 0101</td>
+            <td>0110 1101</td>
+            <td>0111 0011</td>
+            <td>0010 0000</td>
+          </tr>
+        </table>
+        <table class="nice_table">
+          <tr>
+            <td bgcolor="efefef" width="200px">
+              6bits per token 
+            </td>
+            <td width="71px">0100 10</td>
+            <td width="71px">01 0111</td>
+            <td width="71px">0100 01</td>
+            <td width="71px">10 0101</td>
+            <td width="71px">0110 11</td>
+            <td width="71px">01 0111</td>
+            <td width="71px">0011 00</td>
+            <td width="71px">10 0000</td>
+          </tr>
+          <tr>
+            <td bgcolor="efefef">
+              Index
+            </td>
+            <td>18</td>
+            <td>23</td>
+            <td>17</td>
+            <td>37</td>
+            <td>27</td>
+            <td>23</td>
+            <td>12</td>
+            <td>32</td>
+          </tr>
+          <tr>
+            <td bgcolor="efefef">
+              Base64-encoded
+            </td>
+            <td>S</td>
+            <td>X</td>
+            <td>R</td>
+            <td>l</td>
+            <td>b</td>
+            <td>X</td>
+            <td>M</td>
+            <td>g</td>
+          </tr>
+        </table>
+        <br />
+        Base64 index table (from wikipedia):
+        <table class="nice_table">
+        <tr bgcolor="e5e5e5">
+          <td><b>Value</b></td>
+          <td><b>Char</b></td>
+          <td><b>Value</b></td>
+          <td><b>Char</b></td>
+          <td><b>Value</b></td>
+          <td><b>Char</b></td>
+          <td><b>Value</b></td>
+          <td><b>Char</b></td>
+        </tr>
+        <tr>
+          <td>0</td>
+          <td>A</td>
+          <td>16</td>
+          <td>Q</td>
+          <td>32</td>
+          <td>g</td>
+          <td>48</td>
+          <td>w</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>B</td>
+          <td>17</td>
+          <td>R</td>
+          <td>33</td>
+          <td>h</td>
+          <td>49</td>
+          <td>x</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>C</td>
+          <td>18</td>
+          <td>S</td>
+          <td>34</td>
+          <td>i</td>
+          <td>50</td>
+          <td>y</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>D</td>
+          <td>19</td>
+          <td>T</td>
+          <td>35</td>
+          <td>j</td>
+          <td>51</td>
+          <td>z</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>E</td>
+          <td>20</td>
+          <td>U</td>
+          <td>36</td>
+          <td>k</td>
+          <td>52</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>F</td>
+          <td>21</td>
+          <td>V</td>
+          <td>37</td>
+          <td>l</td>
+          <td>53</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>G</td>
+          <td>22</td>
+          <td>W</td>
+          <td>38</td>
+          <td>m</td>
+          <td>54</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>H</td>
+          <td>23</td>
+          <td>X</td>
+          <td>39</td>
+          <td>n</td>
+          <td>55</td>
+          <td>3</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>I</td>
+          <td>24</td>
+          <td>Y</td>
+          <td>40</td>
+          <td>o</td>
+          <td>56</td>
+          <td>4</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>J</td>
+          <td>25</td>
+          <td>Z</td>
+          <td>41</td>
+          <td>p</td>
+          <td>57</td>
+          <td>5</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>K</td>
+          <td>26</td>
+          <td>a</td>
+          <td>42</td>
+          <td>q</td>
+          <td>58</td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>L</td>
+          <td>27</td>
+          <td>b</td>
+          <td>43</td>
+          <td>r</td>
+          <td>59</td>
+          <td>7</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>M</td>
+          <td>28</td>
+          <td>c</td>
+          <td>44</td>
+          <td>s</td>
+          <td>60</td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>N</td>
+          <td>29</td>
+          <td>d</td>
+          <td>45</td>
+          <td>t</td>
+          <td>61</td>
+          <td>9</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>O</td>
+          <td>30</td>
+          <td>e</td>
+          <td>46</td>
+          <td>u</td>
+          <td>62</td>
+          <td>+</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>P</td>
+          <td>31</td>
+          <td>f</td>
+          <td>47</td>
+          <td>v</td>
+          <td>63</td>
+          <td>/</td>
+        </tr>
+        </table>
+        <br />
+        Base64 is to transmit email attachments in the MIME specification (Multipurpose Internet Mail Extensions).<br />
+        <br />
+        It has many many other uses (for instance the grading server uses it to convert your binary formatted zip to Base64 to transmit over a text based socket to a server application in a virtual machine).<br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>Checksums</h2>
+        Checksums can be used to make sure a file or message transfered over the internet was no corrupted.<br />
+        <br />
+        The simplest way to compute a checksum is to let an integer overflow:<br />
+        <br />
+        <div class="code_block">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// checksumOverflow.cpp - download <a href="/ads/index.php/dlcode/index/checksumOverflow.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">iostream&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">fstream&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_green">void</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">computeChecksum(</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">filename)</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">checksum&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">prev_checksum&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rollovers&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">ifstream&nbsp;</div><div class="code_nothing">fin(</div><div class="code_nothing">filename.c_str(</div><div class="code_nothing">)</div><div class="code_nothing">,&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">ios:</div><div class="code_nothing">:</div><div class="code_nothing">binary)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">fin.good(</div><div class="code_nothing">)</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">c;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">fin.get(</div><div class="code_nothing">c)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">checksum&nbsp;</div><div class="code_nothing">+=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">c;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">checksum&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">prev_checksum)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rollovers++;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">prev_checksum&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">checksum;</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"checksum&nbsp;for&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">filename&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">":&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">checksum;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"&nbsp;("</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rollovers&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"&nbsp;rollovers)"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">main(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">argc,&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">argv[</div><div class="code_nothing">]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">computeChecksum(</div><div class="code_string">"output.bin"</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">computeChecksum(</div><div class="code_string">"output.txt"</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//prints:</div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//&nbsp;&nbsp;checksum&nbsp;for&nbsp;output.bin:&nbsp;10&nbsp;(0&nbsp;rollovers)</div><br /><div class="code_grey">32:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//&nbsp;&nbsp;checksum&nbsp;for&nbsp;output.txt:&nbsp;112&nbsp;(4&nbsp;rollovers)</div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+        <h2>Position dependent hashes</h2>
+        The MD5 and SHA-1 hashes are often used to ensure integrity when downloading a file or program. With these hashes, a small difference in the file produces a very large difference in the hashes (or checksums).<br />
+        <br />
+        A software publisher will display the hash for a file on a website, and after downloading, a user can verify the hash matches.<br />
+        <br />
+        Here are some MD5 hashes for ubuntu iso's<br />
+        <br />
+        <table class="nice_table">
+          <tr bgcolor="#e5e5e5">
+            <td>MD5 Hash</td>
+            <td>File</td>
+          </tr>
+          <tr>
+            <td>5e427f31e6b10315ada74094e8d5d483</td>
+            <td>ubuntu-11.10-alternate-amd64.iso</td>
+          </tr>
+          <tr>
+            <td>24da873c870d6a3dbfc17390dda52eb8</td>
+            <td>ubuntu-11.10-alternate-i386.iso</td>
+          </tr>
+          <tr>
+            <td>62fb5d750c30a27a26d01c5f3d8df459</td>
+            <td>ubuntu-11.10-desktop-amd64.iso</td>
+          </tr>
+          <tr>
+            <td>c396dd0f97bd122691bdb92d7e68fde5</td>
+            <td>ubuntu-11.10-desktop-i386.iso</td>
+          </tr>
+          <tr>
+            <td>f8a0112b7cb5dcd6d564dbe59f18c35f</td>
+            <td>ubuntu-11.10-server-amd64.iso</td>
+          </tr>
+          <tr>
+            <td>881d188cb1ca5fb18e3d9132275dceda</td>
+            <td>ubuntu-11.10-server-i386.iso</td>
+          </tr>
+        </table>
+        <br />
+        These can be checked with a program that recomputes the hash from what was downloaded.
+        <br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>References</h2>
+        <ol>
+          <li>http://en.wikipedia.org/wiki/Huffman_coding</li>
+          <li>http://en.wikipedia.org/wiki/Base64</li>
+          <li>http://www.motobit.com/util/base64-decoder-encoder.asp</li>
+          <li>https://help.ubuntu.com/community/UbuntuHashes</li>
+          <li>Adam Drozdek, "Data Structures and Algorithms in C++". Fourth Edition. Page 594.</li>
+          <li>http://en.wikipedia.org/wiki/DEFLATE</li>
+          <li>http://softsurfer.com/Archive/algorithm_0103/algorithm_0103.htm</li>
+        </ol>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

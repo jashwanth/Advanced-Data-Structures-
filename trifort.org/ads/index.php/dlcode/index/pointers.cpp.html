@@ -1,0 +1,53 @@
+<pre>#include &lt;iostream&gt;
+
+struct SingleNode {
+  SingleNode * m_next;
+  long long m_value;
+};
+
+void printAddrValues(SingleNode * node, long long addr, const char * title){
+  std::cout &lt;&lt; "=================================================" &lt;&lt; std::endl;
+  std::cout &lt;&lt; "= " &lt;&lt; title &lt;&lt; " addrs/values: " &lt;&lt; std::endl;
+  std::cout &lt;&lt; "=================================================" &lt;&lt; std::endl;
+  std::cout &lt;&lt; "addr(" &lt;&lt; title &lt;&lt; "): " &lt;&lt; std::hex &lt;&lt; addr &lt;&lt; std::endl;
+  std::cout &lt;&lt; "value(" &lt;&lt; title &lt;&lt; "): " &lt;&lt; std::hex &lt;&lt; node &lt;&lt; std::endl;
+  std::cout &lt;&lt; "addr(" &lt;&lt; title &lt;&lt; ".m_next): " &lt;&lt; std::hex &lt;&lt; &(node-&gt;m_next) &lt;&lt; std::endl;
+  std::cout &lt;&lt; "value(" &lt;&lt; title &lt;&lt; ".m_next): " &lt;&lt; std::hex &lt;&lt; node-&gt;m_next &lt;&lt; std::endl;
+  std::cout &lt;&lt; "addr(" &lt;&lt; title &lt;&lt; ".m_value): " &lt;&lt; std::hex &lt;&lt; &(node-&gt;m_value) &lt;&lt; std::endl;
+  std::cout &lt;&lt; "value(" &lt;&lt; title &lt;&lt; ".m_value): " &lt;&lt; std::hex &lt;&lt; node-&gt;m_value &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+}
+
+int main(int argc, char *argv[]){
+
+  std::cout &lt;&lt; "=================================================" &lt;&lt; std::endl;
+  std::cout &lt;&lt; "= sizes: " &lt;&lt; std::endl;
+  std::cout &lt;&lt; "=================================================" &lt;&lt; std::endl;
+  std::cout &lt;&lt; "sizeof(SingleNode): " &lt;&lt; sizeof(SingleNode) &lt;&lt; std::endl;
+  std::cout &lt;&lt; "sizeof(SingleNode *): " &lt;&lt; sizeof(SingleNode *) &lt;&lt; std::endl;
+  std::cout &lt;&lt; "sizeof(long long): " &lt;&lt; sizeof(long long) &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;
+
+  SingleNode * head = new SingleNode();
+  printAddrValues(head, (long long) &head, "head");
+
+  SingleNode * one = new SingleNode();
+  one-&gt;m_value = 1;
+
+  SingleNode * two = new SingleNode();
+  two-&gt;m_value = 2;
+  
+  SingleNode * three = new SingleNode();
+  three-&gt;m_value = 3;
+    
+  head-&gt;m_next = one;
+  one-&gt;m_next = two;
+  two-&gt;m_next = three;
+  printAddrValues(head, (long long) &head, "head");
+  printAddrValues(one, (long long) &one, "one");
+  printAddrValues(two, (long long) &two, "two");
+  printAddrValues(three, (long long) &three, "three");
+
+  return 0;
+}
+</pre>

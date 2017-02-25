@@ -1,0 +1,52 @@
+<pre>#include &lt;iostream&gt;
+
+class Account {
+public:
+  Account();
+  int getBalance();
+  void setBalance(int value);
+private:
+  int m_Balance;
+};
+
+Account::Account()
+ : m_Balance(100)
+{
+}
+
+int Account::getBalance()
+{
+  return m_Balance;
+}
+
+void Account::setBalance(int value)
+{
+  m_Balance = value;
+}
+
+int main(int argc, char * argv[])
+{
+
+  Account account;
+
+  //thread1:
+  int bal1 = account.getBalance();
+  bal1 += 20;
+
+  //thread2:
+  int bal2 = account.getBalance();
+  bal2 += 20;
+
+  //thread1:
+  account.setBalance(bal1);
+
+  //thread2:
+  account.setBalance(bal2);
+
+  std::cout &lt;&lt; "final balance: " &lt;&lt; account.getBalance() &lt;&lt; std::endl;
+  //prints:
+  //  final balance: 120
+
+  return 0;
+}
+</pre>

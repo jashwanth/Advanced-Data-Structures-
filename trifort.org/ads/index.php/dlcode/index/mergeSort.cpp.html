@@ -1,0 +1,75 @@
+<pre>#include &lt;iostream&gt;
+
+int * merge(int * left, int * right, int len){
+  int * ret = new int[len + len];
+  int left_position = 0;
+  int right_position = 0;
+  int ret_position = 0;
+  while(left_position &lt; len && right_position &lt; len){
+    int left_value = left[left_position];
+    int right_value = right[right_position];
+    if(left_value &lt; right_value){
+      ret[ret_position] = left_value;
+      ret_position++;
+      left_position++;
+    } else {
+      ret[ret_position] = right_value;
+      ret_position++;
+      right_position++;
+    }
+  }
+  while(left_position &lt; len){
+    ret[ret_position] = left[left_position];
+    ret_position++;
+    left_position++;
+  }
+  while(right_position &lt; len){
+    ret[ret_position] = right[right_position];
+    ret_position++;
+    right_position++;
+  }
+  return ret;
+}
+
+int * mergeSort(int * input, int len){
+  if(len == 1){
+    return input;
+  }
+  int middle = len / 2;
+  int * left = new int[middle];
+  int * right = new int[middle];
+  for(int i = 0; i &lt; middle; ++i){
+    left[i] = input[i];
+  }
+  for(int i = 0; i &lt; middle; ++i){
+    right[i] = input[i+middle];
+  }
+  left = mergeSort(left, middle);
+  right = mergeSort(right, middle);
+  int * ret = merge(left, right, middle);
+  delete [] left;
+  delete [] right;
+  return ret;
+}
+
+int main(int argc, char * argv[]){
+
+  int * array = new int[8];
+  array[0] = 8;
+  array[1] = 2;
+  array[2] = 4;
+  array[3] = 9;
+  array[4] = 3;
+  array[5] = 6;
+  array[6] = 10;
+  array[7] = 5;
+
+  int * sorted = mergeSort(array, 8);
+  for(int i = 0; i &lt; 8; ++i){
+    std::cout &lt;&lt; sorted[i] &lt;&lt; " ";
+  }
+  std::cout &lt;&lt; std::endl;
+
+  return 0;
+}
+</pre>

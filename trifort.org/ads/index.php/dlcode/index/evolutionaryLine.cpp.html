@@ -1,0 +1,163 @@
+<pre>#include &lt;vector&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstdlib&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+
+struct Seed {
+  int m;
+  int b;
+  int cost;
+
+  bool operator&lt;(const Seed& rhs) const;
+};
+
+bool Seed::operator&lt;(const Seed& rhs) const
+{
+  return cost &lt; rhs.cost;
+}
+
+struct Point {
+  int x;
+  int y;
+  Point(int x, int y);
+};
+
+Point::Point(int x, int y){
+  this-&gt;x = x;
+  this-&gt;y = y;
+}
+
+class EvolutionaryLine {
+public:
+  Seed solve(std::vector&lt;Point&gt; points);
+private:
+  void fixSeeds();
+  void initSeeds();
+  int calculateScore(Seed seed);
+  void mutate();
+  void calculateScores();
+  std::vector&lt;Point&gt; m_Points;
+  std::vector&lt;Seed&gt; m_Seeds;
+  int m_ConvergeCount;
+  Seed m_BestSeed;
+};
+
+int EvolutionaryLine::calculateScore(Seed seed){
+  int ret = 0;
+  for(size_t i = 0; i &lt; m_Points.size(); ++i){
+    Point curr = m_Points[i];
+    int y = (seed.m * curr.x) + seed.b;
+    int score = curr.y - y;
+    score *= score;
+    ret += score;
+  }
+  return ret;
+}
+
+Seed EvolutionaryLine::solve(std::vector&lt;Point&gt; points){
+  m_Points = points;
+  initSeeds();
+  while(m_BestSeed.cost &gt; 1){
+    std::cout &lt;&lt; "cost: " &lt;&lt; m_BestSeed.cost &lt;&lt; std::endl;
+    mutate();
+    calculateScores();
+  }
+  return m_BestSeed;
+}
+
+void EvolutionaryLine::fixSeeds(){
+  for(size_t i = 0; i &lt; m_Seeds.size(); ++i){
+    Seed curr = m_Seeds[i];
+    while(curr.m == 0){
+      curr.m += (rand() % 4) - 2;
+    }
+    m_Seeds[i] = curr;
+  }
+}
+
+void EvolutionaryLine::mutate(){
+  std::vector&lt;Seed&gt; new_seeds;
+  new_seeds.push_back(m_BestSeed);
+
+  for(int i = 0; i &lt; 10; ++i){
+    Seed curr = m_Seeds[i];
+    curr.m += (rand() % 4) - 2;
+    curr.b += (rand() % 4) - 2;
+    new_seeds.push_back(curr);
+  }
+
+  for(int i = 0; i &lt; 10; ++i){
+    Seed seed;
+    seed.m = (rand() % 10) - 5;
+    seed.b = (rand() % 10) - 5;
+    new_seeds.push_back(seed);
+  }
+
+  m_Seeds = new_seeds;
+  fixSeeds();
+}
+
+void EvolutionaryLine::calculateScores()
+{
+  for(size_t i = 0; i &lt; m_Seeds.size(); ++i){
+    Seed curr = m_Seeds[i];
+    curr.cost = calculateScore(curr);
+    m_Seeds[i] = curr;
+  }
+
+  sort(m_Seeds.begin(), m_Seeds.end());
+  Seed new_best = m_Seeds[0];
+  if(new_best.m == m_BestSeed.m && new_best.b == m_BestSeed.b){
+    m_ConvergeCount++;
+  } else {
+    m_ConvergeCount = 1;
+    m_BestSeed = new_best;
+  }
+}
+
+void EvolutionaryLine::initSeeds()
+{
+  srand(time(NULL));
+  for(int i = 0; i &lt; 10; ++i){
+    Seed seed;
+    seed.m = (rand() % 10) - 5;
+    seed.b = (rand() % 10) - 5;
+    m_Seeds.push_back(seed);
+  }
+  fixSeeds();
+  for(size_t i = 0; i &lt; m_Seeds.size(); ++i){
+    Seed curr = m_Seeds[i];
+    curr.cost = calculateScore(curr);
+    m_Seeds[i] = curr;
+  }
+  sort(m_Seeds.begin(), m_Seeds.end());
+  m_BestSeed = m_Seeds[0];
+  m_ConvergeCount = 1;
+}
+
+int main(int argc, char * argv[]){
+
+  std::vector&lt;Point&gt; points;
+  points.push_back(Point(1, 0));
+  points.push_back(Point(2, 1));
+  points.push_back(Point(3, 2));
+  points.push_back(Point(4, 3));
+  points.push_back(Point(5, 4));
+  points.push_back(Point(6, 5));
+  points.push_back(Point(8, 6));
+
+  EvolutionaryLine evoline;
+  Seed seed = evoline.solve(points);
+
+  std::cout &lt;&lt; "seed.m: " &lt;&lt; seed.m &lt;&lt; " seed.b: " &lt;&lt; seed.b &lt;&lt; std::endl;
+  //prints:
+  //  cost: 186
+  //  cost: 33
+  //  seed.m: 1 seed.b: -1
+
+  return 0;
+}
+</pre>

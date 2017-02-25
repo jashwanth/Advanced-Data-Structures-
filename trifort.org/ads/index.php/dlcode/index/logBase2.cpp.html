@@ -1,0 +1,21 @@
+<pre>#include &lt;iostream&gt;
+
+int logBase2(int n){
+  int ret = 0;
+  while(n &gt; 1){
+    n /= 2;
+    ret++;
+  }
+  return ret;
+}
+
+int main(int argc, char * argv[]){
+
+  for(int i = 0; i &lt;= 32; ++i){
+    int log2 = logBase2(i);
+    std::cout &lt;&lt; "the log base 2 of (" &lt;&lt; i &lt;&lt; ") = " &lt;&lt; log2 &lt;&lt; std::endl;
+  }
+
+  return 0;
+}
+</pre>

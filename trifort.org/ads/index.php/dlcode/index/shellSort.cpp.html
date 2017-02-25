@@ -1,0 +1,65 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+void insertionSort(int inc, int start, std::vector&lt;int&gt;& data){
+  for(int key_index = start; key_index &lt; data.size(); key_index += inc){
+    int key = data[key_index];
+    int other_index = key_index - inc;
+    while(other_index &gt;= 0 && data[other_index] &gt; key){
+      data[other_index + inc] = data[other_index];
+      other_index -= inc;
+    }
+    data[other_index + inc] = key;
+  }
+}
+
+void shellSort(std::vector&lt;int&gt;& data){
+  std::vector&lt;int&gt; increments;
+  //produce the h's
+  for(int h = 1; h &lt; data.size(); ){
+    increments.push_back(h);
+    h = (3 * h) + 1;
+  }
+  //loop over the different h's
+  for(int i = increments.size() - 1; i &gt;= 0; --i){
+    int h = increments[i];
+    //loop over the number of sub-arrays produced by the current h
+    for(int start = 0; start &lt;= h; ++start){
+      insertionSort(h, start, data);
+    }
+  }
+}
+
+int main(int argc, char * argv[]){
+
+  std::vector&lt;int&gt; array;
+  array.push_back(10);
+  array.push_back(5);
+  array.push_back(15);
+  array.push_back(7);
+  array.push_back(1);
+  array.push_back(6);
+  array.push_back(8);
+  array.push_back(3);
+  array.push_back(2);
+  array.push_back(4);
+  array.push_back(16);
+  array.push_back(12);
+  array.push_back(13);
+  array.push_back(11);
+  array.push_back(9);
+  array.push_back(14);
+  array.push_back(17);
+
+  shellSort(array);
+
+  for(size_t i = 0; i &lt; array.size(); ++i){
+    std::cout &lt;&lt; array[i] &lt;&lt; " ";
+  }
+  std::cout &lt;&lt; std::endl;
+  //prints: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
+
+  return 0;
+}
+
+</pre>

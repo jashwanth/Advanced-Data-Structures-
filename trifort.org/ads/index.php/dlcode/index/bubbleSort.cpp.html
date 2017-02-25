@@ -1,0 +1,13 @@
+<pre>void bubbleSort(int * array, int n){
+  for(int i = 0; i &lt; n; ++i){
+    for(int j = i + 1; j &lt; n; ++j){
+      int lhs = array[i];
+      int rhs = array[j];
+      if(rhs &lt; lhs){
+        array[i] = rhs;
+        array[j] = lhs;
+      }
+    }
+  }
+}
+</pre>

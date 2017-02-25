@@ -1,0 +1,20 @@
+<pre>#include &lt;stack&gt;
+#include &lt;iostream&gt;
+
+int main(int argc, char * argv[]){
+
+  std::stack&lt;int&gt; int_stack;
+  int_stack.push(1);
+  int_stack.push(2);
+
+  //in the std library top and pop are two seperate methods
+  std::cout &lt;&lt; int_stack.top() &lt;&lt; std::endl;
+  int_stack.pop();
+
+  int_stack.push(3);
+  int_stack.push(4);
+  int_stack.push(5);
+
+  return 0;
+}
+</pre>

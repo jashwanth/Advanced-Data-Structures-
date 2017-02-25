@@ -1,0 +1,94 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;pthread.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;cstdlib&gt;
+
+class Account {
+public:
+  Account(bool use_locking);
+  ~Account();
+  int getBalance();
+  void setBalance(int value);
+  void acquireLock();
+  void releaseLock();
+private:
+  int m_Balance;
+  pthread_mutex_t m_Mutex;
+  bool m_UseLocking;
+};
+
+Account::Account(bool use_locking)
+ : m_Balance(0), m_UseLocking(use_locking)
+{
+  pthread_mutex_init(&m_Mutex, NULL);
+}
+
+Account::~Account()
+{
+  pthread_mutex_destroy(&m_Mutex);
+}
+
+int Account::getBalance()
+{
+  return m_Balance;
+}
+
+void Account::setBalance(int value)
+{
+  m_Balance = value;
+}
+
+void Account::acquireLock()
+{
+  if(m_UseLocking){
+    pthread_mutex_lock(&m_Mutex);
+  }
+}
+
+void Account::releaseLock()
+{
+  if(m_UseLocking){
+    pthread_mutex_unlock(&m_Mutex);
+  }
+}
+
+void * threadProc(void * data){
+
+  Account * account = (Account *) data;
+  for(int i = 0; i &lt; 100000; ++i){
+    account-&gt;acquireLock();
+    int bal = account-&gt;getBalance();
+    bal += 20;
+    account-&gt;setBalance(bal);
+    account-&gt;releaseLock();
+  }
+}
+
+int main(int argc, char * argv[])
+{
+
+  const int num_threads = 2;
+  pthread_t threads1[num_threads];
+  pthread_t threads2[num_threads];
+  Account account1(true); 
+  Account account2(false);
+
+  for(int i = 0; i &lt; num_threads; ++i){
+    pthread_create(&threads1[i], NULL, &threadProc, &account1);
+    pthread_create(&threads2[i], NULL, &threadProc, &account2);
+  }
+
+  for(int i = 0; i &lt; num_threads; ++i){
+    pthread_join(threads1[i], NULL);
+    pthread_join(threads2[i], NULL);
+  }
+
+  std::cout &lt;&lt; "locked final balance: " &lt;&lt; account1.getBalance() &lt;&lt; std::endl;
+  std::cout &lt;&lt; "unlocked final balance: " &lt;&lt; account2.getBalance() &lt;&lt; std::endl;
+  //prints:
+  //  locked final balance: 4000000
+  //  unlocked final balance: 2583880
+
+  return 0;
+}
+</pre>

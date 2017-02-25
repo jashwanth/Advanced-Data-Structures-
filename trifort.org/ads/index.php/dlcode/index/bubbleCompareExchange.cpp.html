@@ -1,0 +1,39 @@
+<pre>#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+void compare_exchange(std::vector&lt;int&gt;& vec, int index1, int index2){
+  int lhs = vec[index1];
+  int rhs = vec[index2];
+  if(rhs &lt; lhs){
+    vec[index1] = rhs;
+    vec[index2] = lhs;
+  }
+}
+
+void bubble3(std::vector&lt;int&gt;& vec){
+  compare_exchange(vec, 0, 1);
+  compare_exchange(vec, 0, 2);
+  compare_exchange(vec, 1, 2);
+}
+
+int main(int argc, char * argv[]){
+
+  std::vector&lt;int&gt; to_sort;
+  to_sort.push_back(3);
+  to_sort.push_back(2);
+  to_sort.push_back(1);
+
+  bubble3(to_sort);
+
+  for(size_t i = 0; i &lt; to_sort.size(); ++i){
+    std::cout &lt;&lt; to_sort[i] &lt;&lt; std::endl;
+  }
+
+  //prints:
+  //  1
+  //  2
+  //  3
+
+  return 0;
+}
+</pre>

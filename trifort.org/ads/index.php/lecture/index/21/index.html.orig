@@ -1,0 +1,1071 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+  <link href="/css/styles.css" rel="stylesheet" type="text/css"></link>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+  <link rel="shortcut icon" href="/cse382/img/favicon2.ico" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>21: string matching #2</h1>
+          Spell Check | Matching Multiple Words | Regular Expression Matching | Ternary Search Tries<br />
+          Suffix Arrays | String Alignment | Burrows-Wheeler Transform | String Sorting<br />
+        </div>
+        <div class="section">
+        <h2>Trie Based Spell Check [4]</h2>
+        Dictionary contains words:
+        <ul>
+          <li>jewel</li>
+          <li>jeweler</li>
+          <li>jewels</li>
+          <li>jello</li>
+        </ul>
+        Seaching for corrections to word:
+        <ul>
+          <li>jewele</li>
+        </ul>
+        Build a trie data structure:<br />
+        <img src="/ads/img/pict/SpellCheck_0.bmp" alt="SpellCheck" />
+        <br />
+        <br />
+        Search algorithm:
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">findCorrections(</div><div class="code_nothing">TrieNode&nbsp;</div><div class="code_nothing">root,&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">word)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">doFind(</div><div class="code_nothing">root,&nbsp;</div><div class="code_nothing">word,&nbsp;</div><div class="code_nothing">1,&nbsp;</div><div class="code_nothing">word.size(</div><div class="code_nothing">)</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">doFind(</div><div class="code_nothing">TrieNode&nbsp;</div><div class="code_nothing">curr,&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">word,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">depth,&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">match_length,&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">path)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//if&nbsp;we&nbsp;found&nbsp;a&nbsp;match,&nbsp;add&nbsp;it&nbsp;to&nbsp;the&nbsp;output&nbsp;</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">has&nbsp;</div><div class="code_nothing">word&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">depth&nbsp;</div><div class="code_nothing">&gt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">word&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">within&nbsp;</div><div class="code_nothing">+/-&nbsp;</div><div class="code_nothing">1&nbsp;</div><div class="code_nothing">length&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">match_length)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">add&nbsp;</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">word&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">output;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//search&nbsp;with&nbsp;no&nbsp;change</div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">TrieNode&nbsp;</div><div class="code_nothing">child&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">curr->getChild(</div><div class="code_nothing">first&nbsp;</div><div class="code_nothing">character&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">word)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">child&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">NULL)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">doFind(</div><div class="code_nothing">child,&nbsp;</div><div class="code_nothing">word&nbsp;</div><div class="code_nothing">without&nbsp;</div><div class="code_nothing">first&nbsp;</div><div class="code_nothing">character,&nbsp;</div><div class="code_nothing">depth,&nbsp;</div><div class="code_nothing">match_length,&nbsp;</div><div class="code_nothing">path)</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//we&nbsp;have&nbsp;room&nbsp;to&nbsp;make&nbsp;some&nbsp;changes</div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">depth&nbsp;</div><div class="code_nothing">>=&nbsp;</div><div class="code_nothing">1)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//deletion</div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">deleted&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">word&nbsp;</div><div class="code_nothing">without&nbsp;</div><div class="code_nothing">first&nbsp;</div><div class="code_nothing">character;</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">TrieNode&nbsp;</div><div class="code_nothing">child&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">curr->getChild(</div><div class="code_nothing">first&nbsp;</div><div class="code_nothing">character&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">deleted)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">child&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">NULL)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">doFind(</div><div class="code_nothing">child,&nbsp;</div><div class="code_nothing">deleted,&nbsp;</div><div class="code_nothing">depth&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1,&nbsp;</div><div class="code_nothing">match_length&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1,&nbsp;</div><div class="code_nothing">path)</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">child&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">children)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//insertion</div><br /><div class="code_grey">32:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">doFind(</div><div class="code_nothing">child,&nbsp;</div><div class="code_nothing">word,&nbsp;</div><div class="code_nothing">depth&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1,&nbsp;</div><div class="code_nothing">match_length&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1,&nbsp;</div><div class="code_nothing">path)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//substitution</div><br /><div class="code_grey">35:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">doFind(</div><div class="code_nothing">child,&nbsp;</div><div class="code_nothing">deleted,&nbsp;</div><div class="code_nothing">depth&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1,&nbsp;</div><div class="code_nothing">match_length&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1,&nbsp;</div><div class="code_nothing">path)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">36:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">37:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">38:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">39:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+        Example:<br />
+        <table class="nice_table">
+          <tr bgcolor="#e5e5e5">
+            <td width="100px">curr</td>
+            <td width="100px">word</td>
+            <td width="100px">depth</td>
+            <td width="100px">prefix</td>
+            <td width="500px">description</td>
+          </tr>
+          <tr>
+            <td>j</td>
+            <td>jewele</td>
+            <td>1</td>
+            <td>&nbsp;</td>
+            <td>searching with no change</td>
+          </tr>
+          <tr>
+            <td>e</td>
+            <td>ewele</td>
+            <td>1</td>
+            <td>j</td>
+            <td>searching with no change</td>
+          </tr>
+          <tr>
+            <td>w</td>
+            <td>wele</td>
+            <td>1</td>
+            <td>je</td>
+            <td>searching with no change</td>
+          </tr>
+          <tr>
+            <td>e</td>
+            <td>ele</td>
+            <td>1</td>
+            <td>jew</td>
+            <td>searching with no change</td>
+          </tr>
+          <tr>
+            <td>l</td>
+            <td>le</td>
+            <td>1</td>
+            <td>jewe</td>
+            <td>found jewel. searching with no change</td>
+          </tr>
+          <tr>
+            <td>e</td>
+            <td>e</td>
+            <td>1</td>
+            <td>jewel</td>
+            <td>searching with no change</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>1</td>
+            <td>jewele</td>
+            <td>inserting r</td>
+          </tr>
+          <tr>
+            <td>r</td>
+            <td>r</td>
+            <td>0</td>
+            <td>jewele</td>
+            <td>found jeweler. returing from recursion.</td>
+          </tr>
+          <tr>
+            <td>e</td>
+            <td>e</td>
+            <td>1</td>
+            <td>jewel</td>
+            <td>inserting s</td>
+          </tr>
+          <tr>
+            <td>s</td>
+            <td>s</td>
+            <td>0</td>
+            <td>jewel</td>
+            <td>found jewels</td>
+          </tr>
+        </table>
+        </div>
+        <div class="section">
+        <h2>Matching Sets of Words</h2>
+        A trie is formed for the words:
+        <ul>
+          <li>inner</li>
+          <li>input</li>
+          <li>tint</li>
+        </ul>
+        <img src="/ads/img/pict/SetsOfWords_0.bmp" alt="SetsOfWords" />
+        <br />
+        <br />
+        AhoChorasick Algorithm:
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">AhoCorasick(</div><div class="code_nothing">set&nbsp;</div><div class="code_nothing">keywords,&nbsp;</div><div class="code_nothing">text&nbsp;</div><div class="code_nothing">T)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">computeGotoFunction(</div><div class="code_nothing">keywords,&nbsp;</div><div class="code_nothing">g,&nbsp;</div><div class="code_nothing">output)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">computeFailureFunction(</div><div class="code_nothing">g,&nbsp;</div><div class="code_nothing">output,&nbsp;</div><div class="code_nothing">f)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">|T|&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1)</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">state,&nbsp;</div><div class="code_nothing">T[</div><div class="code_nothing">i]</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">fail</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">f(</div><div class="code_nothing">state)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">state,&nbsp;</div><div class="code_nothing">T[</div><div class="code_nothing">i]</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">output(</div><div class="code_nothing">state)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">empty</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">print&nbsp;</div><div class="code_nothing">that&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">strings&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">output(</div><div class="code_nothing">state)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">match&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">location&nbsp;</div><div class="code_nothing">i;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">computeGotoFunction(</div><div class="code_nothing">set&nbsp;</div><div class="code_nothing">keywords,&nbsp;</div><div class="code_nothing">function&nbsp;</div><div class="code_nothing">g,&nbsp;</div><div class="code_nothing">function&nbsp;</div><div class="code_nothing">output)</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">newstate&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">|keywords|&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1)</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">P&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">keyword[</div><div class="code_nothing">i]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//descend&nbsp;down&nbsp;an&nbsp;existing&nbsp;path</div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">state,&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">j]</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">fail</div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">state,&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">j]</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++j;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//create&nbsp;a&nbsp;path&nbsp;for&nbsp;suffix</div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_nothing">p&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">|P|&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1)</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">newstate++;</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">state,&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">p]</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">newstate;</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">newstate;</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">add&nbsp;</div><div class="code_nothing">P&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">set&nbsp;</div><div class="code_nothing">output(</div><div class="code_nothing">state)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">all&nbsp;</div><div class="code_nothing">characters&nbsp;</div><div class="code_nothing">ch&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">alphabet</div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">0,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">fail</div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">0,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">32:&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">computeFailureFunction(</div><div class="code_nothing">function&nbsp;</div><div class="code_nothing">g,&nbsp;</div><div class="code_nothing">function&nbsp;</div><div class="code_nothing">output,&nbsp;</div><div class="code_nothing">function&nbsp;</div><div class="code_nothing">f)</div><div class="code_nothing"></div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">character&nbsp;</div><div class="code_nothing">ch&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">alphabet</div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">0,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">0</div><br /><div class="code_grey">35:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">enqueue(</div><div class="code_nothing">g(</div><div class="code_nothing">0,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">36:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">f(</div><div class="code_nothing">g(</div><div class="code_nothing">0,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">37:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">38:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//do&nbsp;a&nbsp;breadth&nbsp;first&nbsp;search&nbsp;on&nbsp;the&nbsp;trie</div><br /><div class="code_grey">39:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">queue&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">empty</div><br /><div class="code_grey">40:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dequeue&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">r;</div><div class="code_nothing"></div><br /><div class="code_grey">41:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">character&nbsp;</div><div class="code_nothing">ch&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">alphabet</div><br /><div class="code_grey">42:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">r,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">fail</div><br /><div class="code_grey">43:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">enqueue(</div><div class="code_nothing">g(</div><div class="code_nothing">r,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">44:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">f(</div><div class="code_nothing">r)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">45:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//follow&nbsp;the&nbsp;failure&nbsp;links&nbsp;for&nbsp;ch&nbsp;until&nbsp;a&nbsp;goto&nbsp;is&nbsp;found</div><br /><div class="code_grey">46:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">state,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">fail</div><br /><div class="code_grey">47:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">f(</div><div class="code_nothing">state)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">48:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//make&nbsp;the&nbsp;failure&nbsp;that&nbsp;goto</div><br /><div class="code_grey">49:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">f(</div><div class="code_nothing">g(</div><div class="code_nothing">r,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">g(</div><div class="code_nothing">state,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">50:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">add&nbsp;</div><div class="code_nothing">keywords&nbsp;</div><div class="code_nothing">from&nbsp;</div><div class="code_nothing">output(</div><div class="code_nothing">g(</div><div class="code_nothing">state,&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">output(</div><div class="code_nothing">r)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">51:&nbsp;</div><div class="code_nothing"></div><br />        </div>
+        </div>
+        <div class="section">
+        <h2>Regular Expression Matching</h2>
+        Simplified regular expression language:
+        <ul>
+          <li>All letters are regular expressions</li>
+          <li>If r and s are regular expressions
+            <ul>
+              <li>r|s = r or s</li>
+              <li>r+ = one or more occurances: r, rr, rrr, ...</li>
+              <li>rs = concatenation of r and s</li>
+              <li>(r) represents the regular expression r</li>
+            </ul>
+          </li>
+        </ul>
+        Example regular expressions:
+        <ul>
+          <li>chi(r)+up: matches chirup, chirrup, chirrrup, etc</li>
+          <li>(b|c)at: matches bat or cat</li>
+        </ul>
+        Nondeterministic finite automatas (NFA) are used to match regular expressions:<br />
+        <br />
+        <img src="/ads/img/pict/RegularExpressions_0.bmp" alt="RegularExpressions" /><br />
+        <br />
+        The longest possible match is used in these regular expressions. To do this, a set of states is kept at each position in the string.<br />
+        <ul>
+          <li>When chir is matched in the first NFA, the next set of states is 3, 4.</li>
+          <li>When a u is finally matched, the next set of states just becomes 5.</li>
+        </ul>
+        <br />
+        Perl 5.0 Regular Expression Syntax is probably the most complete and consistent standard there is [2]. While I would never write a new program today in Perl, many programming languages base their regular expresion syntax on Perl 5.0.
+        <ul>
+          <li>Java</li>
+          <li>JavaScript</li>
+          <li>Python</li>
+          <li>Ruby</li>
+          <li>C# (and the rest of .Net)</li>
+          <li>C++ via Boost</li>
+          <li>PHP</li>
+          <li>antlr</li>
+        </ul>
+        <h3>Perl 5.0 Regular Expression Syntax [3]</h3>
+        Metacharacters
+        <ol>
+          <li>\ - quote the next metacharacter</li>
+          <li>^ - match the beginning of the line</li>
+          <li>. - match any character</li>
+          <li>$ - match the end of the line</li>
+          <li>| - choice</li>
+          <li>() - grouping</li>
+          <li>[] - bracketed character class</li>
+        </ol>
+        <br />
+        Quantifiers
+        <ol>
+          <li>* - match 0 or more times</li>
+          <li>+ - match 1 or more times</li>
+          <li>? - match 1 or 0 times</li>
+          <li>{n} - match exactly n times</li>
+          <li>{n,} - match at least n times</li>
+          <li>{n,m} - match at least n times but no more than m times</li>
+        </ol>
+        <br />
+        Character Classes
+        <ol>
+          <li>[a-zA-Z0-9] - match alphanumerics</li>
+          <li>etc</li>
+        </ol>
+        <br />
+        There are many many more details of Perl 5.0 regular expresions. But these I use routinely.<br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>Ternary Search Tries (TSTs)</h2>
+        In Ternary Search Tries there are three links for each node: 1) nodes less than, 2) nodes equal to and 3) nodes greater than
+        <ul>
+          <li>One digit of a key is stored in the internal node</li>
+          <li>A search hit only occurs when we are traversing middle nodes</li>
+        </ul>
+        <img src="/ads/img/pict/TernarySearchTrie_0.bmp" alt="TernarySearchTrie" />
+        <ul>
+          <li>Add "time"</li>
+        </ul>
+        <img src="/ads/img/pict/TernarySearchTrie_1.bmp" alt="TernarySearchTrie" />
+        <br />
+        Strengths of TSTs
+        <ul>
+          <li>They adapt to irregularities in search keys that appear in practical applications</li>
+          <li>(With TSTs you can use 1 or 2-byte character encodings without worring about excessive costs of nodes as in Multiway Tries)</li>
+          <li>In practice search misses only use a few comparisons even when the strings are very long</li>
+          <li>TST support: Print all keys that match a prefix of the search key</li>
+          <li>TST support: Visit all keys keys that differ the search key by one digit position</li>
+        </ul>
+        </div>
+        <div class="section">
+        <h2>Suffix Arrays</h2>
+        The suffixes of a word are sorted in lexographic order and put into an array.<br />
+        <br />
+        Word T=proposition. Suffix array:<br />
+        <br />
+        <table class="nice_table">
+          <tr bgcolor="e5e5e5">
+            <td width="100px">Suffix Array Index</td>
+            <td width="100px">Original Array Index</td>
+            <td width="100px">Suffix</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>8</td>
+            <td>ion</td>  
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>6</td>
+            <td>ition</td>  
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>10</td>
+            <td>n</td>  
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>9</td>
+            <td>on</td>  
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>2</td>
+            <td>oposition</td>  
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>4</td>
+            <td>osition</td>  
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>3</td>
+            <td>position</td>  
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>0</td>
+            <td>proposition</td>  
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>1</td>
+            <td>roposition</td>  
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>5</td>
+            <td>sition</td>  
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>7</td>
+            <td>tion</td>  
+          </tr>
+        </table><br />
+        A suffix array can be made in O(|T|lg(|T|)) time. Then a binary search can be done in lg(|T|) time to find patterns. The suffix array is built from the text to be searched.<br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>Approximate String Matching</h2>
+        In all the previous string matching algorithms, only exact matches were considered.
+        <h3>String Similarity</h3>
+        Given the words: "apple" and "capital" they can be aligned:<br />
+        <span style="font-family: courier;">
+        -app--le<br />
+        capital-<br />
+        </span><br />
+        <b>Genome String Similarity</b><br />
+        <br />
+        <span style="font-family: courier;">
+        TGGAGCTGGAAAAGGAATTCCACTTCAATCGCTACCTGACCCGGCGGCGACCGTATCGAGA<br />
+        |||||||||| ||||| ||||||||||| || || &nbsp;|| &nbsp;||||| ||| || &nbsp;|||||||<br />
+        TGGAGCTGGAGAAGGAGTTCCACTTCAACCGTTATTTGTGCCGGCCGCGCCCTGATCGAGA<br />
+        </span>
+        <br />
+        Basic operations in approximate string matching:
+        <ul>
+          <li>Deletion</li>
+          <li>Insertion</li>
+          <li>Substitution</li>
+          <li>Match</li>
+        </ul>
+        String Similarity, D(Q,R) is the measure of how similar strings Q and R are.
+        <ul>
+          <li>Deletion: When Q[i] is deleted from Q(0...i) then D(i-1,j-1) = D(i-2,j-1) + 1;</li>
+          <li>Insertion: When R[j] is inserted into R(0...j-1) then D(i-1,j-1) = D(i-1,j-2) + 1;</li>
+          <li>Substitution: When R[j] is substituted in R(0...j) then D(i-1,j-1) = D(i-2,j-2) + 1;</li>
+          <li>Match: When Q[i] == R[j], then D(i-1,j-1) = D(i-2,j-2)</li>
+        </ul>
+        All of the conditions can be summarized:
+        <ul>
+          <li>D(i,j) = min(D(i-1,j)+1, D(i,j-1)+1, D(i-1,j-1) + c(i,j))
+            <ul><li>where c(i,j)=0 if Q[i] == R[j] and c(i,j)=1 otherwise</li></ul>
+          </li>
+        </ul>
+        Wagner Fischer Algorithm<br />
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">wagnerFischer(</div><div class="code_nothing">table&nbsp;</div><div class="code_nothing">dist,&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">Q,&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">R)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//initialize&nbsp;first&nbsp;row&nbsp;&nbsp;</div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">|Q|</div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dist[</div><div class="code_nothing">i,0]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">i;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//initialize&nbsp;first&nbsp;column</div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">|R|</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dist[</div><div class="code_nothing">0,j]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">j;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">1&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">|Q|</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">1&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">|R|</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">x&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">dist[</div><div class="code_nothing">i-1,j&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">]</div><div class="code_nothing">+1;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//upper</div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">y&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">dist[</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">,j-1]</div><div class="code_nothing">+1;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//left</div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">z&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">dist[</div><div class="code_nothing">i-1,j-1]</div><div class="code_nothing">+0;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//diagonal</div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">Q[</div><div class="code_nothing">i-1]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">R[</div><div class="code_nothing">j-1]</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++z;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dist[</div><div class="code_nothing">i,j]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">min(</div><div class="code_nothing">x,y,z)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br />        </div>
+        <table class="nice_table">
+          <tr bgcolor="e5e5e5">
+            <td> </td>
+            <td> </td>
+            <td>a</td>
+            <td>p</td>
+            <td>p</td>
+            <td>l</td>
+            <td>e</td>
+          </tr>
+          <tr>
+            <td bgcolor="e5e5e5"> </td>
+            <td>0</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td bgcolor="e5e5e5">c</td>
+            <td>1</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td bgcolor="e5e5e5">a</td>
+            <td>2</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td bgcolor="e5e5e5">p</td>
+            <td>3</td>
+            <td>2</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td bgcolor="e5e5e5">i</td>
+            <td>4</td>
+            <td>3</td>
+            <td>2</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td bgcolor="e5e5e5">t</td>
+            <td>5</td>
+            <td>4</td>
+            <td>3</td>
+            <td>3</td>
+            <td>3</td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td bgcolor="e5e5e5">a</td>
+            <td>6</td>
+            <td>5</td>
+            <td>4</td>
+            <td>4</td>
+            <td>4</td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td bgcolor="e5e5e5">l</td>
+            <td>7</td>
+            <td>6</td>
+            <td>5</td>
+            <td>5</td>
+            <td>4</td>
+            <td bgcolor="ffffcc">5</td>
+          </tr>
+        </table>
+        <br />
+        The number in the lower right of the table (5) is the minimum distance between the string.<br />
+        <br />
+        To print out the alignment:<br />
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">wagnerFischerPrint(</div><div class="code_nothing">table&nbsp;</div><div class="code_nothing">dist,&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">Q,&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">R)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">|Q|;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">|R|;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">or&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">0</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">>&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">dist[</div><div class="code_nothing">i-1,j]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dist[</div><div class="code_nothing">i,j]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//up</div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">stackQ.push(</div><div class="code_nothing">Q[</div><div class="code_nothing">i]</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">stackR.push(</div><div class="code_nothing">'-')</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">--i;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">>&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">dist[</div><div class="code_nothing">i,j-1]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dist[</div><div class="code_nothing">i,j]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//left</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">stackQ.push(</div><div class="code_nothing">'-')</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">stackR.push(</div><div class="code_nothing">R[</div><div class="code_nothing">j]</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">--j;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">stackQ.push(</div><div class="code_nothing">Q[</div><div class="code_nothing">i]</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">stackR.push(</div><div class="code_nothing">R[</div><div class="code_nothing">j]</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">--i;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">--j;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">print&nbsp;</div><div class="code_nothing">stackQ;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">print&nbsp;</div><div class="code_nothing">stackR;</div><div class="code_nothing"></div><br />        </div><br />
+        Prints:<br />
+        <span style="font-family: courier;">
+        capital (Q)<br />
+        -apple- (R)<br />
+        </span><br />
+        The intiution is that we are seeking for the place where the min was selected from while building the table. This path will produce the minimum cost alignment.<br />
+        <br />
+        Wagner Fischer:
+        <ul>
+          <li>Time Complexity: O(|Q||R|)</li>
+          <li>Space Complexity: O(|Q||R|)</li>
+        </ul>
+        Wagner Fischer Print:
+        <ul>
+          <li>Time Complexity: O(max(|Q|,|R|))</li>
+        </ul>
+        </div>
+        <div class="section">
+          <h2>Burrows-Wheeler Transform [5-6]</h2>
+          The Burrows-Wheeler Transform is a reversible transformation on strings that allows for better run-length encoding.<br />
+          <br />
+          <b>Original String:</b> ^juju| <br />
+          <b>Resultant String:</b> ^ujj|u <br />
+          <br />
+          In longer strings there will be larger runs. The intuition is that words like the and there in the suffix array will be close
+          and thus the t's will be compressable with run-length encoding.<br />
+          <br />
+          <table>
+            <tr>
+              <td width="340px">
+                <b>Rotations:</b><br />
+                <table class="nice_table">
+                  <tr>
+                    <td width="20px">^</td>
+                    <td width="20px">j</td>
+                    <td width="20px">u</td>
+                    <td width="20px">j</td>
+                    <td width="20px">u</td>
+                    <td width="20px">|</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                </table>
+              </td>
+              <td>
+                <b>Sorted:</b><br />
+                <table class="nice_table">
+                  <tr>
+                    <td width="20px">j</td>
+                    <td width="20px">u</td>
+                    <td width="20px">j</td>
+                    <td width="20px">u</td>
+                    <td width="20px">|</td>
+                    <td width="20px">^</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <br />
+          (Take the last column from sorted and that is the result).<br />
+          <br />
+          To reconstruct from final result keep calling add and sort:
+          <table class="nice_table">
+            <tr>
+              <td width="120px" align="center">
+                <b>Add</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>^</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                  </tr>
+                </table>
+              </td>
+              <td width="120px" align="center">
+                <b>Sort</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>^</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                  </tr>
+                </table>
+              </td>
+              <td width="120px" align="center">
+                <b>Add</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                </table>
+              </td>
+              <td width="120px" align="center">
+                <b>Sort</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                </table>
+              </td>
+              <td width="120px" align="center">
+                <b>Add</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                </table>
+              </td>
+              <td width="120px" align="center">
+                <b>Sort</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td width="120px" align="center">
+                <b>Add</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                </table>
+              </td>
+              <td width="120px" align="center">
+                <b>Sort</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                </table>
+              </td>
+              <td width="120px" align="center">
+                <b>Add</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                </table>
+              </td>
+              <td width="120px" align="center">
+                <b>Sort</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                </table>
+              </td>
+              <td width="120px" align="center">
+                <b>Add</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                </table>
+              </td>
+              <td width="120px" align="center">
+                <b>Sort</b>
+                <table class="nice_table">
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                  </tr>
+                  <tr>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>u</td>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                  </tr>
+                  <tr>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>|</td>
+                  </tr>
+                  <tr>
+                    <td>|</td>
+                    <td>^</td>
+                    <td>j</td>
+                    <td>u</td>
+                    <td>j</td>
+                    <td>u</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="section">
+          <h2>String Sorting Algorithms</h2>
+          <ul>
+            <li>Quicksort</li>
+            <li>Three-way quicksort: Pick the first character of a string as the pivot. Partition strings into subsets
+              with less than, equal and greater. Then three-way quicksort the partitions on a second character from
+              each of the partitions.</li>
+            <li>MSD Radix Sort</li>
+            <li>Burst Sort</li>
+          </ul>
+          <b>MSD Radix Sort</b>
+          <div class="algorithm">
+          <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sortQueue(</div><div class="code_nothing">queue&nbsp;</div><div class="code_nothing">q)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">allocate&nbsp;</div><div class="code_nothing">radix&nbsp;</div><div class="code_nothing">number&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">queues;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">q</div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">has&nbsp;</div><div class="code_nothing">more&nbsp;</div><div class="code_nothing">characters</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">put&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">queue&nbsp;</div><div class="code_nothing">according&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">current&nbsp;</div><div class="code_nothing">character;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">output&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">as&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">result;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">queue&nbsp;</div><div class="code_nothing">with&nbsp;</div><div class="code_nothing">elements</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">call&nbsp;</div><div class="code_nothing">sortQueue;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">stringRadix(</div><div class="code_nothing">array&nbsp;</div><div class="code_nothing">strings,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">radix)</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">allocate&nbsp;</div><div class="code_nothing">'radix'&nbsp;</div><div class="code_nothing">number&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">queues;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">put&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">strings&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">queues&nbsp;</div><div class="code_nothing">according&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">first&nbsp;</div><div class="code_nothing">character;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">queue</div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">call&nbsp;</div><div class="code_nothing">sortQueue;</div><div class="code_nothing"></div><br />          </div>
+          <b>Burst Sort</b>
+<div class="algorithm">
+<b>algorithm</b> burstInsert(string key)
+<pre>  find the trie node bucket to insert into (of size d)
+  if(the size of the bucket is greater than L)
+    burst the trie node bucket to create a new set of nodes of d+1
+  insert the key into the bucket</pre>
+</div>
+Once all of the keys have been inserted, sort the buckets and then do an inorder
+traversal.<br />
+<br />
+        </div>
+        <div class="section">
+        <h2>References</h2>
+        <ol>
+          <li>http://en.wikipedia.org/wiki/Suffix_array</li>
+          <li>http://en.wikipedia.org/wiki/Regular_expression#Perl-derived_regular_expressions</li>
+          <li>http://perldoc.perl.org/perlre.html</li>
+          <li>http://blog.afterthedeadline.com/2010/01/29/how-i-trie-to-make-spelling-suggestions/</li>
+          <li>http://en.wikipedia.org/wiki/Burrows%E2%80%93Wheeler_transform</li>
+          <li>http://www.hpl.hp.com/techreports/Compaq-DEC/SRC-RR-124.pdf</li>
+          <li>http://goanna.cs.rmit.edu.au/~jz/fulltext/alenex03.pdf</li>
+        </ol>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

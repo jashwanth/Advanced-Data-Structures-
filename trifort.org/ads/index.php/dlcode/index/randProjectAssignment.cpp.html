@@ -1,0 +1,69 @@
+<pre>#include &lt;cstdlib&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;sstream&gt;
+#include &lt;ctime&gt;
+#include &lt;algorithm&gt;
+
+std::vector&lt;std::vector&lt;std::string&gt; &gt; assign(int num_people, std::vector&lt;std::string&gt; names)
+{
+  std::vector&lt;int&gt; people;
+  for(int i = 0; i &lt; names.size(); ++i){
+    people.push_back(i % num_people);
+  }
+
+  std::random_shuffle(people.begin(), people.end()); 
+
+  std::vector&lt;std::vector&lt;std::string&gt; &gt; ret;
+  ret.resize(num_people);
+
+  for(int i = 0; i &lt; people.size(); ++i){
+    int id = people[i];
+    ret[id].push_back(names[i]);
+  }
+  
+  return ret;
+}
+
+std::string toString(int i)
+{
+  std::ostringstream oss;
+  oss &lt;&lt; i;
+  return oss.str();
+}
+
+int main(int argc, char * argv[])
+{
+
+  std::vector&lt;std::string&gt; names;
+  for(int i = 0; i &lt; 10; ++i){
+    names.push_back(toString(i));
+  }
+
+  std::vector&lt;std::vector&lt;std::string&gt; &gt; groups = assign(3, names);
+  for(size_t i = 0; i &lt; groups.size(); ++i){
+    std::cout &lt;&lt; "group: " &lt;&lt; i &lt;&lt; std::endl;
+    std::vector&lt;std::string&gt; curr = groups[i];
+    for(size_t j = 0; j &lt; curr.size(); ++j){
+      std::cout &lt;&lt; "  name: " &lt;&lt; curr[j] &lt;&lt; std::endl;
+    }
+  }
+
+  //group: 0
+  //  name: 1
+  //  name: 4
+  //  name: 8
+  //  name: 9
+  //group: 1
+  //  name: 0
+  //  name: 2
+  //  name: 7
+  //group: 2
+  //  name: 3
+  //  name: 5
+  //  name: 6
+
+  return 0;
+}
+</pre>

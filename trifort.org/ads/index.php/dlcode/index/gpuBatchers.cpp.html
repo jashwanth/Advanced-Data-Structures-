@@ -1,0 +1,63 @@
+<pre>#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+void compare_exchange(std::vector&lt;int&gt;& vec, int left, int right){
+  int lhs = vec[left];
+  int rhs = vec[right];
+  if(rhs &lt; lhs){
+    vec[left] = rhs;
+    vec[right] = lhs;
+  }
+}
+
+void batchersEvenOdd(std::vector&lt;int&gt;& vec, int procs){
+  int num = vec.size();
+  for(int i = 0; i &lt; num; ++i){
+    for(int proc = 0; proc &lt; procs; ++proc){
+      int left;
+      int right;
+      if(i % 2 == 0){
+        left = 2 * proc;
+        right = (2 * proc) + 1;
+      } else {
+        left = (2 * proc) + 1;
+        right = (2 * proc) + 2;
+      }
+      if(right &lt; num){
+        compare_exchange(vec, left, right);
+      }
+    }
+  }
+}
+
+int main(int argc, char * argv[]){
+
+  std::vector&lt;int&gt; vec;
+  int size = 8;
+  for(int i = size-1; i &gt;= 0; --i){
+    vec.push_back(i);
+  }
+
+  std::cout &lt;&lt; "values: " &lt;&lt; std::endl;
+  for(size_t i = 0; i &lt; vec.size(); ++i){
+    std::cout &lt;&lt; vec[i] &lt;&lt; " ";
+  }
+  std::cout &lt;&lt; std::endl;
+
+  batchersEvenOdd(vec, size / 2);
+
+  std::cout &lt;&lt; "values: " &lt;&lt; std::endl;
+  for(size_t i = 0; i &lt; vec.size(); ++i){
+    std::cout &lt;&lt; vec[i] &lt;&lt; " ";
+  }
+  std::cout &lt;&lt; std::endl;
+
+  //prints:
+  //  values: 
+  //  7 6 5 4 3 2 1 0 
+  //  values: 
+  //  0 1 2 3 4 5 6 7 
+ 
+  return 0;
+}
+</pre>

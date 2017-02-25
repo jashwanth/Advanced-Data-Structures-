@@ -1,0 +1,494 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+  <link href="/css/styles.css" rel="stylesheet" type="text/css"></link>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+  <link rel="shortcut icon" href="/cse382/img/favicon2.ico" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>17: memory management</h1>
+          Sequential Fit | Buddy Allocation | Reference Counting | Garbage Collection<br />
+          <br />
+        </div>
+
+          <div class="section">
+          <h2>Sequential Fit Methods [6]</h2>
+glibc malloc source code: http://code.woboq.org/userspace/glibc/malloc/malloc.c.html
+<div class="algorithm">
+<pre>
+1139	    chunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+1140	            |             Size of previous chunk, if allocated            | |
+1141	            +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+1142	            |             Size of chunk, in bytes                       |M|P|
+1143	      mem-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+1144	            |             User data starts here...                          .
+1145	            .                                                               .
+1146	            .             (malloc_usable_size() bytes)                      .
+1147	            .                                                               |
+1148	nextchunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+1149	            |             Size of chunk                                     |
+1150	            +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre>
+</div>
+
+          A free list (doubly linked list) of free blocks is kept. The list is built from
+          the blocks that are free. A sequential scan is done along the linked list until
+          an appropriate sized block is found.
+          <ol>
+            <li>Start:<br />
+              <img src="/ads/img/pict/SequentialFit_0.bmp" alt="SequentialFit" />
+            </li>
+            <li>Delete at 320. Check in 320-prev_size to find a free tag. Found. Check in 320+size to find a free tag. Found. Combine all elements into one node.
+              Otherwise add to free list.<br />
+              <img src="/ads/img/pict/SequentialFit_1.bmp" alt="SequentialFit" />
+            </li>
+          </ol>
+          malloc stores book-keeping data for the pointer returned before the pointer returned [7]. It uses more space per allocation than you request.
+          </div>
+          <div class="section">
+          <h2>Basic Non-Sequential Fit</h2>
+          A vector or tree of lists is kept according to block size.
+          <ul>
+            <li>When memory is returned to the system it is added to a list of that size because the same size may be needed again</li>
+            <li>Note that malloc cannot be used for these red-black tree nodes because those would need to be tracked [7]</li>
+          </ul>
+          </div>
+          <div class="section">
+          <h2>Buddy Memory Allocation</h2>
+          In buddy memory allocation, no two neighboring blocks are free:
+          <ul>
+            <li>256k blocks can be at location: &nbsp;0</li>
+            <li>128k blocks can be at locations: 0, 4</li>
+            <li>64k blocks can be at locations: &nbsp;0, 2, 4, 6</li>
+            <li>32k blocks can be at locations: &nbsp;0, 1, 2, 3, 4, 5, 6, 7</li>
+          </ul>
+          A buddy of a block can be found by flipping a bit in the address.<br />
+          <br />
+          <table class="thin_table">
+          <tr>
+            <td bgcolor="e5e5e5" style="width: 200px;">32k</td>
+            <td bgcolor="e5e5e5" style="width: 200px;">32k</td>
+            <td bgcolor="e5e5e5" style="width: 200px;">32k</td>
+            <td bgcolor="e5e5e5" style="width: 200px;">32k</td>
+            <td bgcolor="e5e5e5" style="width: 200px;">32k</td>
+            <td bgcolor="e5e5e5" style="width: 200px;">32k</td>
+            <td bgcolor="e5e5e5" style="width: 200px;">32k</td>
+            <td bgcolor="e5e5e5" style="width: 200px;">32k</td>
+          </tr>
+          <tr>
+            <td bgcolor="efefef" style="width: 200px;">0</td>
+            <td bgcolor="efefef" style="width: 200px;">1</td>
+            <td bgcolor="efefef" style="width: 200px;">2</td>
+            <td bgcolor="efefef" style="width: 200px;">3</td>
+            <td bgcolor="efefef" style="width: 200px;">4</td>
+            <td bgcolor="efefef" style="width: 200px;">5</td>
+            <td bgcolor="efefef" style="width: 200px;">6</td>
+            <td bgcolor="efefef" style="width: 200px;">7</td>
+          </tr>
+          <tr>
+            <td colspan="8">2^8</td>
+          </tr>
+          <tr>
+            <td colspan="4">2^4</td>
+            <td colspan="4">2^4</td>
+          </tr>
+          <tr>
+            <td colspan="2">2^2</td>
+            <td colspan="2">2^2</td>
+            <td colspan="4">2^4</td>
+          </tr>
+          <tr>
+            <td colspan="1" bgcolor="ffffcc">2^1</td>
+            <td colspan="1">2^1</td>
+            <td colspan="2">2^2</td>
+            <td colspan="4">2^4</td>
+          </tr>
+          <tr>
+            <td colspan="1" bgcolor="ffffcc">2^1</td>
+            <td colspan="1" bgcolor="ff9900">2^1</td>
+            <td colspan="2">2^2</td>
+            <td colspan="4">2^4</td>
+          </tr>
+          <tr>
+            <td colspan="1" bgcolor="ffffcc">2^1</td>
+            <td colspan="1" bgcolor="ff9900">2^1</td>
+            <td colspan="2" bgcolor="ff3300">2^2</td>
+            <td colspan="4">2^4</td>
+          </tr>
+          <tr>
+            <td colspan="1">2^1</td>
+            <td colspan="1" bgcolor="ff9900">2^1</td>
+            <td colspan="2" bgcolor="ff3300">2^2</td>
+            <td colspan="4">2^4</td>
+          </tr>
+          <tr>
+            <td colspan="1">2^1</td>
+            <td colspan="1">2^1</td>
+            <td colspan="2" bgcolor="ff3300">2^2</td>
+            <td colspan="4">2^4</td>
+          </tr>
+          <tr>
+            <td colspan="2">2^2</td>
+            <td colspan="2" bgcolor="ff3300">2^2</td>
+            <td colspan="4">2^4</td>
+          </tr>
+          <tr>
+            <td colspan="2">2^2</td>
+            <td colspan="2">2^2</td>
+            <td colspan="4">2^4</td>
+          </tr>
+          <tr>
+            <td colspan="4">2^4</td>
+            <td colspan="4">2^4</td>
+          </tr>
+          <tr>
+            <td colspan="8">2^8</td>
+          </tr>
+          </table>
+          <br />
+          <ul>
+            <li>The linux kernel uses this system with some optimizations</li>
+            <li>A chunk of memory may be much too big for an object</li>
+            <li>Slab Allocation is used to allocate inside of the chunks</li>
+            <li>With slab allocation, the kernel knows the fixed size of objects. When they are destroyed they don't actually get freed, they are cached, but zero'd out</li>
+          </ul>
+          </div>
+          <div class="section">
+          <h2>Reference Counting Garbage Collection</h2>
+          A smart pointer can be used in reference counting garbage collection.
+          <ul>
+            <li>A counter tracks when pointer references are copied</li>
+            <li>In the SmartPointer destructor, the count is decremented</li>
+            <li>When the count becomes zero, the memory made with new is deleted</li>
+          </ul>
+          <div class="code_block">
+          <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// smartPointer.cpp - download <a href="/ads/index.php/dlcode/index/smartPointer.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">iostream&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">string&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_red">class</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Person&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_red">public</div><div class="code_nothing">:</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">m_Name;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">m_Email;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_red">class</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Counter&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_red">public</div><div class="code_nothing">:</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_Count;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Counter(</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_Count(</div><div class="code_nothing">1)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">template&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">typename&nbsp;</div><div class="code_nothing">T&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_red">class</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SmartPointer&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_red">public</div><div class="code_nothing">:</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SmartPointer(</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_Ptr(</div><div class="code_nothing">0)</div><div class="code_nothing">,&nbsp;</div><div class="code_nothing">m_Counter(</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Counter(</div><div class="code_nothing">)</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SmartPointer(</div><div class="code_nothing">T&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">ptr)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">:</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_Ptr(</div><div class="code_nothing">ptr)</div><div class="code_nothing">,&nbsp;</div><div class="code_nothing">m_Counter(</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Counter(</div><div class="code_nothing">)</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">virtual</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">~SmartPointer(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">T&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">operator-&gt;</div><div class="code_nothing">(</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_Ptr;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">void</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">operator=</div><div class="code_nothing">(</div><div class="code_nothing">SmartPointer&</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rhs)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_red">private</div><div class="code_nothing">:</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">T&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">m_Ptr;</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Counter&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">m_Counter;</div><div class="code_nothing"></div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing">template&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">typename&nbsp;</div><div class="code_nothing">T&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">32:&nbsp;</div><div class="code_nothing">SmartPointer&lt;</div><div class="code_nothing">T&gt;</div><div class="code_nothing">:</div><div class="code_nothing">:</div><div class="code_nothing">~SmartPointer(</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_Counter-&gt;</div><div class="code_nothing">m_Count--;</div><div class="code_nothing"></div><br /><div class="code_grey">35:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"remaining&nbsp;count:&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_Counter-&gt;</div><div class="code_nothing">m_Count&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">36:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">m_Counter-&gt;</div><div class="code_nothing">m_Count&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">37:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"deleting&nbsp;object..."</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">38:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">delete</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_Ptr;</div><div class="code_nothing"></div><br /><div class="code_grey">39:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">delete</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_Counter;</div><div class="code_nothing"></div><br /><div class="code_grey">40:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">41:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">42:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">43:&nbsp;</div><div class="code_nothing">template&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">typename&nbsp;</div><div class="code_nothing">T&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">44:&nbsp;</div><div class="code_green">void</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SmartPointer&lt;</div><div class="code_nothing">T&gt;</div><div class="code_nothing">:</div><div class="code_nothing">:</div><div class="code_nothing">operator=</div><div class="code_nothing">(</div><div class="code_nothing">SmartPointer&</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rhs)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">45:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rhs.m_Counter-&gt;</div><div class="code_nothing">m_Count++;</div><div class="code_nothing"></div><br /><div class="code_grey">46:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">this-&gt;</div><div class="code_nothing">m_Ptr&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rhs.m_Ptr;</div><div class="code_nothing"></div><br /><div class="code_grey">47:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">this-&gt;</div><div class="code_nothing">m_Counter&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rhs.m_Counter;</div><div class="code_nothing"></div><br /><div class="code_grey">48:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">49:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">50:&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">main(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">argc,&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">argv[</div><div class="code_nothing">]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">51:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">52:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Person&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">person&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Person(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">53:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">person-&gt;</div><div class="code_nothing">m_Name&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_string">"phil&nbsp;pratt-szeliga"</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">54:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">person-&gt;</div><div class="code_nothing">m_Email&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_string">"pcpratts@syr.edu"</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">55:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SmartPointer&lt;</div><div class="code_nothing">Person&gt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ptr(</div><div class="code_nothing">person)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">56:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">57:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"name:&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ptr-&gt;</div><div class="code_nothing">m_Name&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">58:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"email:&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ptr-&gt;</div><div class="code_nothing">m_Email&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">59:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">60:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SmartPointer&lt;</div><div class="code_nothing">Person&gt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ptr2;</div><div class="code_nothing"></div><br /><div class="code_grey">61:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ptr2&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ptr;</div><div class="code_nothing"></div><br /><div class="code_grey">62:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">63:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//prints:</div><br /><div class="code_grey">64:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//&nbsp;&nbsp;name:&nbsp;phil&nbsp;pratt-szeliga</div><br /><div class="code_grey">65:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//&nbsp;&nbsp;email:&nbsp;pcpratts@syr.edu</div><br /><div class="code_grey">66:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//&nbsp;&nbsp;remaining&nbsp;count:&nbsp;1</div><br /><div class="code_grey">67:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//&nbsp;&nbsp;remaining&nbsp;count:&nbsp;0</div><br /><div class="code_grey">68:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//&nbsp;&nbsp;deleting&nbsp;object...</div><br /><div class="code_grey">69:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">70:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">71:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />          </div>
+          Notes:
+          <ul>
+            <li>In reference counting, objects are freed as soon as they can no longer be referenced.</li>
+            <li>In tracing garbage collection (next), objects are freed sometimes much after they are not needed</li>
+            <li>In tracing garbage collection, there can be long pauses in execution that are not predictable. In realtime or embedded systems, sometimes this is not an option</li>
+            <li>The references can really form a graph. To handle cycles in a graph, you can delete a whole strongly connected component when none of the vertices in the component can be accessed</li>
+          </ul>
+          </div>
+          <div class="section">
+          <h2>Mark-and-Sweep Garbage Collection</h2>
+          In mark-and-sweep, all objects in the system have an 'in-use' flag.
+          <div class="algorithm">
+          <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">naiveMarkSweep(</div><div class="code_nothing">root_objects,&nbsp;</div><div class="code_nothing">all_objects)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">add&nbsp;</div><div class="code_nothing">root_objects&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">queue;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">queue&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">empty</div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">element&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">pop&nbsp;</div><div class="code_nothing">from&nbsp;</div><div class="code_nothing">queue;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">element.in_use&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">true;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">all&nbsp;</div><div class="code_nothing">objects&nbsp;</div><div class="code_nothing">accessible&nbsp;</div><div class="code_nothing">from&nbsp;</div><div class="code_nothing">element</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">add&nbsp;</div><div class="code_nothing">object&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">queue;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">object&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">all_objects</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">object.in_use&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">false</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">reclaim&nbsp;</div><div class="code_nothing">memory;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">set&nbsp;</div><div class="code_nothing">object.in_use&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">false;</div><div class="code_nothing"></div><br />          </div>
+          <ul>
+            <li>This garbage collector requires to entirely stop all program execution</li>
+            <li>Also, the entire memory needs to be visited twice, this can be very slow in paged memory systems</li>
+          </ul>
+          Example of object header in memory managed language:
+          <br />
+          <div class="code_block">
+<pre>struct Object {
+  int ref_ptr_size;
+  bool in_use;
+  struct RefPointers {
+    long value;
+  } ref_pointers[1];
+};</pre>
+          </div>
+          Example Graph of Objects:<br />
+          <img src="/ads/img/pict/NaiveGarbageCollection_0.bmp" alt="NaiveGarbageCollection" /><br />
+          A is the root object here.<br />
+          <br />
+          Allocation of a new node and making c point to it.<br />
+          <img src="/ads/img/pict/NaiveGarbageCollection_1.bmp" alt="NaiveGarbageCollection" /><br />
+          <br />
+          <table class="nice_table">
+            <tr bgcolor="#e5e5e5">
+              <td>Curr Node</td>
+              <td>Queue</td>
+              <td>In-Use</td>
+              <td>Not In-Use</td>
+            </tr>
+            <tr>
+              <td>a</td>
+              <td>b c</td>
+              <td>[a]</td>
+              <td>[b c d e f g]</td>
+            </tr>
+            <tr>  
+              <td>b</td>
+              <td>c d</td>
+              <td>[a b]</td>
+              <td>[c d e f g]</td>
+            </tr>
+            <tr>  
+              <td>c</td>
+              <td>d g</td>
+              <td>[a b c]</td>
+              <td>[d e f g]</td>
+            </tr>
+            <tr>  
+              <td>d</td>
+              <td>g e</td>
+              <td>[a b c d]</td>
+              <td>[e f g]</td>
+            </tr>
+            <tr>  
+              <td>g</td>
+              <td>e</td>
+              <td>[a b c d g]</td>
+              <td>[e f]</td>
+            </tr>
+            <tr>  
+              <td>e</td>
+              <td></td>
+              <td>[a b c d g e]</td>
+              <td>[f]</td>
+            </tr>
+          </table>
+          </div>
+          <div class="section">
+          <h2>Problems with Mark-and-Sweep</h2>
+          The queue in the above example needs memory. We cannot use a fixed sized array for this because an overflow cannot be ignored.<br />
+          <br />
+          We can store extra data in each object header to allow arbitrary depth of recursion.
+          <div class="code_block">
+<pre>struct Object {
+  int ref_ptr_size;
+  bool in_use;
+  int curr_ptr;
+  long curr_parent;
+  struct RefPointers {
+    long value;
+  } ref_pointers[1];
+};</pre>
+          </div>
+          <img src="/ads/img/pict/MarkSweepNoQueue_0.bmp" alt="MarkSweepNoQueue" />
+          <br />
+          <table class="nice_table">
+            <tr>
+              <td width="100px" bgcolor="#e5e5e5"></td>
+              <td width="100px" bgcolor="#e5e5e5">curr_ptr</td>
+              <td width="100px" bgcolor="#e5e5e5">curr_parent</td>
+            </tr>
+            <tr>
+              <td bgcolor="#e5e5e5">a</td>
+              <td>0</td>
+              <td>NULL</td>
+            </tr>
+            <tr>
+              <td bgcolor="#e5e5e5">c</td>
+              <td>0</td>
+              <td>a</td>
+            </tr>
+            <tr>
+              <td bgcolor="#e5e5e5">g</td>
+              <td>0</td>
+              <td>c</td>
+            </tr>
+          </table>
+          <img src="/ads/img/pict/MarkSweepNoQueue_1.bmp" alt="MarkSweepNoQueue" />
+          <br />
+          <table class="nice_table">
+            <tr>
+              <td width="100px" bgcolor="#e5e5e5"></td>
+              <td width="100px" bgcolor="#e5e5e5">curr_ptr</td>
+              <td width="100px" bgcolor="#e5e5e5">curr_parent</td>
+            </tr>
+            <tr>
+              <td bgcolor="#e5e5e5">a</td>
+              <td>0</td>
+              <td>NULL</td>
+            </tr>
+            <tr>
+              <td bgcolor="#e5e5e5">c</td>
+              <td>1</td>
+              <td>a</td>
+            </tr>
+            <tr>
+              <td bgcolor="#e5e5e5">d</td>
+              <td>0</td>
+              <td>c</td>
+            </tr>
+            <tr>
+              <td bgcolor="#e5e5e5">e</td>
+              <td>0</td>
+              <td>d</td>
+            </tr>
+          </table>
+          <div class="algorithm">
+          <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">markSweepNoQueue(</div><div class="code_nothing">root_objects)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">object&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">root_objects)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Object&nbsp;</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">object;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">curr.curr_ptr&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">curr.curr_parent&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">NULL;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">true)</div><div class="code_nothing">{</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">curr.in_use&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">true;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">curr.curr_ptr;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">curr.ref_ptr_size)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">curr.curr_parent;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">NULL)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">break</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Object&nbsp;</div><div class="code_nothing">child&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">curr.ref_pointers[</div><div class="code_nothing">i]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">curr.curr_ptr++;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">child.in_use)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">continue;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">child.curr_ptr&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">child.curr_parent&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">curr;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">child;</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing"></div><br />          </div>
+          </div>
+          <div class="section">
+          <h2>Tri-Color Marking Garbage Collection [5]</h2>
+          Tri-Color Marking has 3 sets:
+          <ul>
+            <li>White set: Objects that can possibly be collected</li>
+            <li>Black set: Objects that definately can't be collected</li>
+            <li>Grey set: All objects accessible from root objects but haven't been scanned yet</li>
+          </ul>
+          Algorithm:
+          <ol>
+            <li>Start by adding the root objects into the grey set</li>
+            <li>Pick an object from the grey set and blacken it by putting all directly accessibly white objects in the grey set</li>
+            <li>Repeat step one until the grey set is empty</li>
+            <li>Reclaim the objects in the white set</li>
+          </ol><br />
+          <img src="/ads/img/pict/NaiveGarbageCollection_1.bmp" alt="NaiveGarbageCollection" /><br />
+          <table class="nice_table">
+            <tr bgcolor="#e5e5e5">
+              <td width="100px">Grey</td>
+              <td width="100px">Black</td>
+              <td width="100px">White</td>
+            </tr>
+            <tr>
+              <td>a</td>
+              <td></td>
+              <td>b c d g e f</td>
+            </tr>
+            <tr>
+              <td>b c</td>
+              <td>a</td>
+              <td>d g e f</td>
+            </tr>
+            <tr>
+              <td>c d</td>
+              <td>a b</td>
+              <td>g e f</td>
+            </tr>
+            <tr>
+              <td>d g</td>
+              <td>a b c</td>
+              <td>e f</td>
+            </tr>
+            <tr>
+              <td>g e</td>
+              <td>a b c d</td>
+              <td>f</td>
+            </tr>
+            <tr>
+              <td>e</td>
+              <td>a b c d g</td>
+              <td>f</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>a b c d g e</td>
+              <td>f</td>
+            </tr>
+          </table>
+          <br />
+          You don't have to rescan the whole memory again with tri-color marking. The in_use variable is kept outside of the objects.<br />
+          <h3>Moving vs. non moving</h3>
+          <ul>
+            <li>Moving: all alive objects can be moved to a new, empty, memory space and compacted as moved.</li>
+            <li>Non-moving: a free list is kept of free space</li>
+          </ul>
+          A moving strategy requires work to move the memory, but can make allocation very fast:
+          <ul>
+            <li>To allocate, just increment a "free-pointer"</li>
+            <li>Allocating a free pointer is very simple to implement in a concurrent environment (like my research). You simply do an atomic increment-and-get-previous</li>
+            <li>However, the runtime needs to keep track of handles to pointers to update when the objects are moved</li>
+          </ul>
+          <h3>Allocation in a Moving Garbage Collector</h3>
+          A from_space and to_space is kept.<br />
+          <img src="/ads/img/pict/MovingCGAllocation_0.bmp" alt="MovingGCAllocation" /><br />
+          <br />
+          To compact, the black objects are copied to the to_space and the spaces are swapped.<br />
+          <img src="/ads/img/pict/MovingCGAllocation_1.bmp" alt="MovingGCAllocation" />
+          </div>
+          <div class="section">      
+          <h2>Concurrent Mark-Sweep (CMS) Garbage Collection [10-11]</h2>
+          All of the previous garbage collection algorithms were stop-the-world algorithms. CMS is a concurrent algorithm so the application can
+          still run while garbage collection takes place.<br />
+          <br />
+          There are four colors:
+          <ul>
+            <li><b>White: </b> objects that have not yet been visited while marking</li>
+            <li><b>Gray: </b> object has been visisted, but children have not</li>
+            <li><b>Black: </b> object has been visisted and children have been visisted</li>
+            <li><b>Blue: </b> object is in the free list</li>
+          </ul>
+          There are three major phases
+          <ol>
+            <li><b>Root Enumeration: </b>Determine Roots and mark them grey</li>
+            <li><b>Marking Phase: </b>While grey objects exist, mark their children grey and mark the current object black</li>
+            <li><b>Sweep Phase: </b>Convert white objects to blue and convert grey/black objects to white</li>
+          </ol>
+          During the marking phase, the mutators (programs outside of the collector) allocate objects as grey.<br />
+          <br />
+          </div>
+          <div class="section">
+          <h2>Generational Garbage Collection</h2>
+          It has been observed that objects that have been recently created are more likely to be recently freed. Generational Garbage Collection tries to capitalize on this
+          <ul>
+            <li>Different sets are kept based on how old something is</li>
+            <li>The younger sets are scanned more periodically than the older sets</li>
+          </ul>
+          Well known systems using Generational GC:
+          <ul>
+            <li>Java</li>
+            <li>C# (.Net)</li>
+          </ul>
+          </div>
+          <div class="section">
+          <h2>Java Garbage Collection in Hotspot [9]</h2>
+          All Hotspot garbage collectors use generations.<br />
+          <br />
+          Types:
+          <ul>
+            <li>Serial Collector</li>
+            <li>Parallel Collector</li>
+            <li>Parallel Compacting Collector</li>
+            <li>Concurrent Mark-Sweep (CMS) Collector</li>
+          </ul>
+          <br />
+          <b>Serial Collector</b><br />
+          <br />
+          In all collectors there is Eden, the To-Space and From-Space and the Old Generation<br />
+          <br />
+          <img src="/ads/img/pict/HotspotGC_0.bmp" /><br />
+          <br />
+          Items are initially placed in Eden. When a collection happens, they are moved to the to-space. Then once in
+          the to-space the to-space is relabed from-space and live objects are moved back to the to-space. Once an object
+          has been in the young generation for a while, it is moved to the old generation.<br />
+          <br />
+          To compact the old generation in the serial collector a mark-sweep compactor is used. The alive objects are shifted 
+          left over dead objects.<br />
+          <br />
+          <b>Parallel Collector</b><br />
+          <br />
+          With the parallel collector, the young generation uses threads in parallel to collect.<br />
+          <br />
+          <b>Parallel Compacting Collector</b><br />
+          <br />
+          In the parallel compacting collector, the young generation uses the same method as the parallel collector. In the old
+          generation regions are considered. The density of regions with garbage in them are calculated. A place starting from
+          the left is not changed until the density goes above a threshold. From the previous collection most
+          objects on the left hand side of the old generation will be live.<br />
+          <br />
+          <b>Concurrent Mark-Sweep (CMS) Collector</b><br />
+          <br />
+          The young generation is the same as the parallel collector and the old generation uses concurrent mark-sweep.<br />
+          <br />
+          </div>
+          <div class="section">
+          <h2>References</h2>
+          <ol>
+            <li>http://en.wikipedia.org/wiki/Buddy_memory_allocation</li>
+            <li>http://en.wikipedia.org/wiki/Slab_allocation</li>
+            <li>http://en.wikipedia.org/wiki/Reference_counting</li>
+            <li>http://www.lcs.syr.edu/faculty/fawcett/handouts/CSE687/code/smartPointer/smartPointer.cpp</li>
+            <li>http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)</li>
+            <li>http://research.cs.vt.edu/AVresearch/MMtutorial/sequential.php</li>
+            <li>http://web.eecs.utk.edu/~huangj/cs360/360/notes/Malloc1/lecture.html</li>
+            <li>http://www.ibm.com/developerworks/java/library/j-jtp01274/index.html</li>
+            <li>http://www.oracle.com/technetwork/java/javase/tech/memorymanagement-whitepaper-1-150020.pdf</li>
+            <li>http://research.microsoft.com/en-us/um/people/lamport/pubs/garbage.pdf</li>
+            <li>http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.52.9494</li>
+          </ol>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

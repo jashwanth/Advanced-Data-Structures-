@@ -1,0 +1,124 @@
+<pre>#include "UnixStopwatch.h"
+#include &lt;iostream&gt;
+#include &lt;pthread.h&gt;
+
+int ** newMatrix(int size){
+
+  int ** ret = new int*[size];
+  for(int i = 0; i &lt; size; ++i){
+    ret[i] = new int[size];
+    for(int j = 0; j &lt; size; ++j){
+      ret[i][j] = i * j;
+    }
+  }
+  
+  return ret;
+}
+
+void serialMultiply(int ** a, int ** b, int ** c, int size){
+  for(int i = 0; i &lt; size; ++i){
+    for(int j = 0; j &lt; size; ++j){
+      int sum = 0;
+      for(int k = 0; k &lt; size; ++k){
+        sum += a[i][k] * b[k][j];
+      }
+      c[i][j] = sum;
+    }
+  }
+}
+
+struct ThreadData {
+  int start_row;
+  int stop_row;
+  int size;
+  int ** a;
+  int ** b;
+  int ** c;
+};
+
+void * threadProc(void * data){
+  ThreadData * thread_data = (ThreadData *) data;
+  int start_row = thread_data-&gt;start_row;
+  int stop_row = thread_data-&gt;stop_row;
+  int size = thread_data-&gt;size;
+  int ** a = thread_data-&gt;a;
+  int ** b = thread_data-&gt;b;
+  int ** c = thread_data-&gt;c;
+
+  for(int i = start_row; i &lt; stop_row; ++i){
+    for(int j = 0; j &lt; size; ++j){
+      int sum = 0;
+      for(int k = 0; k &lt; size; ++k){
+        sum += a[i][k] * b[k][j];
+      }
+      c[i][j] = sum;
+    }
+  }
+}
+
+void parallelMultiply(int ** a, int ** b, int ** c, int size)
+{
+  const int num_threads = 4;
+  pthread_t threads[num_threads];
+  ThreadData data[num_threads];
+
+  int num_each = size / num_threads;
+
+  for(int i = 0; i &lt; num_threads; ++i){
+    data[i].a = a;
+    data[i].b = b;
+    data[i].c = c;
+    data[i].size = size;
+    data[i].start_row = i * num_each;
+    data[i].stop_row = (i + 1) * num_each;
+    pthread_create(&threads[i], NULL, &threadProc, &data[i]);
+  }
+
+  for(int i = 0; i &lt; num_threads; ++i){
+    pthread_join(threads[i], NULL);
+  }
+}
+
+void verifyResults(int ** c1, int ** c2, int size)
+{
+  for(int i = 0; i &lt; size; ++i){
+    for(int j = 0; j &lt; size; ++j){
+      int lhs = c1[i][j];
+      int rhs = c2[i][j];
+
+      if(lhs != rhs){
+        std::cout &lt;&lt; "results do not match!" &lt;&lt; std::endl;
+      }
+    }
+  }
+  std::cout &lt;&lt; "results match!" &lt;&lt; std::endl;
+}
+
+int main(int argc, char * argv[]){
+
+  int size = 1024;
+  int ** a = newMatrix(size);
+  int ** b = newMatrix(size);
+  int ** c1 = newMatrix(size);
+  int ** c2 = newMatrix(size);
+
+  UnixStopwatch watch;
+  serialMultiply(a, b, c1, size);
+  watch.stop();
+  std::cout &lt;&lt; "serial time ms: " &lt;&lt; watch.getTime() &lt;&lt; std::endl;
+
+  watch.start();
+  parallelMultiply(a, b, c2, size);
+  watch.stop();
+  std::cout &lt;&lt; "parallel time ms: " &lt;&lt; watch.getTime() &lt;&lt; std::endl;
+
+  verifyResults(c1, c2, size);
+
+  //prints:
+  //  serial time ms: 28821
+  //  parallel time ms: 6629
+  //  results match!
+  
+  return 0;
+}
+</pre>

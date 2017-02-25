@@ -1,0 +1,608 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+  <link href="/css/styles.css" rel="stylesheet" type="text/css"></link>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+  <link rel="shortcut icon" href="/cse382/img/favicon2.ico" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>20: string matching #1</h1>
+          Brute-Force | Hancart | Knuth-Morris-Pratt | Boyer-Moore | Bitvector<br />
+          <br />
+        </div>
+
+        <div class="section">
+        <h2>Brute-Force String Matching</h2>
+        Algorithm:
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">bruteForceStringMatching(</div><div class="code_nothing">pattern&nbsp;</div><div class="code_nothing">P,&nbsp;</div><div class="code_nothing">text&nbsp;</div><div class="code_nothing">t)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing"><=&nbsp;</div><div class="code_nothing">|T|&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">|P|</div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">T[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">j]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing"><&nbsp;</div><div class="code_nothing">|P|</div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++j;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">|P|</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">match&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">|P|</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">no&nbsp;</div><div class="code_nothing">match;</div><div class="code_nothing"></div><br />        </div>
+        Example:
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_nothing">text&nbsp;</div><div class="code_nothing">T&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">ababcdabbabababad</div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">pattern&nbsp;</div><div class="code_nothing">P&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">abababa</div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">ababcdabbabababad</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing"><u>ababa</u>ba</div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><u>a</u>bababa</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><u>aba</u>baba</div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><u>a</u>bababa</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><u>a</u>bababa</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><u>a</u>bababa</div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><u>aba</u>baba</div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><u>a</u>bababa</div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><u>a</u>bababa&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><u>abababa</u></div><br />        </div>
+        <ul>
+          <li>Worst Case Time Complexity: O(T*P)</li>
+        </ul>
+        </div>
+        <div class="section">
+        <h2>Hancart String Matching</h2>
+        Hancart also have worst case time complexity of O(T*P) but on average it performs better than the more complicated algorithms in the rest of this lecture.
+        <ul>
+          <li>The order of characters involved is: P[1], P[2], ... P[size-1], P[0]</li>
+        </ul>
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">hancart(</div><div class="code_nothing">pattern&nbsp;</div><div class="code_nothing">P,&nbsp;</div><div class="code_nothing">text&nbsp;</div><div class="code_nothing">T)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">0]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">1]</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sEqual&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sDiff&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">2;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sEqual&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">2;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sDiff&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing"><=&nbsp;</div><div class="code_nothing">|T|&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">|P|</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">T[</div><div class="code_nothing">i+1]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">1]</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">sDiff;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing"><&nbsp;</div><div class="code_nothing">|P|&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">T[</div><div class="code_nothing">i+j]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">j]</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++j;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">|P|&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">0]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">T[</div><div class="code_nothing">i]</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">match&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">i;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">sEqual;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">no&nbsp;</div><div class="code_nothing">match;</div><div class="code_nothing"></div><br />        </div>
+        <ul>
+          <li>If the first two characters of the pattern are the same, after a mismatch with T[i+1], i is shifted over two</li>
+          <li>But if the first two characters of the pattern are the same and there is a mismatch in the inner while, the pattern is shifted one position</li>
+          <li>But if the first two characters are different (a more common case), a mismatch at T[i+1] is shifted over one and a mismatch in the inner while loop is shifted over two</li>
+        </ul>
+        <b>Example #1</b> (First two characters of pattern are the same):<br />
+<div class="code_block">
+<pre>Pattern: aabcda
+Text:    aabaabcda
+
+First P[1] matches T[1]. Then there is a mismatch later at c and a. Shift by one.
+
+Pattern:  aabcda
+Text:    aabaabcda
+
+P[1] does not match T[1]. Since P[0]==P[1], T[1] will never match P[0]. Shift by two.
+
+Pattern:    aabcda
+Text:    aabaabcda
+
+P[1] through P[5] match. Check P[0]. There is a match so the pattern matches the text
+at location 3.</pre>
+</div> 
+<b>Example #2</b> (First two characters of the pattern are different): <br />
+<div class="code_block">
+<pre>Pattern: gabcda
+Text:    fgagabcda
+
+First P[1] and T[1] does not match. Shift by one because T[1] could match P[0].
+
+Pattern:  gabcda
+Text:    fgagabcda
+
+P[1] and T[1] match. Then there is a mismatch at P[2] and T[1]. Shift by two because
+T[1] will never match P[0].
+
+Pattern:    gabcda
+Text:    fgagabcda
+
+P[1] through P[5] match. Check P[0]. There is a match so the pattern matches the text
+at location 3.</pre>
+</div> 
+        </div>
+        <div class="section">
+        <h2>Knuth-Morris-Pratt [4-5]</h2>
+        In this algorithm, the pattern is pre-processed to find the longest repeating suffix for each element in the pattern. This is like generalizing Hancart to have more than two character prefix match.
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">findNext(</div><div class="code_nothing">pattern&nbsp;</div><div class="code_nothing">P,&nbsp;</div><div class="code_nothing">table&nbsp;</div><div class="code_nothing">next)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">next[</div><div class="code_nothing">0]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">-1;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">-1;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">|P|)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">-1&nbsp;</div><div class="code_nothing">or&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">|P|&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">j]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i++;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j++;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">next[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">j;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">next[</div><div class="code_nothing">j]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">knuthMorrisPratt(</div><div class="code_nothing">pattern&nbsp;</div><div class="code_nothing">p,&nbsp;</div><div class="code_nothing">text&nbsp;</div><div class="code_nothing">T)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">findNext(</div><div class="code_nothing">p,&nbsp;</div><div class="code_nothing">next)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">|T|&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">|P|)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">-1&nbsp;</div><div class="code_nothing">or&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing"><&nbsp;</div><div class="code_nothing">|P|&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">T[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">j]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++j;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">|P|)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">match&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">|P|;</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">next[</div><div class="code_nothing">j]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">no&nbsp;</div><div class="code_nothing">match;</div><div class="code_nothing"></div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+      <b>Example: </b><br />
+      <div class="code_block">
+<pre>
+Pattern: ababacdd
+Next:   -10012300 
+Text:    ababcabbababacdd
+
+P[0-3] matches T[0-3]. mismatch at j=4. next[4]=2. This means align P[2] with T[4] 
+because there is a repeated pattern of size 2.
+
+Pattern:   ababacdd
+Text:    ababcabbababacdd
+
+P[0-1] matches T[0-1]. mismatch at j=2. next[2]=0. This means align P[0] with T[4]
+because there is no repeat.
+
+Pattern:     ababacdd
+Text:    ababcabbababacdd
+
+P[0] does not match T[0]. j=0. next[0]=-1; When j=-1, the algorithm increaments
+both i and j. This shifts the pattern over by one.
+
+Pattern:      ababacdd
+Text:    ababcabbababacdd
+
+P[0-1] matches T[0-1]. mismatch at j=2. next[2]=0. This means align P[0] with T[8]
+
+Pattern:         ababacdd
+Text:    ababcabbababacdd
+
+Match at text index 8.</pre>
+</div>
+<br />
+<b>Next Explained:</b><br />
+<br />
+Next specifies the place where the longest prefix and suffix match.<br />
+<div class="code_block">
+<pre>
+letter: a b a b a c d d
+next:  -1 0 0 1 2 3 0 0
+index:  1 2 3 4 5 6 7 8
+
+Index 1:
+Position 0 contains the longest suffix/prefix match
+
+Index 2:
+Position 0 contains the longest suffix/prefix match
+
+Index 3:
+Position 0 contains the longest suffix/prefix match
+
+Index 4:
+a b a b
+a b a 
+    a b a
+
+The longest suffix/prefix match is to shift the pattern to have position 1 
+match position 3.
+
+Index 5:
+a b a b a
+a b a b 
+    a b a b
+
+The longest suffix/prefix match is to shift the pattern to have position 2 
+match position 4.
+
+Index 6: 
+a b a b a c
+a b a b a 
+    a b a b a
+
+The longest suffix/prefix match is to shift the pattern to have position 3 
+match position 5.
+
+Index 7: 
+a b a b a c d
+a b a b a c
+            a b a b a c
+
+The longest suffix/prefix match is to shift the pattern to have position 0 
+match position 6.
+
+Index 8: 
+a b a b a c d d
+a b a b a c d
+              a b a b a c d
+
+The longest suffix/prefix match is to shift the pattern to have position 0 
+match position 7.
+</pre>
+</div>
+<br />
+  <b>Building next:</b><br />
+        <br />
+        <table class="nice_table">
+          <tr bgcolor="#e5e5e5">
+            <td width="80px">i</td>
+            <td width="80px">j</td>
+            <td width="280px">next</td>
+            <td width="280px">pattern</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>-1</td>
+            <td>[-1]</td>
+            <td>ababacdd</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>[-1 0]</td>
+            <td><u>ab</u>abacdd</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>-1</td>
+            <td>[-1 0]</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>0</td>
+            <td>[-1 0 0]</td>
+            <td><u>a</u>b<u>a</u>bacdd</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>1</td>
+            <td>[-1 0 0 1]</td>
+            <td>a<u>b</u>a<u>b</u>acdd</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>2</td>
+            <td>[-1 0 0 1 2]</td>
+            <td>ab<u>a</u>b<u>a</u>cdd</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>3</td>
+            <td>[-1 0 0 1 2 3]</td>
+            <td>aba<u>b</u>a<u>c</u>dd</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>1</td>
+            <td>[-1 0 0 1 2 3]</td>
+            <td>a<u>b</u>aba<u>c</u>dd</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>0</td>
+            <td>[-1 0 0 1 2 3]</td>
+            <td><u>a</u>baba<u>c</u>dd</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>-1</td>
+            <td>[-1 0 0 1 2 3]</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>0</td>
+            <td>[-1 0 0 1 2 3 0]</td>
+            <td><u>a</u>babac<u>d</u>d</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>-1</td>
+            <td>[-1 0 0 1 2 3 0]</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>0</td>
+            <td>[-1 0 0 1 2 3 0 0]</td>
+            <td><u>a</u>babacd<u>d</u></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>-1</td>
+            <td>[-1 0 0 1 2 3 0 0]</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>0</td>
+            <td>[-1 0 0 1 2 3 0 0]</td>
+            <td></td>
+          </tr>
+        </table>
+<b>Another next:</b><br />
+<div class="code_block">
+<pre>pattern: a b c a b c a b d
+next:   -1 0 0 0 1 2 3 4 5
+index:   0 1 2 3 4 5 6 7 8 
+
+index 4
+abcab
+   abcab
+
+index 5
+abcabc
+   abcabc
+
+index 6
+abcabca
+   abcabca
+
+index 7
+abcabcab
+   abcabcab
+
+index 8
+abcabcabd
+   abcabcabd</pre>
+</div>
+        <ul>
+          <li>Time complexity: O(T)</li>
+        </ul>
+        </div>
+        <div class="section">
+        <h2>Boyer-Moore Algorithm</h2>
+        In Knuth-Morris-Pratt, the search is done in the pattern from left to right. In Boyer-Moore the search is done from right to left. This makes it so when there is a mismatch, more of the pattern can often be skipped.<br />
+        <br />
+        Rules:
+        <ol>
+          <li>No occurance rule: if the mismatched character T[i] appears nowhere in P, align P[0] with T[i+1]
+            <div class="algorithm">
+            <div class="code_grey">1:&nbsp;</div><div class="code_nothing">aaaa<u>ebd</u>aabadbda</div><br /><div class="code_grey">2:&nbsp;</div><div class="code_nothing">daba<u>cbd</u></div><br /><div class="code_grey">3:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dabacbd&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">--&nbsp;</div><div class="code_nothing">there&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">no&nbsp;</div><div class="code_nothing">e&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">pattern,&nbsp;</div><div class="code_nothing">so&nbsp;</div><div class="code_nothing">it&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">shifted&nbsp;</div><div class="code_nothing">one&nbsp;</div><div class="code_nothing">past&nbsp;</div><div class="code_nothing">e</div><br />            </div>
+          </li>
+          <li>Left side occurance rule: if there is an occurance of character ch equal to T[i] only to the left of P[j], align T[i] with P[k] = ch closest to P[j]
+            <div class="algorithm">
+            <div class="code_grey">1:&nbsp;</div><div class="code_nothing">aaaaebdaab<u>ad</u>bda</div><br /><div class="code_grey">2:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dabac<u>bd</u>&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dabacbd&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">--&nbsp;</div><div class="code_nothing">pattern&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">shifted&nbsp;</div><div class="code_nothing">over&nbsp;</div><div class="code_nothing">until&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">a's&nbsp;</div><div class="code_nothing">match.</div><br />            </div>
+          </li>
+          <li>Right side occurance rule: if there is an occurance of character ch equal to T[i] to the right of P[j], shift P by one position
+            <div class="algorithm">
+            <div class="code_grey">1:&nbsp;</div><div class="code_nothing">aaaaebdaaba<u>dbd</u>a</div><br /><div class="code_grey">2:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">daba<u>cbd</u></div><br /><div class="code_grey">3:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dabacbd</div><br />            </div>
+          </li>
+        </ol>
+        Algorithm:
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">boyerMooreSimple(</div><div class="code_nothing">pattern&nbsp;</div><div class="code_nothing">P,&nbsp;</div><div class="code_nothing">text&nbsp;</div><div class="code_nothing">T)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">|P|&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1</div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">delta1[</div><div class="code_nothing">P[</div><div class="code_nothing">j]</div><div class="code_nothing">]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">|P|&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">|P|&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing"><&nbsp;</div><div class="code_nothing">|T|</div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">|P|&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">&gt;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">P[</div><div class="code_nothing">j]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">T[</div><div class="code_nothing">i]</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">--i;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">--j;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">-1</div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">match&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">delta1&nbsp;</div><div class="code_nothing">contains&nbsp;</div><div class="code_nothing">T[</div><div class="code_nothing">i]</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">+=&nbsp;</div><div class="code_nothing">delta1[</div><div class="code_nothing">T[</div><div class="code_nothing">i]</div><div class="code_nothing">]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">+=&nbsp;</div><div class="code_nothing">|P|;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">no&nbsp;</div><div class="code_nothing">match;</div><div class="code_nothing"></div><br />        </div>
+        <ul>
+          <li>The worst case time complexity is 3T or O(T). This was determined in 1991. [2]</li>
+        </ul>
+        <b>Building delta1: </b>
+<div class="code_block">
+<pre>Index J=0: 
+Pattern: d a b a c b d
+delta1[d] = 7 - 0 - 1 = 6
+delta1[a]: 0
+delta1[b]: 0
+delta1[c]: 0
+delta1[d]: 6
+
+Index J=1: 
+Pattern: d a b a c b d
+delta1[a] = 7 - 1 - 1 = 5
+delta1[a]: 5
+delta1[b]: 0
+delta1[c]: 0
+delta1[d]: 6
+
+Index J=2: 
+Pattern: d a b a c b d
+delta1[b] = 7 - 2 - 1 = 4
+delta1[a]: 5
+delta1[b]: 4
+delta1[c]: 0
+delta1[d]: 6
+
+Index J=3: 
+Pattern: d a b a c b d
+delta1[a] = 7 - 3 - 1 = 3
+delta1[a]: 3
+delta1[b]: 4
+delta1[c]: 0
+delta1[d]: 6
+
+Index J=4: 
+Pattern: d a b a c b d
+delta1[c] = 7 - 4 - 1 = 2
+delta1[a]: 3
+delta1[b]: 4
+delta1[c]: 2
+delta1[d]: 6
+
+Index J=5: 
+Pattern: d a b a c b d
+delta1[b] = 7 - 5 - 1 = 1
+delta1[a]: 3
+delta1[b]: 1
+delta1[c]: 2
+delta1[d]: 6
+
+Index J=6: 
+Pattern: d a b a c b d
+delta1[d] = 7 - 6 - 1 = 0
+delta1[a]: 3
+delta1[b]: 1
+delta1[c]: 2
+delta1[d]: 0
+</pre>
+</div>
+        </div>
+        <div class="section">
+        <h2>Rabin-Karp Algorithm</h2>
+        Rabin-Karp uses a hash function to determine if the strings match.
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rabinKarp(</div><div class="code_nothing">pattern&nbsp;</div><div class="code_nothing">P,&nbsp;</div><div class="code_nothing">text&nbsp;</div><div class="code_nothing">T)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">hash_pattern&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">hash(</div><div class="code_nothing">P)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">hash_text&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">hash(</div><div class="code_nothing">T)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">1&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">|T|</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">hash_pattern&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">hash_text</div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">verify&nbsp;</div><div class="code_nothing">works</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">hash_text&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">rolling_hash(</div><div class="code_nothing">hash_text,&nbsp;</div><div class="code_nothing">T,&nbsp;</div><div class="code_nothing">i)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">not_found;</div><div class="code_nothing"></div><br />        </div>
+        Rolling hash functions:
+        <ul>
+          <li>hash_next = hash_prev - character_being_removed + character_being_added</li>
+        </ul>
+        Time complexity:
+        <ul>
+          <li>Worst case running time: O(T*P)</li>
+          <li>Average case running time: O(T)</li>
+        </ul>
+        <b>Example:</b>
+<div class="code_block">
+<pre>Letters:
+========
+A 1
+B 2
+C 3
+D 4
+E 5
+
+Pattern: ace
+Text:    abaeace
+
+Hash(ace) = 1+3+5 = 9
+Hash(aba) = 1+2+1 = 4
+
+Hashes do not match, roll text hash by one.
+Hash(bae) = Hash(aba) - a + e = 4 - 1 + 5 = 8
+ 
+Pattern:  ace
+Text:    abaeace
+
+Hashes do not match, roll text hash by one.
+Hash(aea) = Hash(bae) - b + a = 8 - 2 + 1 = 7
+ 
+Pattern:   ace
+Text:    abaeace
+
+Hashes do not match, roll text hash by one.
+Hash(eac) = Hash(aea) - a + c = 7 - 1 + 3 = 9
+ 
+Pattern:    ace
+Text:    abaeace
+
+Hashes match, check full pattern. Pattern does not match text, roll text hash by one.
+Hash(ace) = Hash(eac) - e + e = 9 - 5 + 5 = 9
+ 
+Pattern:     ace
+Text:    abaeace
+
+Hashes match, check full pattern. A match is output at index 4 in the text</pre>
+</div>
+        </div>
+        <div class="section">
+        <h2>Bitvector String Matching</h2>
+        This approach keeps a state that gets reset when there is not a match.<br />
+        <br />
+        Code:
+        <div class="code_block">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// shiftAnd.cpp - download <a href="/ads/index.php/dlcode/index/shiftAnd.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">iostream&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">string&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">vector&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_green">void</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">shiftAnd(</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">pattern,&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">string&nbsp;</div><div class="code_nothing">text)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">matchBit&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">size_t</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">pattern.length(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">matchBit&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">vector&lt;</div><div class="code_green">int</div><div class="code_nothing">&gt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">charactersInP;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">255;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">charactersInP.push_back(</div><div class="code_nothing">0)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">size_t</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0,&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">pattern.length(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i,&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">charactersInP[</div><div class="code_nothing">pattern[</div><div class="code_nothing">i]</div><div class="code_nothing">]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">|=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j;</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"charactersInP["</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">pattern[</div><div class="code_nothing">i]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"]="</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">charactersInP[</div><div class="code_nothing">pattern[</div><div class="code_nothing">i]</div><div class="code_nothing">]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"search:&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">text.length(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"charactersInP["</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">text[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"]="</div><div class="code_nothing">;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">charactersInP[</div><div class="code_nothing">text[</div><div class="code_nothing">i]</div><div class="code_nothing">]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">(</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">|&nbsp;</div><div class="code_nothing">1)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">charactersInP[</div><div class="code_nothing">text[</div><div class="code_nothing">i]</div><div class="code_nothing">]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"state:&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">(</div><div class="code_nothing">matchBit&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">state)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">!=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"match&nbsp;at:&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">pattern.length(</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">32:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">35:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">36:&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">main(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">argc,&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">argv[</div><div class="code_nothing">]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">37:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">38:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">shiftAnd(</div><div class="code_string">"ababab"</div><div class="code_nothing">,&nbsp;</div><div class="code_string">"ababxabababababa"</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">39:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">40:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+        <b>Example:</b>
+<div class="algorithm">
+<pre>matchBit = 10000
+charactersInP[a] shows positions of a's as bits
+state starts at zero
+
+charactersInP[a] = 00101
+charactersInP[b] = 01010
+charactersInP[c] = 10000
+
+Pattern: ababc
+Text:    ababxababc
+State:   00000
+
+Match at T[0] and P[0]
+
+Pattern: ababc
+Text:    ababxababc
+State:   00001
+
+Match at T[1] and P[1]
+
+Pattern: ababc
+Text:    ababxababc
+State:   00010
+
+Match at T[2] and P[2]
+
+Pattern: ababc
+Text:    ababxababc
+State:   00101
+
+Match at T[3] and P[3]
+
+Pattern: ababc
+Text:    ababxababc
+State:   01010
+
+Mismatch at T[4] and P[4]
+
+Pattern:      ababc
+Text:    ababxababc
+State:   00000
+
+Match at T[5] and P[0]
+
+Pattern:      ababc
+Text:    ababxababc
+State:   00001
+
+Match at T[6] and P[1]
+
+Pattern:      ababc
+Text:    ababxababc
+State:   00010
+
+Match at T[7] and P[2]
+
+Pattern:      ababc
+Text:    ababxababc
+State:   00101
+
+Match at T[8] and P[3]
+
+Pattern:      ababc
+Text:    ababxababc
+State:   01010
+
+Match at T[9] and P[4]
+
+Pattern:      ababc
+Text:    ababxababc
+State:   10000
+
+Matchbit == State. Match found at index 5 in the text
+</pre>
+</div>
+        <ul>
+          <li>Time complexity: O(|T|)</li>
+          <li>Max pattern size is the number of bits in a long int (64).</li>
+          <li>An array of long ints can be used and then the time complexity becomes: O(|P|/64 * |T|) or O(|P| * |T|)
+        </ul>
+        </div>
+        <div class="section">
+        <h2>Summary of String Matching Algorithms #1</h2>
+        <table class="nice_table">
+          <tr class="grey">
+            <td>Algorithm</td>
+            <td>Description</td>
+            <td>Preprocessing Time Complexity</td>
+            <td>Worst Case Search Time Complexity</td>
+            <td>Average Case Search Time Complexity</td>
+          </tr>
+          <tr>
+            <td>Brute-Force</td>
+            <td>Double Nested For Loops</td>
+            <td>O(1)</td>
+            <td>O(T*P)</td>
+            <td>O(T*P)</td>
+          </tr>
+          <tr>
+            <td>Hancart</td>
+            <td>Can jump at most 2 characters</td>
+            <td>O(1)</td>
+            <td>O(T*P)</td>
+            <td>O(T)</td>
+          </tr>
+          <tr>
+            <td>Knuth-Morris Pratt</td>
+            <td>Can jump any subpattern length of characters</td>
+            <td>O(P)</td>
+            <td>O(T) (2T)</td>
+            <td>O(T) (2T)</td>
+          </tr>
+          <tr>
+            <td>Boyer-Moore</td>
+            <td>Searches for matches in reverse</td>
+            <td>O(P)</td>
+            <td>O(T) (3T)</td>
+            <td>O(T) (3T)</td>
+          </tr>
+          <tr>
+            <td>Rabin-Karp</td>
+            <td>Uses a hash of the pattern</td>
+            <td>O(P)</td>
+            <td>O(T*P)</td>
+            <td>O(T)</td>
+          </tr>
+          <tr>
+            <td>Bitvector</td>
+            <td>Uses a bitvector, can only use for patterns less than 64 characters</td>
+            <td>O(P)</td>
+            <td>O(T) (T)</td>
+            <td>O(T) (T)</td>
+          </tr>
+        </table>
+        </div>
+        <div class="section">
+        <h2>References</h2>
+        <ol>
+          <li>http://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm</li>
+          <li>http://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string_search_algorithm</li>
+          <li>http://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm</li>
+          <li>Cormen, Leiserson, Rivest, Stein, "Introduction to Algorithms", Second Edition. Section 32.4</li>
+          <li>Drozdek, "Data Structures and Algorithms", Fourth Edition. Section 13.1.2</li>
+        </ol>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

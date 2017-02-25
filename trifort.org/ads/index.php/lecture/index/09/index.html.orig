@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+  <link href="/css/styles.css" rel="stylesheet" type="text/css"></link>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+  <link rel="shortcut icon" href="/cse382/img/favicon2.ico" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>09: binary trees #2</h1>
+          Tree Rotations | DSW Algorithm | AVL Trees | Splay Trees<br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>DSW Algorithm</h2>
+          DSW is based on rotations.  It takes a possibly unbalanced tree and balances it all at once.  Other algorithms keep a tree balanced after every insertion/deletion.<br />
+          <br />
+          <img src="/ads/img/Tree_rotation.png" alt="TreeRotation" /><br />
+          (Image from wikipedia [1])<br />
+          <br />
+          <ul>
+            <li>Rotate Left with Labels:<br />
+              <img src="/ads/img/pict/Rotations_0.bmp" alt="rotations" /></li>
+            <li>Rotate Right with Labels:<br />
+              <img src="/ads/img/pict/Rotations_1.bmp" alt="rotations" /></li>
+          </ul>
+          <div class="code_block">
+          <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// rotations.cpp - download <a href="/ads/index.php/dlcode/index/rotations.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_green">void</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rotateRight(</div><div class="code_nothing">TreeNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">gr,&nbsp;</div><div class="code_nothing">TreeNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">par,&nbsp;</div><div class="code_nothing">TreeNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//grandparent&nbsp;child&nbsp;becomes&nbsp;ch&nbsp;&nbsp;</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">gr-&gt;</div><div class="code_nothing">getRight(</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">par)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">gr-&gt;</div><div class="code_nothing">setRight(</div><div class="code_nothing">ch)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">gr-&gt;</div><div class="code_nothing">setLeft(</div><div class="code_nothing">ch)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">TreeNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">ch_right&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ch-&gt;</div><div class="code_nothing">getRight(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">par-&gt;</div><div class="code_nothing">setLeft(</div><div class="code_nothing">ch_right)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ch-&gt;</div><div class="code_nothing">setRight(</div><div class="code_nothing">par)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_green">void</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rotateLeft(</div><div class="code_nothing">TreeNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">gr,&nbsp;</div><div class="code_nothing">TreeNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">par,&nbsp;</div><div class="code_nothing">TreeNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">ch)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//grandparent&nbsp;child&nbsp;becomes&nbsp;ch&nbsp;&nbsp;</div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">gr-&gt;</div><div class="code_nothing">getRight(</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">par)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">gr-&gt;</div><div class="code_nothing">setRight(</div><div class="code_nothing">ch)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">gr-&gt;</div><div class="code_nothing">setLeft(</div><div class="code_nothing">ch)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">TreeNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">ch_left&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ch-&gt;</div><div class="code_nothing">getLeft(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">par-&gt;</div><div class="code_nothing">setRight(</div><div class="code_nothing">ch_left)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ch-&gt;</div><div class="code_nothing">setLeft(</div><div class="code_nothing">par)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />          </div>
+          First we create the backbone (this takes O(n) worst case)<br />
+          <ol>
+            <li>Start: <br />
+            <img src="/ads/img/pict/DswBackbone_0.bmp" alt="DswBackbone" /></li>
+            <li>Rotate right (20, 10): <br />
+            <img src="/ads/img/pict/DswBackbone_1.bmp" alt="DswBackbone" /></li>
+            <li>Rotate right (10, 5): <br />
+            <img src="/ads/img/pict/DswBackbone_2.bmp" alt="DswBackbone" /></li>
+            <li>Rotate right (5, 2): <br />
+            <img src="/ads/img/pict/DswBackbone_3.bmp" alt="DswBackbone" /></li>
+            <li>Rotate right (20, 15): <br />
+            <img src="/ads/img/pict/DswBackbone_4.bmp" alt="DswBackbone" /></li>
+            <li>Apply algorithm to remainder: <br />
+            <img src="/ads/img/pict/DswBackbone_5.bmp" alt="DswBackbone" /></li>
+          </ol>
+          Then we create the tree (this also takes O(n) worst case).  Execute rotations repeatedly for every other node.<br />
+          <ol>
+            <li>Start: <br />
+            <img src="/ads/img/pict/DswBackbone_5.bmp" alt="DswBackbone" /></li>
+            <li>Rotate left at 5 and 11, 17, 43, 53<br />
+            <img src="/ads/img/pict/DswBackbone_6.bmp" alt="DswBackbone" /></li>  
+            <li>Rotate left at 11, 43.  We are done because the maximum height difference is one.<br />
+            <img src="/ads/img/pict/DswBackbone_7.bmp" alt="DswBackbone" /></li>  
+          </ol>
+          (approximate) DSW Algorithm:
+          <div class="algorithm">
+          <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">createBackbone(</div><div class="code_nothing">root)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">tmp&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">root;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">tmp&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">NULL)</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">tmp&nbsp;</div><div class="code_nothing">has&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">left&nbsp;</div><div class="code_nothing">child</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rotate&nbsp;</div><div class="code_nothing">right&nbsp;</div><div class="code_nothing">about&nbsp;</div><div class="code_nothing">tmp&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">it's&nbsp;</div><div class="code_nothing">left&nbsp;</div><div class="code_nothing">child;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">set&nbsp;</div><div class="code_nothing">tmp&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">left&nbsp;</div><div class="code_nothing">child&nbsp;</div><div class="code_nothing">that&nbsp;</div><div class="code_nothing">just&nbsp;</div><div class="code_nothing">became&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">parent;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">set&nbsp;</div><div class="code_nothing">tmp&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">right&nbsp;</div><div class="code_nothing">child</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">createPerfectTree(</div><div class="code_nothing">n)</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">make&nbsp;</div><div class="code_nothing">n/2&nbsp;</div><div class="code_nothing">left&nbsp;</div><div class="code_nothing">rotations&nbsp;</div><div class="code_nothing">starting&nbsp;</div><div class="code_nothing">from&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">top;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">n&nbsp;</div><div class="code_nothing">>&nbsp;</div><div class="code_nothing">1)</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">n&nbsp;</div><div class="code_nothing">/&nbsp;</div><div class="code_nothing">2;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">make&nbsp;</div><div class="code_nothing">n&nbsp;</div><div class="code_nothing">left&nbsp;</div><div class="code_nothing">rotations&nbsp;</div><div class="code_nothing">starting&nbsp;</div><div class="code_nothing">from&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">top;</div><div class="code_nothing"></div><br />          </div>
+        </div>
+        <div class="section">
+          <h2>AVL Trees</h2>
+          AVL Trees were the first self balancing binary tree invented [2].  
+          <ul>
+            <li>In AVL Trees each node has a balance factor that specify the difference in height between the left and right subtrees (balance = right_height - left_height).</li>
+            <li>The balance factors should always be -1, 0 or +1.  Otherwise rebalancing is needed</li>
+            <li>AVL Trees do not guarentee that the tree is always perfectly balanced.</li>
+            <li>AVL Trees are similar to Red-Black Trees.
+              <ul>
+                <li>AVL Trees have faster lookup (empirically) than Red-Black Trees because the balancing is more rigid</li>
+                <li>Red-Black Trees have faster insertion (empirically) and removal because the balancing is less rigid</li>
+              </ul>
+            </li>
+            <li>AVL Tree Time Complexities (Worst Case):
+              <ul>
+                <li>Search: O(lg(n))</li>
+                <li>Insert: O(lg(n))</li>
+                <li>Delete: O(lg(n))</li>
+              </ul>
+            </li>
+          </ul>
+          <h3>AVL Tree Insertion</h3>
+          After insertion, the balance factors need to be checked.  There are six cases.  Content from this section is adapted from [2].
+          <ol>
+            <li>Case: +2, +1 (parent is 2 and signs are the same)<br />
+            <ol>
+              <li>Start: <br />
+              <img src="/ads/img/pict/AVLTreeRotations_0.bmp" alt="AVLTreeRotations" /></li>
+              <li>Show Node 53<br />
+              <img src="/ads/img/pict/AVLTreeRotations_1.bmp" alt="AVLTreeRotations" /></li>
+              <li>Insert value <br />
+              <img src="/ads/img/pict/AVLTreeRotations_2.bmp" alt="AVLTreeRotations" /></li>
+              <li>Right Rotation around 20 and 40<br />
+              <img src="/ads/img/pict/AVLTreeRotations_3.bmp" alt="AVLTreeRotations" /></li>
+            </ol></li>
+            <li>Case: +2, -1 (parent is 2 and signs are the different)<br />
+            <ol>
+              <li>Start: <br />
+              <img src="/ads/img/pict/AVLTreeRotations_7.bmp" alt="AVLTreeRotations" /></li>
+              <li>Show Node 30<br />
+              <img src="/ads/img/pict/AVLTreeRotations_8.bmp" alt="AVLTreeRotations" /></li>
+              <li>Insert value <br />
+              <img src="/ads/img/pict/AVLTreeRotations_9.bmp" alt="AVLTreeRotations" /></li>
+              <li>Left Rotation around 30 and 40<br />
+              <img src="/ads/img/pict/AVLTreeRotations_10.bmp" alt="AVLTreeRotations" /></li>
+              <li>Right Rotation with Parent as Root <br />
+              <img src="/ads/img/pict/AVLTreeRotations_11.bmp" alt="AVLTreeRotations" /></li>
+            </ol></li>
+            <li>There are mirror images of step 3 not shown here</li>
+          </ol>
+          <h3>AVL Tree Deletion</h3>
+          <ul>
+            <li>Deletion by copying is prefered because there is less balancing needed.</li>
+          </ul>
+        </div>
+        <div class="section">
+          <h2>Splay Trees</h2>
+          Splay Trees are like self organizing lists, except for trees. The most recently accessed element is moved to the root using tree rotations. [3]
+          <h3>Splay Tree Search and Insertion</h3>
+          A basic binary search is used to find the node in a search or find the place to insert in insertion. On the way down the recursion, 6 types of rotations are used.
+          <ol>
+            <li>Zig Step: The parent is the root and the found node is the left child.  A right rotation is done at the root<br />
+              <img src="/ads/img/pict/SplayTree_0.bmp" alt="SplayTree" /></li>
+            <li>Zag Step: The parent is the root and the found node is the right child.  A left rotation is done at the root<br />
+              <img src="/ads/img/pict/SplayTree_1.bmp" alt="SplayTree" /></li></li>
+            <li>Zig-zig Step: The path from the grandparent to the found node was two left pointers.  A right rotation is done at the grandparent and parent<br />
+              <img src="/ads/img/pict/SplayTree_2.bmp" alt="SplayTree" /></li></li>
+            <li>Zag-zag Step: The path from the grandparent to the found node was two right pointers.  A left rotation is done at the grandparent and parent<br />
+              <img src="/ads/img/pict/SplayTree_3.bmp" alt="SplayTree" /></li></li>
+            <li>Zag-zig Step: The path from the grandparent to the found node was a left pointer followed by a right pointer.  A left rotation is done at the parent and a right at the grandparent<br />
+              <img src="/ads/img/pict/SplayTree_4.bmp" alt="SplayTree" /></li></li>
+            <li>Zig-zag Step: The path from the grandparent to the found node was a right pointer followed by a left pointer.  A right rotation is done at the parent and a left at the grandparent<br />
+              <img src="/ads/img/pict/SplayTree_5.bmp" alt="SplayTree" /></li></li>
+          </ol>
+          <h3>Splay Tree Deletion</h3>
+          One method of Splay Tree Deletion is as follows:
+          <ol>
+            <li>Splay the node to be deleted to the top</li>
+            <li>Make the left child the root</li>
+            <li>Make the left child's right sub-tree and attach it to the leftmost node of the right child</li>
+            <li>Make the right child the new right child of the new root</li>
+          </ol>
+        </div>
+
+        <div class="section">
+          <h2>References</h2>
+          <ol>
+            <li>http://en.wikipedia.org/wiki/Tree_rotation</li>
+            <li>http://en.wikipedia.org/wiki/AVL_tree</li>
+            <li>http://en.wikipedia.org/wiki/Splay_tree</li>
+          </ol>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

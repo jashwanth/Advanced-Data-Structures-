@@ -1,0 +1,508 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+    <link href="../../../../../css/styles.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['len', 'vec', 'sll'], 
+          [1048576, 10, 63],
+          [2097152, 11, 125],
+          [3145728, 31, 141],
+          [4194304, 48, 210],
+          [5242880, 58, 239],
+          [6291456, 68, 282],
+          [7340032, 81, 323],
+          [8388608, 107, 405],
+          [9437184, 121, 448],
+          [10485760, 124, 463],
+          [11534336, 137, 522],
+          [12582912, 145, 547],
+          [13631488, 159, 589],
+          [14680064, 172, 629],
+          [15728640, 178, 671],
+          [16777216, 253, 811],
+          [17825792, 243, 834],
+          [18874368, 251, 877],
+          [19922944, 267, 918],
+          [20971520, 278, 967],
+          [22020096, 286, 1011],
+          [23068672, 300, 1055],
+          [24117248, 335, 1105],
+          [25165824, 322, 1138],
+          [26214400, 357, 1200],
+          [27262976, 382, 1284],
+          [28311552, 373, 1283],
+          [29360128, 375, 1297],
+          [30408704, 386, 1351],
+          [31457280, 419, 1388],
+          [32505856, 417, 1424]
+        ]);
+
+        var options = {
+          title: 'Insertion Performance'
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+
+        var data2 = google.visualization.arrayToDataTable([
+          ['len', 'vec', 'sll'], 
+          [1048576, 8, 7],
+          [2097152, 16, 14],
+          [3145728, 24, 22],
+          [4194304, 33, 29],
+          [5242880, 41, 36],
+          [6291456, 49, 43],
+          [7340032, 57, 51],
+          [8388608, 65, 57],
+          [9437184, 74, 65],
+          [10485760, 84, 72],
+          [11534336, 90, 80],
+          [12582912, 99, 88],
+          [13631488, 107, 97],
+          [14680064, 115, 102],
+          [15728640, 125, 116],
+          [16777216, 131, 119],
+          [17825792, 143, 124],
+          [18874368, 149, 149],
+          [19922944, 161, 139],
+          [20971520, 167, 148],
+          [22020096, 180, 158],
+          [23068672, 184, 159],
+          [24117248, 190, 184],
+          [25165824, 198, 175],
+          [26214400, 205, 200],
+          [27262976, 215, 190],
+          [28311552, 224, 198],
+          [29360128, 231, 208],
+          [30408704, 240, 212],
+          [31457280, 253, 222],
+          [32505856, 256, 224]
+        ]);
+
+        var options2 = {
+          title: 'Iter Performance: no optimization'
+        };
+
+        var chart2 = new google.visualization.LineChart(document.getElementById('iter_div'));
+        chart2.draw(data2, options2);
+
+        var data3 = google.visualization.arrayToDataTable([
+          ['len', 'vec', 'sll'], 
+          [1048576, 0, 6],
+          [2097152, 1, 11],
+          [3145728, 2, 18],
+          [4194304, 3, 23],
+          [5242880, 3, 30],
+          [6291456, 3, 38],
+          [7340032, 4, 47],
+          [8388608, 5, 48],
+          [9437184, 6, 56],
+          [10485760, 6, 61],
+          [11534336, 7, 66],
+          [12582912, 7, 71],
+          [13631488, 8, 77],
+          [14680064, 9, 95],
+          [15728640, 9, 90],
+          [16777216, 10, 99],
+          [17825792, 11, 102],
+          [18874368, 12, 109],
+          [19922944, 12, 115],
+          [20971520, 13, 119],
+          [22020096, 13, 142],
+          [23068672, 14, 137],
+          [24117248, 15, 136],
+          [25165824, 15, 144],
+          [26214400, 15, 147],
+          [27262976, 16, 156],
+          [28311552, 17, 160],
+          [29360128, 17, 168],
+          [30408704, 18, 173],
+          [31457280, 18, 177],
+          [32505856, 19, 185]
+        ]);
+
+        var options3 = {
+          title: 'Iter Performance: g++ -O3'
+        };
+
+        var chart3 = new google.visualization.LineChart(document.getElementById('iter_div2'));
+        chart3.draw(data3, options3);
+
+        var data4 = google.visualization.arrayToDataTable([
+          ['len', 'binary', 'sequential'], 
+          [1024, 0, 4],
+          [2048, 0, 13],
+          [3072, 0, 38],
+          [4096, 0, 51],
+          [5120, 0, 84],
+          [6144, 0, 122],
+          [7168, 0, 160],
+          [8192, 0, 207],
+          [9216, 1, 251],
+          [10240, 1, 333],
+          [11264, 1, 379],
+          [12288, 1, 455],
+          [13312, 1, 544],
+          [14336, 1, 612],
+          [15360, 1, 690],
+          [16384, 2, 791],
+          [17408, 2, 891],
+          [18432, 2, 992],
+          [19456, 2, 1110],
+          [20480, 2, 1220],
+          [21504, 2, 1353],
+          [22528, 2, 1493],
+          [23552, 3, 1639],
+          [24576, 3, 1760],
+          [25600, 3, 1882],
+          [26624, 4, 2032],
+          [27648, 4, 2195],
+          [28672, 4, 2385],
+          [29696, 4, 2556],
+          [30720, 4, 2724],
+          [31744, 4, 2922]
+        ]);
+
+        var options4 = {
+          title: 'Search Performance: g++'
+        };
+
+        var chart4 = new google.visualization.LineChart(document.getElementById('search_div1'));
+        chart4.draw(data4, options4);
+
+        var data5 = google.visualization.arrayToDataTable([
+          ['len', 'binary', 'sequential'], 
+          [1024, 0, 0],
+          [2048, 0, 1],
+          [3072, 0, 3],
+          [4096, 0, 5],
+          [5120, 0, 9],
+          [6144, 0, 15],
+          [7168, 0, 15],
+          [8192, 0, 25],
+          [9216, 0, 32],
+          [10240, 0, 36],
+          [11264, 0, 45],
+          [12288, 0, 54],
+          [13312, 0, 64],
+          [14336, 0, 66],
+          [15360, 0, 77],
+          [16384, 0, 87],
+          [17408, 0, 103],
+          [18432, 0, 111],
+          [19456, 0, 123],
+          [20480, 0, 136],
+          [21504, 0, 148],
+          [22528, 1, 158],
+          [23552, 0, 183],
+          [24576, 1, 194],
+          [25600, 1, 205],
+          [26624, 1, 225],
+          [27648, 1, 246],
+          [28672, 1, 263],
+          [29696, 1, 279],
+          [30720, 1, 295],
+          [31744, 1, 322]
+        ]);
+
+        var options5 = {
+          title: 'Search Performance: g++ -O3'
+        };
+
+        var chart5 = new google.visualization.LineChart(document.getElementById('search_div2'));
+        chart5.draw(data5, options5);
+      }
+    </script>
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>02: ordered containers #1</h1>
+          Pointers | Singly Linked Lists | Doubly Linked Lists | Vector Data Structure<br />
+          Amortized Complexity | List vs. Vector Performance | Binary Search | HW01<br />
+          <br />
+        </div>
+
+        <div class="section">
+          <h2>Pointers</h2>
+          <div class="code_block"><div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// pointers.cpp - download <a href="../../../dlcode/index/pointers.cpp.html">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">iostream&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_red">struct</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SingleNode&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SingleNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">m_next;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_value;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_green">void</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">printAddrValues(</div><div class="code_nothing">SingleNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">node,&nbsp;</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">addr,&nbsp;</div><div class="code_green">const</div><div class="code_nothing">&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">title)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"================================================="</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"=&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">title&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"&nbsp;addrs/values:&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"================================================="</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"addr("</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">title&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"):&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">hex&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">addr&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"value("</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">title&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"):&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">hex&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">node&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"addr("</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">title&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">".m_next):&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">hex&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">(</div><div class="code_nothing">node-&gt;</div><div class="code_nothing">m_next)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"value("</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">title&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">".m_next):&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">hex&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">node-&gt;</div><div class="code_nothing">m_next&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"addr("</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">title&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">".m_value):&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">hex&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">(</div><div class="code_nothing">node-&gt;</div><div class="code_nothing">m_value)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"value("</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">title&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">".m_value):&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">hex&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">node-&gt;</div><div class="code_nothing">m_value&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">main(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">argc,&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*argv[</div><div class="code_nothing">]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"================================================="</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"=&nbsp;sizes:&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"================================================="</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"sizeof(SingleNode):&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sizeof(</div><div class="code_nothing">SingleNode)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"sizeof(SingleNode&nbsp;*):&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sizeof(</div><div class="code_nothing">SingleNode&nbsp;</div><div class="code_nothing">*)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"sizeof(long&nbsp;long):&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sizeof(</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_green">long</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">32:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SingleNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">head&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SingleNode(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">printAddrValues(</div><div class="code_nothing">head,&nbsp;</div><div class="code_nothing">(</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_green">long</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">head,&nbsp;</div><div class="code_string">"head"</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">35:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">36:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SingleNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">one&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SingleNode(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">37:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">one-&gt;</div><div class="code_nothing">m_value&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">38:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">39:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SingleNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">two&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SingleNode(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">40:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">two-&gt;</div><div class="code_nothing">m_value&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">2;</div><div class="code_nothing"></div><br /><div class="code_grey">41:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">42:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SingleNode&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">three&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">SingleNode(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">43:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">three-&gt;</div><div class="code_nothing">m_value&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">3;</div><div class="code_nothing"></div><br /><div class="code_grey">44:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">45:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">head-&gt;</div><div class="code_nothing">m_next&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">one;</div><div class="code_nothing"></div><br /><div class="code_grey">46:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">one-&gt;</div><div class="code_nothing">m_next&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">two;</div><div class="code_nothing"></div><br /><div class="code_grey">47:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">two-&gt;</div><div class="code_nothing">m_next&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">three;</div><div class="code_nothing"></div><br /><div class="code_grey">48:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">printAddrValues(</div><div class="code_nothing">head,&nbsp;</div><div class="code_nothing">(</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_green">long</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">head,&nbsp;</div><div class="code_string">"head"</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">49:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">printAddrValues(</div><div class="code_nothing">one,&nbsp;</div><div class="code_nothing">(</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_green">long</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">one,&nbsp;</div><div class="code_string">"one"</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">50:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">printAddrValues(</div><div class="code_nothing">two,&nbsp;</div><div class="code_nothing">(</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_green">long</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">two,&nbsp;</div><div class="code_string">"two"</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">51:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">printAddrValues(</div><div class="code_nothing">three,&nbsp;</div><div class="code_nothing">(</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_green">long</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">three,&nbsp;</div><div class="code_string">"three"</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">52:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">53:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">54:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /></div>
+        <table>
+          <tr>
+            <td width="450px">
+<pre>=================================================
+= sizes: 
+=================================================
+sizeof(SingleNode): 16
+sizeof(SingleNode *): 8
+sizeof(long long): 8
+
+=================================================
+= head addrs/values: 
+=================================================
+addr(head): 7fff16456ff0
+value(head): 0x1c20010
+addr(head.m_next): 0x1c20010
+value(head.m_next): 0
+addr(head.m_value): 0x1c20018
+value(head.m_value): 0
+
+=================================================
+= head addrs/values: 
+=================================================
+addr(head): 7fff16456ff0
+value(head): 0x1c20010
+addr(head.m_next): 0x1c20010
+value(head.m_next): 0x1c20030
+addr(head.m_value): 0x1c20018
+value(head.m_value): 0
+
+=================================================
+= one addrs/values: 
+=================================================
+addr(one): 7fff16456ff8
+value(one): 0x1c20030
+addr(one.m_next): 0x1c20030
+value(one.m_next): 0x1c20050
+addr(one.m_value): 0x1c20038
+value(one.m_value): 1
+
+=================================================
+= two addrs/values: 
+=================================================
+addr(two): 7fff16457000
+value(two): 0x1c20050
+addr(two.m_next): 0x1c20050
+value(two.m_next): 0x1c20070
+addr(two.m_value): 0x1c20058
+value(two.m_value): 2
+
+=================================================
+= three addrs/values: 
+=================================================
+addr(three): 7fff16457008
+value(three): 0x1c20070
+addr(three.m_next): 0x1c20070
+value(three.m_next): 0
+addr(three.m_value): 0x1c20078
+value(three.m_value): 3</pre>
+              </td>
+              <td width="450px" valign="top">
+                <img src="../../../../img/pict/Pointers_0.bmp" alt="Pointers 0" />
+              </td>
+            </tr>
+          </table>
+          <br />
+        </div>       
+        <div class="section">
+          <h2>Singly Linked Lists</h2>
+            An item can be inserted in the middle of a singly linked list 
+            without moving all the remaining elements over.  This is required 
+            in a vector.
+            <h3>insertion at the head</h3>
+            <ol>
+              <li>start: <br />
+              <img src="../../../../img/pict/SingleListInsert_0.bmp" alt="SingleListInsert 0" />
+              </li>
+              <li>create a new_node: <br />
+              <img src="../../../../img/pict/SingleListInsert_1.bmp" alt="SingleListInsert 1" />
+              </li>
+              <li>set the value of the new_node:  <br />
+              <img src="../../../../img/pict/SingleListInsert_2.bmp" alt="SingleListInsert 2" />
+              </li>
+              <li>the new_node's next_nointer is set point to where the list's head_pointer currently points to<br />
+              <img src="../../../../img/pict/SingleListInsert_3.bmp" alt="SingleListInsert 3" />  
+              </li>
+              <li>The list's head_pointer is set to point to the new_node<br />
+              <img src="../../../../img/pict/SingleListInsert_4.bmp" alt="SingleListInsert 4" /></li>
+            </ol>
+          <br />
+        </div>
+        <div class="section">
+          <h2>Doubly Linked Lists</h2>
+          In a singly linked list you can only iterate in one direction.  In a 
+          doubly linked list you can iterate going both forwards and backwards<br />
+          <h3>adding a node at the end</h3>
+          <ol>
+            <li>start: <br />
+            <img src="../../../../img/pict/DoubleListAddEnd_0.bmp" alt="DoubleListAddEnd" />
+            </li>
+            <li>create a new node and initialize the value<br />
+            <img src="../../../../img/pict/DoubleListAddEnd_1.bmp" alt="DoubleListAddEnd" />
+            </li>
+            <li>set the next of the tail to the new_node<br />
+            <img src="../../../../img/pict/DoubleListAddEnd_2.bmp" alt="DoubleListAddEnd" />
+            </li>
+            <li>set the prev of the new_node to the tail<br />
+            <img src="../../../../img/pict/DoubleListAddEnd_3.bmp" alt="DoubleListAddEnd" />
+            </li>
+            <li>set the tail to the new_node<br />
+            <img src="../../../../img/pict/DoubleListAddEnd_4.bmp" alt="DoubleListAddEnd" />
+            </li>
+          </ol>
+        </div>
+        <div class="section">
+          <h2>vector</h2>
+            A vector is an array that can automatically grow or shrink.<br />
+            <img src="../../../../img/pict/VectorInternals_0.bmp" alt="VectorInternal 0" /><br />
+            <img src="../../../../img/pict/VectorInternals_1.bmp" alt="VectorInternal 1" /><br />
+            <img src="../../../../img/pict/VectorInternals_2.bmp" alt="VectorInternal 2" /><br />
+            <img src="../../../../img/pict/VectorInternals_3.bmp" alt="VectorInternal 3" /><br />
+            <img src="../../../../img/pict/VectorInternals_4.bmp" alt="VectorInternal 4" /><br />
+            <img src="../../../../img/pict/VectorInternals_5.bmp" alt="VectorInternal 5" /><br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>Amortized Complexity</h2>
+          This is the aggregate method.
+          <ul>
+            <li>In a vector data structure adding an element to the back has a &Omega;(1) and O(size_vector).</li>
+            <li>We want to have a complexity that is more tightly bounded</li>
+            <li>Amortized Complexity attempts to do this</li>
+          </ul>
+          <table class="nice_table">
+            <tr bgcolor="#e5e5e5">
+              <td colspan="16">Cost of insertion into vector</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td>4</td>
+              <td colspan="12" bgcolor="#fafafa">&nbsp;</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td>8</td>
+              <td colspan="12" bgcolor="#fafafa">&nbsp;</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td>16</td>
+              <td colspan="8" bgcolor="#fafafa">&nbsp;</td>
+            </tr>
+            <tr>      
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">1</td>
+              <td width="25px">32</td>
+            </tr>
+          </table>
+          <br />
+          The starting capactity is 4 and we double the capacity when full.
+          <ul>
+            <li>T(n) = n + (n/2) - 1 + T(n/2)</li>
+            <li>T(4) = 4 + 3</li>
+          </ul>
+          <br />
+          Solving for T(n) / n
+          <ul>
+            <li>T(n) = (n + (n/2) - 1) + T(n/2)</li>
+            <li>T(n) = (n + (n/2) - 1) + (n/2 + (n/4) - 1) + T(n/4)</li>
+            <li>T(n) = (n + (n/2) - 1) + (n/2 + (n/4) - 1) + (n/4 + (n/8) - 1) + ... + T(n/n/4)</li>
+            <li>T(n) = (n + (n/2) - 1) + (n/2 + (n/4) - 1) + (n/4 + (n/8) - 1) + ... + T(4)</li>
+            <li>T(n) = (n + (n/2) - 1) + (n/2 + (n/4) - 1) + (n/4 + (n/8) - 1) + ... + 4 + 3</li>  
+            <li>T(n) = sumof: (n + n/2 + n/4 + ... +) for log_2(n-2) times + sumof: (n/2 + n/4 + n/8 + ... +) for log_2(n-2) times + sumof: (-1) for log_2(n-2) times</li>
+            <li>T(n) = n + sumof(1) for log_2(n-3) times + n/16 + cn</li>
+            <li>T(n) = c1*n + c2*log_2(n)</li>
+            <li>T(n) / n = c1 * n/n + c2*log_2(n)/n</li>
+            <li>T(n) / n = O(1)</li>
+          </ul>
+          <br />
+        </div>
+        <div class="section">
+          <h2>List vs. Vector Performance</h2>
+          64 bit system:
+          <ul>
+            <li>linked list value is 4 bytes</li>
+            <li>linked list next is 8 bytes</li>
+          </ul>
+          Common cache line size: 64 bytes
+          <ul>
+            <li>Linked list fits 64/12=5 items in cache before fetching new line</li>
+            <li>Array holds 64/4=16 items in cache before fetching new line</li>
+          </ul>
+          <div>
+            <div id="chart_div" style="width: 800px; height: 500px;"></div>
+            <div id="iter_div" style="width: 800px; height: 500px;"></div>
+            <div id="iter_div2" style="width: 800px; height: 500px;"></div>
+            <br />
+          </div>
+        </div>
+        <div class="section">
+          <h2>Binary Search</h2>
+          Binary Search requires that the collection has random access and is
+          sorted. It has O(lgn) time complexity.
+          <div class="code_block"><div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// binarySearch.cpp - download <a href="../../../dlcode/index/binarySearch.cpp.html">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">binarySearch(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">array,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">key)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">low&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mid;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">high&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n-1;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">low&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">high)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mid&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">low&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">high)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">/&nbsp;</div><div class="code_nothing">2;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">key&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">mid]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">high&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mid&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">array[</div><div class="code_nothing">mid]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">key)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">low&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mid&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mid;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">-1;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /></div><br />
+          <b>Question:</b> Does the array contain 16? 
+          <ol>
+            <li><b>start:</b> [low = 0, high = 19, n = 20]<br />
+              <img src="../../../../img/pict/BinarySearch_0.bmp" alt="BinarySearch 0" />
+            </li>
+            <li><b>iter1:</b> (low + high) / 2 = (0 + 19) / 2 = 9<br />
+              <img src="../../../../img/pict/BinarySearch_1.bmp" alt="BinarySearch 1" />
+            </li>
+            <li><b>iter1:</b> At mid (9), is 16 &lt; 15? No. Go right. [low = 10, high = 19]<br />
+              <img src="../../../../img/pict/BinarySearch_2.bmp" alt="BinarySearch 2" />
+            </li>
+            <li><b>iter2:</b> (low + high) / 2 = (10 + 19) / 2 = 14<br />
+              <img src="../../../../img/pict/BinarySearch_3.bmp" alt="BinarySearch 3" />
+            </li>
+            <li><b>iter2:</b> At mid (14), is 16 &lt; 23? Yes. Go left. [low = 10, high = 13]<br />
+              <img src="../../../../img/pict/BinarySearch_4.bmp" alt="BinarySearch 4" />
+            </li>
+            <li><b>iter3:</b> (low + high) / 2 = (10 + 13) / 2 = 11<br />
+              <img src="../../../../img/pict/BinarySearch_5.bmp" alt="BinarySearch 5" />
+            </li>
+            <li><b>iter3:</b> At mid (11), is 16 &lt; 18? Yes. Go left. [low = 10, high = 10]<br />
+              <img src="../../../../img/pict/BinarySearch_6.bmp" alt="BinarySearch 6" />
+            </li>
+            <li><b>iter4:</b> (low + high) / 2 = (10 + 10) / 2 = 10. At mid (10), 16 == 16. Found result.<br />
+              <img src="../../../../img/pict/BinarySearch_7.bmp" alt="BinarySearch 7" />
+            </li>
+          <br />
+          <div id="search_div1" style="width: 800px; height: 500px;"></div>
+          <div id="search_div2" style="width: 800px; height: 500px;"></div>
+        </div>
+        <div class="section">
+          <h2>References</h2>
+          <ol>
+            <li>Adam Drozdek. "Data Structures and Algorithms in C++"</li>
+            <li><a href="https://google-developers.appspot.com/chart/interactive/docs/gallery/linechart">Google Chart Tools</a></li> 
+          </ol>
+          <br />
+        </div>
+        <div class="clear_section">
+          <br />
+          <br />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<pre>#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+bool forward(int lhs, int rhs){
+  if(lhs &lt; rhs){
+    return true;
+  }
+  return false;
+}
+
+bool reverse(int lhs, int rhs){
+  if(rhs &lt; lhs){
+    return true;
+  }
+  return false;
+}
+
+bool even(int lhs, int rhs){
+  if(lhs % 2 == 0 && rhs % 2 == 0){
+    return true;
+  }
+  return false;
+}
+
+void print(std::vector&lt;int&gt;& numbers, const char * label){
+  std::cout &lt;&lt; label &lt;&lt; ": [";
+  for(size_t i = 0; i &lt; numbers.size(); ++i){
+    std::cout &lt;&lt; numbers[i];
+    if(i &lt; numbers.size() - 1){
+      std::cout &lt;&lt; ",";
+    }
+  }
+  std::cout &lt;&lt; "]" &lt;&lt; std::endl;
+}
+
+int main(int argc, char * argv[]){
+  std::vector&lt;int&gt; numbers;
+  numbers.push_back(10);
+  numbers.push_back(20);
+  numbers.push_back(0);
+  numbers.push_back(15);
+  numbers.push_back(9);
+
+  std::sort(numbers.begin(), numbers.end(), forward);
+  print(numbers, "forward");
+  std::sort(numbers.begin(), numbers.end(), reverse);
+  print(numbers, "reverse");
+  std::sort(numbers.begin(), numbers.end(), even);
+  print(numbers, "evenodd");
+
+  return 0;
+}
+</pre>

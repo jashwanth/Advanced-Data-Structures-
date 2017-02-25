@@ -1,0 +1,18 @@
+<pre>BTreeNode * btreeSearch(int key, BTreeNode * curr){
+  if(curr != NULL){
+    int i;
+    //seek the the closest key
+    for(i = 0; i &lt; curr-&gt;sizeKeys() && curr-&gt;getKey(i) &lt; key; ++i);
+
+    if(i &gt;= curr-&gt;sizeKeys() || curr-&gt;getKey(i) &gt; key){
+      //if the above for loop broke because the key was not found, recurse
+      return btreeSearch(key, curr-&gt;getPointer(i));
+    } else {
+      //else we found the node
+      return curr;
+    }
+  } else {
+    return NULL;
+  }
+}
+</pre>

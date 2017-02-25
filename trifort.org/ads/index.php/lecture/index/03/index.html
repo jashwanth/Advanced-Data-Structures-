@@ -1,0 +1,401 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse691 - advanced data strucures</title>
+    <link href="../../../../../css/styles.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var insert_data = google.visualization.arrayToDataTable([
+          ['len', 'list', 'deque'], 
+          [1048576, 119, 23],
+          [2097152, 209, 49],
+          [3145728, 305, 73],
+          [4194304, 400, 96],
+          [5242880, 499, 121],
+          [6291456, 600, 145],
+          [7340032, 689, 177],
+          [8388608, 785, 194],
+          [9437184, 887, 218],
+          [10485760, 982, 248],
+          [11534336, 1084, 269],
+          [12582912, 1169, 298],
+          [13631488, 1264, 312],
+          [14680064, 1362, 348],
+          [15728640, 1461, 372],
+          [16777216, 1556, 387],
+          [17825792, 1659, 421],
+          [18874368, 1753, 433],
+          [19922944, 1867, 467],
+          [20971520, 1947, 493],
+          [22020096, 2034, 504],
+          [23068672, 2148, 534],
+          [24117248, 2242, 561],
+          [25165824, 2325, 596],
+          [26214400, 2420, 613],
+          [27262976, 2528, 637],
+          [28311552, 2611, 668],
+          [29360128, 2716, 677],
+          [30408704, 2812, 712],
+          [31457280, 2907, 746],
+          [32505856, 2996, 747]
+        ]);
+
+        var insert_options = {
+          title: 'Insertion Performance - No g++ optimization'
+        };
+
+        var insert_chart = new google.visualization.LineChart(document.getElementById('insert_div'));
+        insert_chart.draw(insert_data, insert_options);
+
+        var iter_data = google.visualization.arrayToDataTable([
+          ['len', 'list', 'deque'], 
+          [1048576, 11, 17],
+          [2097152, 24, 34],
+          [3145728, 33, 51],
+          [4194304, 44, 68],
+          [5242880, 59, 85],
+          [6291456, 66, 102],
+          [7340032, 77, 119],
+          [8388608, 89, 136],
+          [9437184, 99, 154],
+          [10485760, 110, 171],
+          [11534336, 121, 187],
+          [12582912, 132, 206],
+          [13631488, 143, 223],
+          [14680064, 155, 239],
+          [15728640, 176, 256],
+          [16777216, 178, 273],
+          [17825792, 189, 291],
+          [18874368, 197, 307],
+          [19922944, 210, 323],
+          [20971520, 225, 366],
+          [22020096, 231, 358],
+          [23068672, 259, 376],
+          [24117248, 258, 393],
+          [25165824, 264, 410],
+          [26214400, 307, 435],
+          [27262976, 286, 444],
+          [28311552, 314, 491],
+          [29360128, 320, 493],
+          [30408704, 321, 494],
+          [31457280, 334, 519],
+          [32505856, 344, 529]
+        ]);
+
+        var iter_options = {
+          title: 'Iteration Performance - No g++ optimization'
+        };
+
+        var iter_chart = new google.visualization.LineChart(document.getElementById('iter_div'));
+        iter_chart.draw(iter_data, iter_options);
+
+        var iter_data2 = google.visualization.arrayToDataTable([
+          ['len', 'list', 'deque'], 
+          [1048576, 6, 1],
+          [2097152, 13, 3],
+          [3145728, 18, 4],
+          [4194304, 25, 5],
+          [5242880, 37, 7],
+          [6291456, 37, 8],
+          [7340032, 42, 9],
+          [8388608, 48, 13],
+          [9437184, 55, 12],
+          [10485760, 60, 13],
+          [11534336, 71, 15],
+          [12582912, 70, 16],
+          [13631488, 78, 17],
+          [14680064, 83, 18],
+          [15728640, 90, 20],
+          [16777216, 99, 22],
+          [17825792, 102, 23],
+          [18874368, 109, 24],
+          [19922944, 121, 25],
+          [20971520, 124, 29],
+          [22020096, 136, 32],
+          [23068672, 133, 31],
+          [24117248, 138, 33],
+          [25165824, 148, 32],
+          [26214400, 151, 34],
+          [27262976, 167, 37],
+          [28311552, 161, 39],
+          [29360128, 168, 38],
+          [30408704, 174, 38],
+          [31457280, 182, 41],
+          [32505856, 190, 42]
+        ]);
+
+        var iter_options2 = {
+          title: 'Iteration Performance - g++ -O3'
+        };
+
+        var iter_chart2 = new google.visualization.LineChart(document.getElementById('iter_div2'));
+        iter_chart2.draw(iter_data2, iter_options2);
+
+      }
+    </script>
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>03: ordered containers #2</h1>
+          XOR Lists | Subtraction Lists | CDR Coding | Skip Lists | Self Organizing Lists<br />
+          Dequeue | Sparse Tables | List vs. Dequeue Performance<br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>XOR Lists [2]</h2>
+          <img src="../../../../img/pict/XORLinkedLists_0.bmp" alt="XORLinkedLists" /><br />
+          Addresses in binary<br />
+          <table class="nice_table">
+            <tr bgcolor="#e5e5e5">
+              <td>Node</td>
+              <td>Addr</td>
+              <td>Binary</td>
+            </tr>
+            <tr>
+              <td>A</td>
+              <td>1</td>
+              <td>0001</td>
+            </tr>
+            <tr>
+              <td>B</td>
+              <td>2</td>
+              <td>0010</td>
+            </tr>
+            <tr>
+              <td>C</td>
+              <td>3</td>
+              <td>0011</td>
+            </tr>
+            <tr>
+              <td>D</td>
+              <td>4</td>
+              <td>0100</td>
+            </tr>
+            <tr>
+              <td>E</td>
+              <td>5</td>
+              <td>0101</td>
+            </tr>
+            <tr>
+              <td>F</td>
+              <td>6</td>
+              <td>0110</td>
+            </tr>
+          </table><br />
+          At Node B:<br />
+          <ul>
+            <li>A xor C = 0010</li>
+            <li>If prev node is A: A xor (A xor C) = 0001 xor 0010 = 0011</li>
+            <li>If prev node is C: C xor (A xor C) = 0011 xor 0010 = 0001</li>
+          </ul>
+          Problems:
+          <ul>
+            <li>Cannot use in managed languages such as C# or Java</li>
+            <li>Cannot start following chain from the middle</li>
+            <li>Code is complex and maybe difficult to understand</li>
+          </ul>
+          Even with these problems, I have heard of this being an interview 
+          question.<br />
+          <br />
+          A solution to these problems is to use dequeues.<br />
+          <br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>subtraction linked lists [2]</h2>
+          <img src="../../../../img/pict/SubtractionLinkedLists_0.bmp" alt="XORLinkedLists" /><br />
+          <ul>
+            <li>Going forwards: Previous pointer is added to pointer</li>
+            <li>Going reverse: Previous pointer is subtracted from pointer</li>
+          </ul>
+          Subtraction Linked Lists can be relocated in memory without needing to 
+          patch pointer values. This is in contrast to normal and XOR linked 
+          lists.<br />
+          <br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>compressed data representation (cdr) coding [3]</h2>
+          If a structure ends with a pointer to a structure, place the structure right at the end of the original structure<br />
+          <div class="code_block">
+<pre>struct _cl_program {
+  cl_ulong m_id;
+  cl_context m_context;
+  cl_long m_referenceCount;
+  cl_uint m_numDevices;
+  struct _cl_program_exe_s {
+    cl_device_id m_device;    
+    void * m_driverSpecific;
+  } m_exes[1];
+};</pre>
+          </div>
+          (see: https://github.com/pcpratts/gcc_opencl/blob/master/cl/cl_internal.h)<br />
+          <br />
+          When allocating _cl_program in C, you calculate how many elements _cl_program_exe_s has and put those into malloc:
+          <div class="code_block">
+<pre>struct * _cl_program prog = 
+  (struct * _cl_program) malloc(sizeof(struct _cl_program) + 
+                                ((count-1) * sizeof(struct _cl_program_exe_c)));</pre>
+          </div>
+          <br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>skip lists</h2>
+          Skip Lists reduce the time to complete a linear search of a linked list.
+          <h3>Insertion</h3>
+          <ol>
+            <li>Start: <br />
+            <img src="../../../../img/pict/SkipListInsert_0.bmp" alt="SkipListInsert" />
+            </li>
+            <li>Create a randomly sized node<br />
+            <img src="../../../../img/pict/SkipListInsert_1.bmp" alt="SkipListInsert" />
+            </li>
+            <br />
+            <li>Connect the next pointers<br />
+            <img src="../../../../img/pict/SkipListInsert_2.bmp" alt="SkipListInsert" />
+            </li>
+            <li>Connect the prev pointers<br />
+            <img src="../../../../img/pict/SkipListInsert_3.bmp" alt="SkipListInsert" />
+            </li>
+          </ol>
+        </div>
+        <div class="section">
+          <h2>self organizing lists [4]</h2>
+          Regular linked lists, but the ordering is changed depending on the access pattern.
+          <h3>Types of Self Organizing Lists</h3>
+          <ul>
+            <li><b>Move-to-Front: </b>Whenever an item is accessed, it is moved to the front<br />
+              <img src="../../../../img/pict/SelfOrganizingLists_0.bmp" alt="SelfOrganizingLists" /> 
+            </li>
+            <li><b>Transpose: </b>After a desired element is located, swap it with its predecessor unless it is at the head<br />
+              <img src="../../../../img/pict/SelfOrganizingLists_1.bmp" alt="SelfOrganizingLists" /> 
+            </li>
+            <li><b>Count: </b>Order the items from highest frequency accessed to lowest frequency<br />
+              <img src="../../../../img/pict/SelfOrganizingLists_2.bmp" alt="SelfOrganizingLists" /> 
+            </li>
+            <li><b>Ordering: </b>Maintain some application specific ordering (such as sorted)</li>
+          </ul>
+          <h3>Time Complexity of Self Organizing Lists</h3>
+          <ul>
+            <li>Average Case<br />
+              <ul>
+                <li>It can be shown that the average case time complexity is: (p(n) is the probability of accessing each element)<br />
+                  Tavg = 1 * p(1) + 2 * p(2) + 3 * p(3) + ... + n * p(n).<br /><br /></li>
+                <li>
+                  If p(n) is uniform: <br />
+                  T(n) = 1 / n + 2 / n + 3 / n + ... + n / n<br />
+                  T(N) = (1 + 2 + 3 + ... + n) / n<br />
+                  T(n) = (n + 1) / 2<br /><br />
+                </li>
+                <li>If p(n) has some heavily weighted elements and the heavy elements are at the front the performance is much better<br /><br /></li>
+              </ul>
+            </li>
+            <li>Worst Case
+              <ul>
+                <li>The worst case is linear time or O(n)</li>
+                <li>This happens when the desired element is at the end of the list<br /><br /></li>
+              </ul>
+            </li>
+            <li>Best Case
+              <ul>
+                <li>The worst case is constant time or O(1)</li>
+                <li>This happens when the desired element is at the front of the list<br /><br /></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="section">
+          <h2>sparse table</h2>
+          <ul>
+            <li>Sparse Tables are Linked Lists of 2 or more dimensions</li>
+            <li>A similar concept is sometimes useful in operating systems kernels (FreeBSD uses the idea)</li>
+          </ul>
+          <img src="../../../../img/pict/SparseTable_0.bmp" alt="SparseTable" />
+          <ul>
+            <li>Linear Search of Classes Students are in is Easy</li>
+            <li>Linear Search of Students in Classes is Easy</li>
+          </ul>
+          <br />
+        </div>
+        <div class="section">
+          <h2>c++ deque</h2>
+          <ul>
+            <li>A deque is a double-ended queue</li>
+            <li>Insertion at the front and back is fast</li>
+            <li>Random access is fast</li>
+          </ul>
+          <ol>
+            <li>Start: <br />
+              <img src="../../../../img/pict/DequeExample_0.bmp" alt="DequeFinal" /> 
+            </li>
+            <li>push_front(0); <br />
+              <img src="../../../../img/pict/DequeExample_1.bmp" alt="DequeFinal" /> 
+            </li>
+            <li>push_front(1); <br />
+                push_front(2); <br />
+                push_front(3); <br />
+              <img src="../../../../img/pict/DequeExample_2.bmp" alt="DequeFinal" /> 
+            </li>
+            <li>push_front(4); <br />
+              <img src="../../../../img/pict/DequeExample_3.bmp" alt="DequeFinal" /> 
+            </li>
+            <li>push_back(0); <br />
+              <img src="../../../../img/pict/DequeExample_4.bmp" alt="DequeFinal" /> 
+            </li>
+            <li>push_back(1); <br />
+                push_back(2); <br />
+                push_back(3); <br />
+              <img src="../../../../img/pict/DequeExample_5.bmp" alt="DequeFinal" /> 
+            </li>
+            <li>push_back(4); <br />
+              <img src="../../../../img/pict/DequeExample_6.bmp" alt="DequeFinal" /> 
+            </li>
+            <li>push_front(5); <br />
+                push_front(6); <br />
+                push_front(7); <br />
+                push_front(8); <br />
+              <img src="../../../../img/pict/DequeExample_7.bmp" alt="DequeFinal" /> 
+            </li>
+          </ol>
+          <ul>
+            <li>C++ deque usage
+              <div class="code_block"><div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// cppDequeExample.cpp - download <a href="../../../dlcode/index/cppDequeExample.cpp.html">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">deque&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">iostream&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">main(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">argc,&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">argv[</div><div class="code_nothing">]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">deque&lt;</div><div class="code_green">int</div><div class="code_nothing">&gt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dq1;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dq1.push_front(</div><div class="code_nothing">1)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dq1.push_front(</div><div class="code_nothing">2)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dq1.push_back(</div><div class="code_nothing">3)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">size_t</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dq1.size(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dq1[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"&nbsp;"</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /></div>
+            </li>
+            <li>Deque Algorithms
+              <div class="code_block"><div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_green">void</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Deque:</div><div class="code_nothing">:</div><div class="code_nothing">push_back(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">value)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">m_LastBlockStop&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">m_BlockSize)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_MiddleBlocks.push_back(</div><div class="code_nothing">m_LastBlock)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_LastBlockStop&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_LastBlock&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">[</div><div class="code_nothing">m_BlockSize]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_LastBlock[</div><div class="code_nothing">m_LastBlockStop]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">value;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++m_LastBlockStop;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++m_Size;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_green">void</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Deque:</div><div class="code_nothing">:</div><div class="code_nothing">push_front(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">value)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">m_FirstBlockStart&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">m_BlockSize)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_MiddleBlocks.push_front(</div><div class="code_nothing">m_FirstBlock)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_FirstBlockStart&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_FirstBlock&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">[</div><div class="code_nothing">m_BlockSize]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_FirstBlock[</div><div class="code_nothing">m_BlockSize&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">m_FirstBlockStart&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">value;</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++m_FirstBlockStart;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++m_Size;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">Deque:</div><div class="code_nothing">:</div><div class="code_nothing">getBlock(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">block_index)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">list&ltint&nbsp;</div><div class="code_nothing">*&gt;</div><div class="code_nothing">:</div><div class="code_nothing">:</div><div class="code_nothing">iterator&nbsp;</div><div class="code_nothing">iter&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">m_MiddleBlocks.begin(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">block_index;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++iter;</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*iter;</div><div class="code_nothing"></div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">32:&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Deque:</div><div class="code_nothing">:</div><div class="code_nothing">get(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">index)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">index&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_FirstBlockStart)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">block_index&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">m_BlockSize&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">m_FirstBlockStart&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">index;</div><div class="code_nothing"></div><br /><div class="code_grey">35:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_FirstBlock[</div><div class="code_nothing">block_index]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">36:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">index&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_Size&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">m_LastBlockStop)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">37:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">index&nbsp;</div><div class="code_nothing">-=&nbsp;</div><div class="code_nothing">m_FirstBlockStart;</div><div class="code_nothing"></div><br /><div class="code_grey">38:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">block&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">index&nbsp;</div><div class="code_nothing">/&nbsp;</div><div class="code_nothing">m_BlockSize;</div><div class="code_nothing"></div><br /><div class="code_grey">39:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">getBlock(</div><div class="code_nothing">block)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">40:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">item&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">index&nbsp;</div><div class="code_nothing">%&nbsp;</div><div class="code_nothing">m_BlockSize;</div><div class="code_nothing"></div><br /><div class="code_grey">41:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">curr[</div><div class="code_nothing">item]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">42:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">43:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">last_index&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">index&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">m_FirstBlockStart&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">m_MiddleBlocks.size(</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">m_BlockSize)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">44:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">m_LastBlock[</div><div class="code_nothing">last_index]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">45:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">46:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">47:&nbsp;</div><div class="code_nothing"></div><br /></div>
+            </li>
+          </ul>
+        </div>
+        <div class="section">
+          <div id="insert_div" style="width: 800px; height: 500px;"></div>
+        </div>
+        <div class="section">
+          <div id="iter_div" style="width: 800px; height: 500px;"></div>
+        </div>
+        <div class="section">
+          <div id="iter_div2" style="width: 800px; height: 500px;"></div>
+        </div>
+        <div class="section">
+          <h2>references</h2>
+          <ol>
+            <li>Adam Drozdek. "Data Structures and Algorithms in C++"</li>
+            <li>http://en.wikipedia.org/wiki/XOR_linked_list</li>
+            <li>http://en.wikipedia.org/wiki/CDR_coding</li>
+            <li>http://en.wikipedia.org/wiki/Self-organizing_list</li>
+          </ol>
+          <br />
+        </div>
+        <div class="clear_section">
+          <br />
+          <br />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

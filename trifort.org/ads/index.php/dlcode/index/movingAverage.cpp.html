@@ -1,0 +1,17 @@
+<pre>int * movingAverage(int * data, int n, int window_size){
+  int * ret = new int[n];
+  int half_window = window_size / 2;
+  for(int i = 0; i &lt; n; ++i){
+    int sum = 0;
+    int num_counted = 0;
+    for(int j = i - half_window; j &lt; i + half_window; ++j){
+      if(j &gt;= 0 && j &lt; n){
+        num_counted++;
+        sum += data[j];
+      }
+      ret[i] = sum / num_counted;
+    }
+  }
+  return ret;
+}
+</pre>

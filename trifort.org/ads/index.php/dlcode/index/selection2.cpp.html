@@ -1,0 +1,62 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+void exch(std::vector&lt;int&gt;& data, int index1, int index2){
+  int lhs = data[index1];
+  int rhs = data[index2];
+  data[index1] = rhs;
+  data[index2] = lhs;
+}
+
+int partition(std::vector&lt;int&gt;& data, int left, int right, int pivot_index){
+  int bound = data[pivot_index];
+  exch(data, pivot_index, right);
+  int store_index = left;
+  for(int i = left; i &lt;= right; ++i){
+    if(data[i] &lt; bound && store_index != i){
+      exch(data, store_index, i);
+      store_index++;
+    }
+  }
+  exch(data, right, store_index);
+  return store_index;
+}
+
+int select(std::vector&lt;int&gt;& data, int left, int right, int k){
+  if(left == right){
+    //if the list contains only one element, return it.
+    return data[left];
+  }
+  //select pivot index between left and right
+  int pivot_index = (left + right) / 2;
+  int pivot_new_index = partition(data, left, right, pivot_index);
+  int pivot_dist = pivot_new_index - left;
+  //the pivot is in its final sorted position, so pivot_dist reflects its 1-based position if data were sorted
+  if(pivot_dist == k){
+    return data[pivot_new_index];
+  } else if(k &lt; pivot_dist){
+    return select(data, left, pivot_new_index - 1, k);
+  } else {
+    return select(data, pivot_new_index + 1, right, k - pivot_dist - 1;
+  }
+}
+
+int main(int argc, char *argv[]){
+
+  std::vector&lt;int&gt; data;
+  data.push_back(20);
+  data.push_back(5);
+  data.push_back(10);
+  data.push_back(6);
+  data.push_back(7);
+  data.push_back(8);
+  data.push_back(20);
+  data.push_back(30);
+  data.push_back(40);
+  std::cout &lt;&lt; "6th min: " &lt;&lt; select(data, 0, data.size() - 1, 6) &lt;&lt; std::endl;
+  //prints: 6th min: 20
+
+  return 0;
+}
+
+</pre>

@@ -1,0 +1,156 @@
+<pre>#include &lt;vector&gt;
+#include &lt;set&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+class Table {
+public:
+  void set(int x, int y, int value);
+  int get(int x, int y);
+  void setInfinity(int x, int y);
+  bool getInfinity(int x, int y);
+  void print(std::string s);
+private:
+  void expand(int x, int y);
+  std::vector&lt;std::vector&lt;int&gt; &gt; m_data;
+  std::set&lt;std::pair&lt;int, int&gt; &gt; m_inf;
+};
+
+void Table::expand(int x, int y)
+{
+  while(m_data.size() &lt;= x){
+    m_data.push_back(std::vector&lt;int&gt;());
+  }
+  std::vector&lt;int&gt;& row = m_data[x];
+  while(row.size() &lt;= y){
+    row.push_back(0);
+  }
+}
+
+void Table::set(int x, int y, int value)
+{
+  expand(x, y);
+  m_data[x][y] = value;
+  std::set&lt;std::pair&lt;int, int&gt; &gt;::iterator iter;
+  iter = m_inf.find(std::pair&lt;int, int&gt;(x, y));
+  if(iter != m_inf.end()){
+    m_inf.erase(iter);
+  }
+}
+
+int Table::get(int x, int y)
+{
+  expand(x, y);
+  return m_data[x][y];
+}
+
+void Table::setInfinity(int x, int y)
+{
+  m_inf.insert(std::pair&lt;int, int&gt;(x, y));
+}
+
+bool Table::getInfinity(int x, int y)
+{
+  if(m_inf.find(std::pair&lt;int, int&gt;(x, y)) == m_inf.end()){
+    return false;
+  }
+  return true;
+}
+
+void Table::print(std::string label)
+{
+  std::cout &lt;&lt; label &lt;&lt; std::endl;
+  for(size_t i = 0; i &lt; m_data.size(); ++i){
+    std::vector&lt;int&gt; inner = m_data[i];
+    for(size_t j = 1; j &lt; inner.size(); ++j){
+      std::cout &lt;&lt; inner[j] &lt;&lt; " ";
+    }
+    if(inner.size() != 0){
+      std::cout &lt;&lt; std::endl;
+    }
+  }
+}
+
+int getMults(std::vector&lt;int&gt;& p, int index1, int index2, int index3)
+{
+  int ret = 1;
+  ret *= p[index1];
+  ret *= p[index2];
+  ret *= p[index3];
+  return ret;
+}
+
+void matrixChainOrder(std::vector&lt;int&gt;& p, Table& m, Table& s)
+{
+  int n = p.size() - 1;
+  for(size_t i = 1; i &lt;= n; ++i){
+    m.set(i, i, 0);
+  }
+  for(int l = 2; l &lt;= n; ++l){
+    for(int i = 1; i &lt;= n - l + 1; ++i){
+      int j = i + l - 1;
+      m.setInfinity(i, j);
+      for(int k = i; k &lt;= j - 1; ++k){
+        std::cout &lt;&lt; "i: " &lt;&lt; i &lt;&lt; " j: " &lt;&lt; j &lt;&lt; " k: " &lt;&lt; k &lt;&lt; " l: " &lt;&lt; l;
+        bool q_is_inf = false;
+        if(m.getInfinity(i, k) || m.getInfinity(k+1, j)){
+          q_is_inf = true;
+        }
+        if(q_is_inf){
+          std::cout &lt;&lt; std::endl;
+          continue;
+        }
+        int q = m.get(i, k) + m.get(k+1, j) + getMults(p, i-1, k, j);
+        std::cout &lt;&lt; " m[i=" &lt;&lt; i &lt;&lt; ",k=" &lt;&lt; k &lt;&lt; "]=";
+        std::cout &lt;&lt; m.get(i,k) &lt;&lt; " m[k+1=" &lt;&lt; k+1 &lt;&lt; ",j=";
+        std::cout &lt;&lt; j &lt;&lt; "]=" &lt;&lt; m.get(k+1,j);
+        std::cout &lt;&lt; " mults(" &lt;&lt; i-1 &lt;&lt; "," &lt;&lt; k &lt;&lt; "," &lt;&lt; j;
+        std::cout &lt;&lt; ")=" &lt;&lt; getMults(p, i-1, k, j);
+        if(m.getInfinity(i, j) || q &lt; m.get(i, j)){
+          m.set(i, j, q);
+          s.set(i, j, k);
+                    
+          std::cout &lt;&lt; " q: " &lt;&lt; q &lt;&lt; " is less than m[i,j]" &lt;&lt; std::endl;
+        } else {
+          std::cout &lt;&lt; std::endl;
+        }
+      }
+    }
+  }
+}
+
+void printOptimalParens(Table& s, int i, int j)
+{
+  if(i == j){
+    std::cout &lt;&lt; "A" &lt;&lt; i;
+  } else {
+    std::cout &lt;&lt; "(";
+    printOptimalParens(s, i, s.get(i, j));
+    printOptimalParens(s, s.get(i, j) + 1, j);
+    std::cout &lt;&lt; ")";
+  }
+}
+
+int main(int argc, char * argv[]){
+
+  std::vector&lt;int&gt; p;
+  
+  p.push_back(30);
+  p.push_back(35);
+  p.push_back(15);
+  p.push_back(5);
+  p.push_back(10);
+  p.push_back(20); 
+  p.push_back(25);
+
+  Table m;
+  Table s;
+ 
+  matrixChainOrder(p, m, s);  
+  m.print("m");
+  s.print("s");
+  printOptimalParens(s, 1, p.size() - 1);
+  std::cout &lt;&lt; std::endl &lt;&lt; std::endl;
+  return 0;
+}
+</pre>

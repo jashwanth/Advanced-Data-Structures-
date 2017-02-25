@@ -1,0 +1,70 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+class Person {
+public:
+  std::string m_Name;
+  std::string m_Email;
+};
+
+class Counter {
+public:
+  int m_Count;
+  Counter() : m_Count(1) { }
+};
+
+template &lt;typename T&gt;
+class SmartPointer {
+public:
+  SmartPointer() : m_Ptr(0), m_Counter(new Counter()) { }
+  SmartPointer(T * ptr) : m_Ptr(ptr), m_Counter(new Counter()) { } 
+  virtual ~SmartPointer();
+  T * operator-&gt;() { return m_Ptr; }
+  void operator=(SmartPointer& rhs);
+private:
+  T * m_Ptr;
+  Counter * m_Counter;
+};
+
+template &lt;typename T&gt;
+SmartPointer&lt;T&gt;::~SmartPointer()
+{
+  m_Counter-&gt;m_Count--;
+  std::cout &lt;&lt; "remaining count: " &lt;&lt; m_Counter-&gt;m_Count &lt;&lt; std::endl;
+  if(m_Counter-&gt;m_Count == 0){
+    std::cout &lt;&lt; "deleting object..." &lt;&lt; std::endl;
+    delete m_Ptr;
+    delete m_Counter;
+  }
+}
+
+template &lt;typename T&gt;
+void SmartPointer&lt;T&gt;::operator=(SmartPointer& rhs){
+  rhs.m_Counter-&gt;m_Count++;
+  this-&gt;m_Ptr = rhs.m_Ptr;
+  this-&gt;m_Counter = rhs.m_Counter;
+} 
+
+int main(int argc, char * argv[]){
+
+  Person * person = new Person();
+  person-&gt;m_Name = "phil pratt-szeliga";
+  person-&gt;m_Email = "pcpratts@syr.edu";
+  SmartPointer&lt;Person&gt; ptr(person);
+
+  std::cout &lt;&lt; "name: " &lt;&lt; ptr-&gt;m_Name &lt;&lt; std::endl;
+  std::cout &lt;&lt; "email: " &lt;&lt; ptr-&gt;m_Email &lt;&lt; std::endl;
+
+  SmartPointer&lt;Person&gt; ptr2;
+  ptr2 = ptr;
+
+  //prints:
+  //  name: phil pratt-szeliga
+  //  email: pcpratts@syr.edu
+  //  remaining count: 1
+  //  remaining count: 0
+  //  deleting object...
+
+  return 0;
+}
+</pre>

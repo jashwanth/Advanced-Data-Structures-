@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+  <link href="/css/styles.css" rel="stylesheet" type="text/css"></link>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+  <link rel="shortcut icon" href="/cse382/img/favicon2.ico" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>11: special purpose trees</h1>
+          Digital Search Trees | Binary Tries | Multiway Tries | R-Trees | Hilbert Space Filling Curves<br />
+          Hilbert R-Trees | KD-Trees | KDB-Trees | Quad Trees | Octrees | Interval Trees | Kth Min Trees<br />
+          <br />
+        </div>
+        <div class="section">
+        <h2>Digital Search Trees [1]</h2>
+        Digital Search Trees are Binary Search Trees that are guarenteed to have a relatively small height and require no balancing operations.<br />
+        <br />
+        In a Digital Search Tree:
+        <ul>
+          <li>The left child of a node has the next bit 0 (next MSB or next LSB, depending on implementation)</li>
+          <li>The right child of a node has the next bit 1</li>
+        </ul>
+        <img src="/ads/img/pict/DigitalSearchTree_0.bmp" alt="DigitalSearchTree" /><br />
+        <font face="courier">
+        <b>
+        <table width="500px" border="1" cellspacing="0" cellpadding="4">
+          <tr>
+            <td width="250px"><font face="arial">ASCII Character</font></td>
+            <td width="250px"><font face="arial">Binary Representation</font></td>
+          </tr>
+          <tr><td>A</td><td>b01000001</td></tr>
+          <tr><td>E</td><td>b010<font color="#ff0000">0</font>0101</td></tr>
+          <tr><td>S</td><td>b010<font color="#ff0000">1</font>0011</td></tr>
+          <tr><td>C</td><td>b0100<font color="#ff0000">0</font>011</td></tr>
+          <tr><td>H</td><td>b0100<font color="#ff0000">1</font>000</td></tr>
+          <tr><td>R</td><td>b0101<font color="#ff0000">0</font>010</td></tr>
+          <tr><td>X</td><td>b0101<font color="#ff0000">1</font>000</td></tr>
+          <tr><td>N</td><td>b01001<font color="#ff0000">1</font>10</td></tr>
+        </table>
+        </b>
+        </font>
+        <br />
+        The max height in a digital search tree is O(log num_key_bits) so the max search time is the same.<br />
+        <br />
+        A simple digital search tree does not allow for an in-order key traversal operation.
+        <br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>Binary Tries </h2>
+        Binary Tries solve the problem in digital search trees where in-order traversal is not possible.
+        <img src="/ads/img/pict/Trie_0.bmp" alt="Trie" />
+        <br />
+        Insert L (0b01001100):<br />
+        <img src="/ads/img/pict/Trie_1.bmp" alt="Trie" />
+        <br />
+        <br />
+        Insertion algorithm:<br />
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">binaryTrieInsertion(</div><div class="code_nothing">Node&nbsp;</div><div class="code_nothing">root,&nbsp;</div><div class="code_green">long</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">key)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">digit&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Node&nbsp;</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">root;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Node&nbsp;</div><div class="code_nothing">prev&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">NULL;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//handle&nbsp;root&nbsp;case&nbsp;</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">true)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">null)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Node(</div><div class="code_nothing">key)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">make&nbsp;</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">have&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">value;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">make&nbsp;</div><div class="code_nothing">correct&nbsp;</div><div class="code_nothing">prev&nbsp;</div><div class="code_nothing">left/right&nbsp;</div><div class="code_nothing">pointer&nbsp;</div><div class="code_nothing">point&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">curr;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">leaf)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Node&nbsp;</div><div class="code_nothing">temp&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Node(</div><div class="code_nothing">key)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">make&nbsp;</div><div class="code_nothing">temp&nbsp;</div><div class="code_nothing">have&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">value;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Node&nbsp;</div><div class="code_nothing">new_node&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">split(</div><div class="code_nothing">temp,&nbsp;</div><div class="code_nothing">curr,&nbsp;</div><div class="code_nothing">digit)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">make&nbsp;</div><div class="code_nothing">correct&nbsp;</div><div class="code_nothing">prev&nbsp;</div><div class="code_nothing">left/right&nbsp;</div><div class="code_nothing">pointer&nbsp;</div><div class="code_nothing">point&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">new_node;</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">prev&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">curr;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">curr&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">curr->left&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">value&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">key&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">digit&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">0,&nbsp;</div><div class="code_nothing">otherwise&nbsp;</div><div class="code_nothing">it&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">equal&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">curr->right;</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++digit;</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">split(</div><div class="code_nothing">Node&nbsp;</div><div class="code_nothing">left,&nbsp;</div><div class="code_nothing">Node&nbsp;</div><div class="code_nothing">right,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">digit)</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Node&nbsp;</div><div class="code_nothing">new_node&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">Node(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">left->value&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">right-value&nbsp;</div><div class="code_nothing">are&nbsp;</div><div class="code_nothing">different&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">digit)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">setup&nbsp;</div><div class="code_nothing">new_node->left&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">new_node->right&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">point&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">correctly)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">left&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">right;</div><div class="code_nothing"></div><br /><div class="code_grey">32:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">both&nbsp;</div><div class="code_nothing">left->value&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">right->value&nbsp;</div><div class="code_nothing">are&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">at&nbsp;</div><div class="code_nothing">digit)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">new_node->setLeft(</div><div class="code_nothing">split(</div><div class="code_nothing">left,&nbsp;</div><div class="code_nothing">right,&nbsp;</div><div class="code_nothing">digit+1)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">35:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">36:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">new_node->setRight(</div><div class="code_nothing">split(</div><div class="code_nothing">left,&nbsp;</div><div class="code_nothing">right,&nbsp;</div><div class="code_nothing">digit+1)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">37:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">38:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">39:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+        </div>
+        <div class="section">
+        <h2>Multiway Tries</h2>
+        In Multiway Tries, there are 'R' links rather than 2.
+        <ul>
+          <li>Supports search in time proportional to the length of the key</li>
+          <li>A naive implementation has R links for each key, so there is a time/space tradeoff here.</li>
+        </ul>
+        <img src="/ads/img/pict/MultiwayTrie_0.bmp" alt="MultiwayTrie" />
+        </div>
+        <div class="section">
+        <h2>R-Trees [3][5]</h2>
+        <img src="/ads/img/r-tree.png" width="500px" alt="r-tree" /><br />
+        (image from wikipedia [5])<br />
+        <br />
+        R-Trees are used to enable efficient search of 2D spatial data. The non-leaf nodes of a b-tree contain rectangle coordiantes of child nodes. (The r in r-tree is for the r in rectangle).<br />
+        <br />
+        Insertion:
+        <ul>
+          <li>Insertion is done in a rectangle that needs the least enlargement (or some other heuristic)</li>
+        </ul>
+        Splitting an overflowing node:
+        <ul>
+          <li>R* tree topological split [6] gives the best tree for spatial map applications. Here, when a node is full, a portion of the nodes are removed and reinserted. Only one reinsert per level is allowed to prevent an infinite loop of overflows.</li>
+        </ul>
+        </div>
+        <div class="section">
+        <h2>Hilbert R-Trees [7]</h2>
+        Hilbert Space Filling Curve:<br />
+        <img src="/ads/img/hilbert_sfc.gif" alt="hilbert_sfc" /><br />
+        (image from wikipedia [7])<br />
+        <br />
+        The Hilbert Value is the distance along the space filling curve. See [8] for an efficient way to compute the distance. Brute force methods quickly run out of 4GB of ram.<br />
+        <br />
+        Hilbert Pack Algorithm for bulk insertion of rectangles into R-Tree. (bulk insertion is non-dynamic)
+        <ol>
+          <li>Assign the hilbert value to each rectangle</li>
+          <li>Sort rectangles according to hilbert value</li>
+          <li>Create leaf nodes: Evenly divide rectangles based on hilbert value</li>
+          <li>Create inner nodes: Recursively build the tree from the leaf nodes using the extents of the children. The multiple children of one parent node are chosen using the time-based ordering of creation. The time based ordering is just the current value of an integer counter.</li>
+        </ol>
+        <h3>Calculating the distance along a Hilbert SFC [8]</h3>
+        <ul>
+          <li>For all points, find max_x and max_y.</li>
+          <li>Find the max of max_x and max_y and call this max_xy.</li>
+          <li>If max_xy is a power of two, leave it. Else make it the next higher power of two.</li>
+          <li>For each point:
+            <ol>
+              <li>Initialize w to be max_xy / 2. Dist = 0.</li>
+              <li>Find the quadrant on a hilbert curve that the point is in.</li>
+              <li>Dist += (quadrant * w * w)</li>
+              <li>Calculate xnew and ynew according to the formulas</li>
+              <li>w becomes w / 2</li>
+              <li>Repeat steps 2 to 5 until w becomes 0</li>
+            </ol>
+          </li>
+        </ul>
+        <div style="text-align: center; margin-left: auto; margin-right: auto; width: 900px;">
+        <div style="text-align: center; width: 900px">
+        <table class="nice_table">
+          <tr bgcolor="#e5e5e5">
+            <td width="150px">Quadrant</td>
+            <td width="150px">x_new</td>
+            <td width="150px">y_new</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>y</td>
+            <td>x</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>x</td>
+            <td>y - w</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>x - w</td>
+            <td>y - w</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>w - y - 1</td>
+            <td>w * 2 - x - 1</td>
+          </tr>
+        </table>
+        </div>
+        </div>
+        <br />
+        <br />
+        Example with coordinates: (4, 0):<br />
+        <img src="/ads/img/hilbert_sfc_h3.gif" alt="sfc" /><br />
+        (image adapted from wikipedia [7])<br />
+        <ul>
+          <li>Quadrant = 3. Dist = 3 * w * w = 3 * 4 * 4</li>
+          <li>Apply table: x,y=(3, 3)</li>
+          <li>Quadrant = 2. Dist += 2 * w * w = 2 * 2 * 2</li>
+          <li>Apply table: x,y=(1, 1)</li>
+          <li>Quadrant = 2. Dist += 2 * w * w = 2 * 1 * 1</li>
+          <li>Dist = 58</li>
+        </ul>
+        </div>
+        <div class="section">
+        <h2>k-d trees [9]</h2>
+        k-d trees support average O(lgn) time search/insert/delete for a k-dimensional space. (k-d is short for k-dimensional).<br />
+        <br />
+        <table class="nice_table">
+          <tr bgcolor="#e5e5e5">
+            <td>Points in a 2D space:</td>
+            <td>The data structure in memory:</td>
+          </tr>
+          <tr>
+            <td><img src="/ads/img/kd-tree_2d.png" alt="kd-tree" /></td>
+            <td><img src="/ads/img/kd-tree_mem.png" alt="kd-tree mem" /></td>
+          </tr>
+        </table>
+        (images from wikipedia)<br />
+        <br />
+        Insertion:
+        <ul>
+          <li>Insertion is done like a standard unbalanced binary tree</li>
+        </ul>
+        <div class="code_block">
+<pre>void insert(Point p, TreeNode * curr, bool is_x){
+  if(is_x){
+    if(p.x &lt; curr->getX()){
+      follow_left_node(!is_x);
+    } else {
+      follow_right_node(!is_x);
+    }
+  } else {
+    if(p.y &lt; curr->getY()){
+      follow_left_node(!is_x);
+    } else {
+      follow_right_node(!is_x);
+    }
+  }
+}</pre>
+        </div>
+        To balance the tree, a K-D-B Tree can be used<br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>K-D-B Trees [4]</h2>
+        <img src="/ads/img/kdb-tree.png" alt="kdb-tree" /><br />
+        (image from [4])<br />
+        <br />
+        In K-D-B Trees, the basic structure of inner nodes is a B-Tree. The leaf nodes contain k-dimensional points.<br />
+        <ul>
+          <li>On insertion: The regular B-Tree algorithm is used, a leaf node is split into two when full and the splits recursively go up.</li>
+          <li>Unlike R-Trees, no rectangles overlap</li>
+        </ul>
+        </div>
+        <div class="section">
+        <h2>QuadTree [10]</h2>
+        QuadTrees have fixed partitions suitable for representing 2-dimensional quadtrants.<br />
+        <ul>
+          <li>Each node always has space for exactly four children</li>
+        </ul>
+        <br />
+        <div style="text-align: center;">
+        <img src="/ads/img/quadtree.png" alt="quadtree" /><br />
+        (image from wikipedia [10])<br />
+        </div>
+        <h2>Octree [11]</h2>
+        Octrees are just like Quadtrees but each node has space for eight children.<br />
+        <br />
+        <div style="text-align: center;">
+        <img src="/ads/img/octree.png" alt="octree" /><br />
+        (image from wikipedia [11])<br />
+        </div>
+        <div class="code_block">
+<pre>void insert(Point p, Octree * curr){
+  int quad = findQuad(p, curr);
+  if(curr has no child at quad){
+    insert child into curr->children[quad];
+  } else {
+    insert(p, curr->children[quad]);
+  }
+}</pre>
+        </div>
+        Above the root node is initialzed with the largest cube to fit all values.
+        <br />
+        <br />
+        Octrees are often used in 3D game engines to partition the visible scene into parts that need rendering.
+        </div>
+
+        <div class="section">
+          <h2>Interval Trees</h2>
+          Interval Trees are ways of storing intervals: [l, h] = { x: l &lt;= x &lt;= h};
+          <ul>
+            <li>Each node has a low_endpoint field</li>
+            <li>Each node has a high_endpoint field</li>
+            <li>Each node has the max of the high_endpoints of itself and its children</li>
+            <li>Each node has a left subtree where all intervals have low_endpoints &lt;= curr_low_endpoint</li>
+            <li>Each node has a right subtree where all intervals have low_endpoints &gt; curr_low_endpoint</li>
+          </ul>
+          <h3>Insertion</h3>
+          <ol>
+            <li>Start: <br />
+              <img src="/ads/img/pict/IntervalTree_0.bmp" alt="IntervalTree" /></li>
+            <li>Insert [6 25]<br />
+              <img src="/ads/img/pict/IntervalTree_1.bmp" alt="IntervalTree" /></li>
+            <li>Fixup the max high_endpoints on the way up from the recursion<br />
+              <img src="/ads/img/pict/IntervalTree_2.bmp" alt="IntervalTree" /></li>
+            <li>Fixup the max high_endpoints on the way up from the recursion<br />
+              <img src="/ads/img/pict/IntervalTree_3.bmp" alt="IntervalTree" /></li>
+          </ol>
+        </div>
+
+        <div class="section">
+          <h2>Kth-Min Tree</h2>
+          <ol>
+            <li>Start: curr = root. Looking for k=5. <br />
+              <img src="/ads/img/pict/KthMinTree_0.bmp" alt="KthMinTree" />
+            </li>
+            <li>count_left = countNodes(curr->getLeft()) = 6; k &lt; count_left. findKth(curr->getLeft(), k). <br />
+              <img src="/ads/img/pict/KthMinTree_1.bmp" alt="KthMinTree" />
+            </li>
+            <li>count_left = 2. k &gt; count_left. findKth(curr->getRight(), k - count_left - 1)<br />
+              <img src="/ads/img/pict/KthMinTree_2.bmp" alt="KthMinTree" />
+            </li>
+            <li>count_left = 1. k = 2. k &gt; count_left. findKth(curr->getRight(), k - count_left - 1)<br />
+              <img src="/ads/img/pict/KthMinTree_3.bmp" alt="KthMinTree" />
+            </li>
+            <li>count_left = 0. k = 0. k == count_left, return curr value</li>
+          </ol>
+        </div>
+        <div class="section">
+        <h2>References</h2>
+        <ol>  
+          <li>Robert Sedgewick, "Algorithms in C++, Parts 1-4", Third Edition. ISBN: 0-201-35088-2, pages 560-573</li>
+          <li>http://en.wikipedia.org/wiki/Red%E2%80%93black_tree</li>
+          <li>"R-trees: A dynamic index structure for spatial searching", A. Guttman</li>
+          <li>"The K-D-B tree: A search structure for large multi-dimensional dynamic indexes". J.T. Robinson</li>
+          <li>http://en.wikipedia.org/wiki/R-tree</li>
+          <li>http://en.wikipedia.org/wiki/R*_tree</li>
+          <li>http://en.wikipedia.org/wiki/Hilbert_R-tree</li>
+          <li>N. Chen, N. Wang, and B. Shi, "A new algorithm for encoding and decoding the Hilbert order," Softw. Pract. Exper.,  vol. 37, 2007, pp. 897-908.</li>
+          <li>http://en.wikipedia.org/wiki/K-d_tree</li>
+          <li>http://en.wikipedia.org/wiki/Quadtree</li>
+        </ol>
+        </div>
+
+
+      </div>
+    </div>
+  </body>
+</html>

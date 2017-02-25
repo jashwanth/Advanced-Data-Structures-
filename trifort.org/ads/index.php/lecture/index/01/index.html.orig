@@ -1,0 +1,398 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>01: course overview</h1>
+        </div>
+        <div class="section">
+          <h2>course format</h2>
+          <ul>
+            <li><b>Topic</b>: Survey of practical data 
+              structures and algorithms used in industrial software design.<br /><br /></li>
+            <li><b>Textbook: </b> Adam Drozdek, "Data Structures and Algorithms in C++", Fourth Edition.<br /><br /></li>
+            <li><b>Supplemental Textbook: </b>Robert Sedgewick, "Algorithms in C++, Parts 1-4."<br /><br /></li>
+            <li><b>Prerequisites: </b>Undergraduate degree in Computer Science, Computer Engineering or Electrical Engineering.</li>
+          </ul>
+          <br />
+        </div>       
+        <div class="section">
+          <h2>grading</h2>
+          <ul>
+            <li><b>Basis For Grades</b>: <br /><br />
+              <table class="nice_table">
+                <tr class="grey">
+                  <td width="250px">Item</td>
+                  <td width="250px">Count</td>
+                  <td width="250px">Percentage of Grade</td>
+                </tr>
+                <tr>
+                  <td>Homeworks</td>
+                  <td>5</td>
+                  <td>40%</td>
+                </tr>
+                <tr>
+                  <td>Exams</td>
+                  <td>2</td>
+                  <td>60%</td>
+                </tr>
+              </table>
+              <br />
+              The total exam grade is the sum of:
+              <ul>
+                <li>Midterm Exam</li>
+                <li>Final Exam</li>
+              </ul>
+            </li>
+          </ul>
+          <ul>
+            <li><b>Grade Server</b>: <br /><br />
+              Each programming homework consists of testcases. The score on an 
+              assignment is based on the number of testcases that pass.<br />
+              <br />
+              Homeworks are submitted to a web-based grading server that 
+              automatically grades the testcases. The wall-clock speed of an
+              assignment is measured. The top ten fastest submissions per
+              assignment get bonus points.<br />
+              <br />
+            </li>
+            <li><b>Independent Work</b>: <br /><br />
+              Each final submission per homework is manually reviewed for
+              cheating with other students. On top of this, data analytics is
+              done to flag  code. Flagged code is reviewed carefully by the
+              instructor.<br />
+              <br />
+              Last semester two students were caught cheating on the first four
+              assignments. They both recieved a failing grade in the course and
+              cannot graduate from Syracuse University until they improve their
+              grade.<br />
+              <br />
+              Assignments are different from last year. All submissions from
+              last year have been saved and automatic algorithms will analyze
+              for similarities between semesters.<br />
+              <br />
+              The only way to be safe from getting caught cheating is to work
+              absolutely independently. You should never see a single line of
+              another persons code. You should not discuss anything regarding
+              homeworks with another student. Working in groups is not allowed.
+              <br />
+              <br />
+            </li>
+          </ul>
+          <br />
+        </div>
+        <div class="section">
+          <h2>complexity analysis</h2>
+          <ul>
+            <li><b>Definition: </b><br /><br />
+              Complexity analysis categorizes an algorithm based on resource
+              usage in relation to the input size (n).<br />
+              <br />
+            </li>
+            <li><b>Time Complexity: </b><br /><br />
+            A categorization related to time.<br /><br /></li>
+            <li><b>Space Complexity: </b><br /><br />
+            A categorization related to space.<br /><br /></li>
+            <li><b>Example:</b><br /><br />
+              To sort all of the names of every person in the world, we can
+              choose either an n^2 or nlgn algorithm<br />
+              <br />
+              There are 6.975 billion people in the world (n). The time to 
+              execute depends on the time complexity.<br />
+              <br />
+              Assume we have to do 1 nanosecond of computation per sort
+              operation.<br />
+              <br />
+              <ul>
+                <li><b>O(n^2) bubblesort: </b>
+                  <ul>
+                    <li>n^2 = 6.975 billion ^ 2 = 4.8509e19 operations</li>
+                    <li>seconds = 4.8509e19 operations * 1 (nanosecond / 
+                      operation)</li>
+                    <li>seconds = 4.86e10</li>
+                    <li>years = 4.86e10 seconds / 31,536,000 (seconds /
+                      year)</li> 
+                    <li>years = 1,541</li>
+                  </ul>
+                </li>
+                <li><b>O(nlgn) heapsort: </b>
+                  <ul>
+                    <li>nlgn = 6.975 billion * lg(6.975 billion) = 2.3001e11 
+                      operations</li>
+                    <li>seconds = 2.3e11 operations * 1 (nanosecond / 
+                      operation)</li>
+                    <li>seconds = 230</li>
+                    <li>minutes = 230 seconds / 60 (seconds / minute) </li> 
+                    <li>minutes = 3.8</li>
+                  </ul>
+                </li>
+              </ul>
+              <br />
+              You can program a bubblesort in 5 minutes or you can program a
+              heapsort in 1 hour. The purpose of complexity analysis is to do
+              back of the envelope calculations to gauge how much programming
+              time should be used optimizing performance. Or to see if an
+              operation on a data input size is feasible within our lifetime
+              with our most advanced algorithms.
+              <br />
+              <br />
+              Usually we want to choose an algorithm with a better time
+              or space complexity<br />
+              <br />
+              <ul>
+                <li>But this is not always true!</li>    
+                <ul>
+                  <li>O(n^2) is really an^2 + bn + c</li>
+                  <li>O(nlgn) is really anlgn + bn + c</li>
+                  <li>Sometimes the constant factors of an O(n^2) algorithm are much
+                    smaller than, say, an O(nlgn) algorithm for small n</li>
+                </ul>
+                <li>Sometimes we have to choose either a good time complexity or a
+                  good space complexity</li>
+              </ul>
+            </li>
+          </ul>
+          <br />
+        </div>
+        <div class="section">
+          <h2>growth of functions</h2>
+          <ul>
+            <li>f(n) = n^2 + 50nlgn + 100n + lgn + 1000</li>
+          </ul>
+          <table class="slim_table">
+            <tr bgcolor="#e5e5e5">
+              <td width="200px">n</td>
+              <td width="200px">f(n)</td>
+              <td width="200px" colspan="2">n^2</td>
+              <td width="200px" colspan="2">50nlgn</td>
+              <td width="200px" colspan="2">100n</td>
+              <td width="200px" colspan="2">lgn</td>
+              <td width="200px" colspan="2">1000</td>
+            </tr>
+            <tr bgcolor="#cccccc">
+              <td width="200px">&nbsp;</td>
+              <td width="200px">&nbsp;</td>
+              <td width="100px">Value</td>
+              <td width="100px">%</td>
+              <td width="100px">Value</td>
+              <td width="100px">%</td>
+              <td width="100px">Value</td>
+              <td width="100px">%</td>
+              <td width="100px">Value</td>
+              <td width="100px">%</td>
+              <td width="100px">Value</td>
+              <td width="100px">%</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>1305</td>
+              <td>4</td>
+              <td>0.31</td>
+              <td>100</td>
+              <td>7.66</td>
+              <td>200</td>
+              <td>15.33</td>
+              <td>1</td>
+              <td>0.08</td>
+              <td>1000</td>
+              <td>76.63</td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td>6060</td>
+              <td>256</td>
+              <td>4.22</td>
+              <td>3200</td>
+              <td>52.81</td>
+              <td>1600</td>
+              <td>26.40</td>
+              <td>4</td>
+              <td>0.07</td>
+              <td>1000</td>
+              <td>16.50</td>
+            </tr>
+            <tr>
+              <td>256</td>
+              <td>194544</td>
+              <td>65536</td>
+              <td>33.69</td>
+              <td>102400</td>
+              <td>52.64</td>
+              <td>25600</td>
+              <td>13.16</td>
+              <td>8</td>
+              <td>0.00</td>
+              <td>1000</td>
+              <td>0.51</td>
+            </tr>
+            <tr>
+              <td>4096</td>
+              <td>19645428</td>
+              <td>16777216</td>
+              <td>85.40</td>
+              <td>2457600</td>
+              <td>12.51</td>
+              <td>409600</td>
+              <td>2.08</td>
+              <td>12</td>
+              <td>0.00</td>
+              <td>1000</td>
+              <td>0.01</td>
+            </tr>
+            <tr>
+              <td>65536</td>
+              <td>4353950712</td>
+              <td>4294967296</td>
+              <td>98.65</td>
+              <td>52428800</td>
+              <td>1.20</td>
+              <td>6553600</td>
+              <td>0.15</td>
+              <td>16</td>
+              <td>0.00</td>
+              <td>1000</td>
+              <td>0.00</td>
+            </tr>
+          </table>
+          <br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>common cyclomatic complexities</h2>
+          <ul>
+            <li>O(n^3)</li>
+            <li>O(n^2)</li>
+            <li>O(nlgn)</li>
+            <li>O(n)</li>
+            <li>O(lgn)</li>
+            <li>O(1)</li> 
+          </ul>
+          Draw graph of this function including the constant term on the 
+            board<br />
+          <br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>lgn</h2>
+          <ul>
+            <li>We use log base 2 in computer science often</li>
+            <li>lgn is the number of times you divide n by 2 until you get to
+              one</li>
+            <li>Often lgn comes up as part of a complexity because we divide a
+              problem into two until we cannot anymore</li>
+          </ul>
+          An example log base 2 calculator: 
+          <div class="code_block">
+          <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// logBase2.cpp - download <a href="/ads/index.php/dlcode/index/logBase2.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">iostream&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">logBase2(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">n&nbsp;</div><div class="code_nothing">&gt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n&nbsp;</div><div class="code_nothing">/=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">2;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret++;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">main(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">argc,&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">argv[</div><div class="code_nothing">]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">32;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">log2&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">logBase2(</div><div class="code_nothing">i)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"the&nbsp;log&nbsp;base&nbsp;2&nbsp;of&nbsp;("</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">")&nbsp;=&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">log2&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />          </div>
+          <br />
+          The results:<br />
+          <ul>
+            <li>lg(0) = 0</li>
+            <li>lg(1) = 0</li>
+            <li>lg(2) = 1</li>
+            <li>lg(4) = 2</li>
+            <li>lg(8) = 3</li>
+            <li>lg(16) = 4</li>
+            <li>lg(32) = 5</li>
+            <li>lg(64) = 6</li>
+            <li>lg(128) = 7</li>
+            <li>lg(256) = 8</li>
+            <li>lg(512) = 9</li>
+            <li>lg(1024) = 10</li>
+            <li>lg(4*1024*1024) = 32</li>
+          </ul>
+          <br />
+          binary for 256: 0b100000000.<br />
+          a single high bit and 8 zero in the binary number.<br />
+          lg(256) = 8.<br />
+          each leading one creates a new lgn increment because binary is base2.<br />
+          <br />
+          lgn grows extremely slowly compared to n. so nlgn is much better than n^2.<br />
+          <br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>big-o notation</h2>
+          <ul>
+            <li>f(n) = n^2 + 50nlgn + 100n + lgn + 1000</li>
+            <li>O(f(n)) = O(n^2)</li>
+            <li>As n becomes large, the terms that grow smaller than n^2 do not
+              matter</li>
+            <li>Big O defines the upper bounds of functions. In the worst
+              possible performing case of an algorithm, it will never be greater
+              than O(f(n)) by more than a constant factor.</li>
+          </ul>
+          <ul>
+            <li>Big O is a best possible worst case.</li>
+            <li>f(n) = 3n^2</li>
+            <ul>
+              <li>O(f(n)) = O(n^2)</li>
+              <li>O(f(n)) != O(n^3)</li>
+              <li>O(f(n)) != O(n)</li>
+            </ul>
+          </ul>
+          <br />
+        </div>
+        <div class="section">
+          <h2>complexity class examples</h2>
+          <ul>
+            <li>
+              O(1) - Simple Calculation: Conversion from Fahrenheit to Celsius
+              <div class="code_block">
+              <div class="code_grey">1:&nbsp;</div><div class="code_comment">// temperature.cpp - download <a href="/ads/index.php/dlcode/index/temperature.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;</div><div class="code_green">float</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">toCelsius(</div><div class="code_green">float</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">fahrenheit_temp)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">float</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">fahrenheit_temp&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">32)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">5.0&nbsp;</div><div class="code_nothing">/&nbsp;</div><div class="code_nothing">9.0;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />              </div>
+            </li>
+            <li>
+              O(lgn) - Binary Search: Given a sorted sequence, find if an
+              element exists in the sequence
+              <div class="code_block">
+              <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// binarySearch.cpp - download <a href="/ads/index.php/dlcode/index/binarySearch.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">binarySearch(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">array,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">key)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">low&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mid;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">high&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n-1;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">low&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">high)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mid&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">low&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">high)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">/&nbsp;</div><div class="code_nothing">2;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">key&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">mid]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">high&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mid&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">array[</div><div class="code_nothing">mid]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">key)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">low&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mid&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mid;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">-1;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />              </div>
+            </li>
+            <li>
+              O(n) - Compute the Sum of an Array
+              <div class="code_block">
+              <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// computeSum.cpp - download <a href="/ads/index.php/dlcode/index/computeSum.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">computeSum(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">array,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret&nbsp;</div><div class="code_nothing">+=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">i]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />              </div>
+            </li>
+            <li>
+              O(n) - Moving Average: Just because there are two for loops
+              doesn't mean it is O(n^2)
+              <div class="code_block">
+              <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// movingAverage.cpp - download <a href="/ads/index.php/dlcode/index/movingAverage.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">movingAverage(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">data,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">window_size)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">ret&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">[</div><div class="code_nothing">n]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">half_window&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">window_size&nbsp;</div><div class="code_nothing">/&nbsp;</div><div class="code_nothing">2;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sum&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">num_counted&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">half_window;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">half_window;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++j)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">&gt;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">&</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">num_counted++;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sum&nbsp;</div><div class="code_nothing">+=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">data[</div><div class="code_nothing">j]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sum&nbsp;</div><div class="code_nothing">/&nbsp;</div><div class="code_nothing">num_counted;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />              </div>
+            </li>
+            <li>
+              O(nlgn) - Efficient Sort (Merge Sort), We'll study this later,
+              don't worry about it for now.
+              <div class="code_block">
+              <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// mergeSort.cpp - download <a href="/ads/index.php/dlcode/index/mergeSort.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_preproc">#include</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">iostream&gt;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">merge(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">left,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">right,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">len)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">ret&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">[</div><div class="code_nothing">len&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">len]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">left_position&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right_position&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret_position&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">left_position&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">len&nbsp;</div><div class="code_nothing">&</div><div class="code_nothing">&</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right_position&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">len)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">left_value&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">left[</div><div class="code_nothing">left_position]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right_value&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right[</div><div class="code_nothing">right_position]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">left_value&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right_value)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret[</div><div class="code_nothing">ret_position]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">left_value;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret_position++;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">left_position++;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret[</div><div class="code_nothing">ret_position]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right_value;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret_position++;</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right_position++;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">left_position&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">len)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret[</div><div class="code_nothing">ret_position]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">left[</div><div class="code_nothing">left_position]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret_position++;</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">left_position++;</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">right_position&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">len)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret[</div><div class="code_nothing">ret_position]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right[</div><div class="code_nothing">right_position]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret_position++;</div><div class="code_nothing"></div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right_position++;</div><div class="code_nothing"></div><br /><div class="code_grey">32:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret;</div><div class="code_nothing"></div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">35:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">36:&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">mergeSort(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">input,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">len)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">37:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">len&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">1)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">38:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">input;</div><div class="code_nothing"></div><br /><div class="code_grey">39:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">40:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">middle&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">len&nbsp;</div><div class="code_nothing">/&nbsp;</div><div class="code_nothing">2;</div><div class="code_nothing"></div><br /><div class="code_grey">41:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">left&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">[</div><div class="code_nothing">middle]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">42:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">right&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">[</div><div class="code_nothing">middle]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">43:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">middle;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">44:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">left[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">input[</div><div class="code_nothing">i]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">45:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">46:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">middle;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">47:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">input[</div><div class="code_nothing">i+middle]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">48:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">49:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">left&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mergeSort(</div><div class="code_nothing">left,&nbsp;</div><div class="code_nothing">middle)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">50:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mergeSort(</div><div class="code_nothing">right,&nbsp;</div><div class="code_nothing">middle)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">51:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">ret&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">merge(</div><div class="code_nothing">left,&nbsp;</div><div class="code_nothing">right,&nbsp;</div><div class="code_nothing">middle)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">52:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">delete</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">[</div><div class="code_nothing">]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">left;</div><div class="code_nothing"></div><br /><div class="code_grey">53:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">delete</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">[</div><div class="code_nothing">]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">right;</div><div class="code_nothing"></div><br /><div class="code_grey">54:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">ret;</div><div class="code_nothing"></div><br /><div class="code_grey">55:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">56:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">57:&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">main(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">argc,&nbsp;</div><div class="code_green">char</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">argv[</div><div class="code_nothing">]</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">58:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">59:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">array&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_red">new</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">[</div><div class="code_nothing">8]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">60:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">0]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">8;</div><div class="code_nothing"></div><br /><div class="code_grey">61:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">1]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">2;</div><div class="code_nothing"></div><br /><div class="code_grey">62:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">2]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">4;</div><div class="code_nothing"></div><br /><div class="code_grey">63:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">3]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">9;</div><div class="code_nothing"></div><br /><div class="code_grey">64:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">4]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">3;</div><div class="code_nothing"></div><br /><div class="code_grey">65:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">5]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">6;</div><div class="code_nothing"></div><br /><div class="code_grey">66:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">6]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">10;</div><div class="code_nothing"></div><br /><div class="code_grey">67:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">7]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">5;</div><div class="code_nothing"></div><br /><div class="code_grey">68:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">69:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">sorted&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">mergeSort(</div><div class="code_nothing">array,&nbsp;</div><div class="code_nothing">8)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">70:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">8;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">71:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sorted[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_string">"&nbsp;"</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">72:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">73:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">cout&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">std:</div><div class="code_nothing">:</div><div class="code_nothing">endl;</div><div class="code_nothing"></div><br /><div class="code_grey">74:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">75:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">76:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />              </div>
+            </li>
+            <li>
+              O(n^2) - Bubble Sort: given any sequence, ensure all the elements
+              are in ascending (or descending) order
+              <div class="code_block">
+              <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_comment">// bubbleSort.cpp - download <a href="/ads/index.php/dlcode/index/bubbleSort.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_green">void</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">bubbleSort(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">*&nbsp;</div><div class="code_nothing">array,&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++i)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">n;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">++j)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">lhs&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">i]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rhs&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">j]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">rhs&nbsp;</div><div class="code_nothing">&lt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">lhs)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">rhs;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">array[</div><div class="code_nothing">j]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">lhs;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />              </div>
+            </li>
+          </ul>
+          <br />
+        </div>
+        <div class="section">
+          <h2>references</h2>
+          <ol>
+            <li><a href="http://en.wikipedia.org/wiki/Big_O_notation">http://en.wikipedia.org/wiki/Big_O_notation</a></li>
+            <li><a href="http://en.wikipedia.org/wiki/World_population">http://en.wikipedia.org/wiki/World_population</a></li>
+            <li><a href="http://www.cs.rpi.edu/academics/courses/fall11/ds/lectures/01_intro.pdf">http://www.cs.rpi.edu/academics/courses/fall11/ds/lectures/01_intro.pdf</a></li>
+            <li>Adam Drozdek. "Data Structures and Algorithms in C++"</li>
+          </ol>
+          <br />
+        </div>
+        <div class="clear_section">
+          <br />
+          <br />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

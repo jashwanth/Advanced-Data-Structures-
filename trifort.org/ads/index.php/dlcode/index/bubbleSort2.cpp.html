@@ -1,0 +1,43 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+void swap(std::vector&lt;int&gt;& a, int index1, int index2){
+  int lhs = a[index1];
+  int rhs = a[index2];
+  a[index1] = rhs;
+  a[index2] = lhs;
+}
+
+void bubbleSort2(std::vector&lt;int&gt;& a){
+  bool swapped = true;
+  while(swapped){
+    swapped = false;
+    for(size_t i = 1; i &lt; a.size(); ++i){
+      if(a[i - 1] &gt; a[i]){
+        swap(a, i-1, i);
+        swapped = true;
+      }
+    }
+  }
+}
+
+int main(int argc, char * argv[]){
+
+  std::vector&lt;int&gt; array;
+  array.push_back(10);
+  array.push_back(5);
+  array.push_back(15);
+  array.push_back(7);
+  array.push_back(1);
+
+  bubbleSort2(array);
+  
+  for(size_t i = 0; i &lt; array.size(); ++i){
+    std::cout &lt;&lt; array[i] &lt;&lt; " ";
+  }
+  std::cout &lt;&lt; std::endl;
+  //prints: 1 5 7 10 15 
+
+  return 0;
+}
+</pre>

@@ -1,0 +1,27 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;set&gt;
+
+int main(int argc, char * argv[]){
+
+  std::set&lt;int&gt; set1;
+  set1.insert(20);
+  set1.insert(10);
+  set1.insert(50);
+  set1.insert(23);
+  set1.insert(20);
+
+  std::set&lt;int&gt;::iterator iter;
+  std::cout &lt;&lt; "items in set1: " &lt;&lt; std::endl;
+  for(iter = set1.begin(); iter != set1.end(); ++iter){
+    std::cout &lt;&lt; "  " &lt;&lt; *iter &lt;&lt; std::endl;
+  }
+  //prints:
+  //  items in set1:
+  //    10
+  //    20
+  //    23
+  //    50
+
+  return 0;
+}
+</pre>

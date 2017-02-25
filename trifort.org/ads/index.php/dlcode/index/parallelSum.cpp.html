@@ -1,0 +1,115 @@
+<pre>#include "Thread.h"
+#include "Barrier.h"
+#include "BlockingQueue.h"
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+class psumJob {
+public:
+  std::vector&lt;int&gt; * input_vec;
+  std::vector&lt;long long&gt; * output_vec;
+  int size;
+  long long ret;
+};
+
+class psumThread : public Thread {
+public:
+  psumThread(BlockingQueue&lt;psumJob&gt; * input_q, 
+             BlockingQueue&lt;psumJob&gt; * output_q,
+             int thread_id, Barrier * barrier)
+
+    : m_input_q(input_q), m_output_q(output_q), 
+      m_threadId(thread_id), m_barrier(barrier)
+  {
+  }
+ 
+  void run(){
+    while(true){
+      psumJob curr_job = m_input_q-&gt;pop_front();
+      long long sum = 0;
+      for(int i = (m_threadId * curr_job.size); i &lt; ((m_threadId+1) * curr_job.size); ++i){
+        sum += curr_job.input_vec-&gt;at(i);
+      }
+      curr_job.output_vec-&gt;at(m_threadId) = sum;
+      m_barrier-&gt;wait();
+
+      if(m_threadId == 0){
+        long long ret = 0;
+        for(int i = 0; i &lt; Thread::numCores(); ++i){
+          ret += curr_job.output_vec-&gt;at(i);
+        }
+        curr_job.ret = ret;
+        m_output_q-&gt;push_back(curr_job);
+      }
+
+    }
+  }
+
+private:
+  BlockingQueue&lt;psumJob&gt; * m_input_q;
+  BlockingQueue&lt;psumJob&gt; * m_output_q;
+  int m_threadId;
+  Barrier * m_barrier;
+};
+
+class psum {
+public:
+
+  psum(){
+    for(int i = 0; i &lt; Thread::numCores(); ++i){
+      Thread * curr = new psumThread(&m_toCores, &m_fromCores, i, &m_barrier);
+      m_threads.push_back(curr);
+      curr-&gt;start();
+    }
+  }
+
+  long long sum(std::vector&lt;int&gt;& vec){
+    std::vector&lt;long long&gt; output_vec;
+    output_vec.resize(vec.size());
+
+    for(int i = 0; i &lt; Thread::numCores(); ++i){
+      psumJob job;
+      job.input_vec = &vec;
+      job.output_vec = &output_vec;
+      job.size = vec.size() / Thread::numCores();
+
+      m_toCores.push_back(job);
+    }
+
+    psumJob job = m_fromCores.pop_front();
+    return job.ret;
+  }
+
+private:
+  std::vector&lt;Thread *&gt; m_threads;
+  BlockingQueue&lt;psumJob&gt; m_toCores;
+  BlockingQueue&lt;psumJob&gt; m_fromCores; 
+  Barrier m_barrier;
+};
+
+long long serialSum(std::vector&lt;int&gt;& vec)
+{
+  long long ret = 0;
+  for(int i = 0; i &lt; vec.size(); ++i){
+    ret += vec[i];
+  }
+  return ret;
+}
+
+int main(int argc, char * argv[]){
+
+  psum p;
+  std::vector&lt;int&gt; vec;
+  for(int i = 0; i &lt; 8*1024*1024; ++i){
+    vec.push_back(i);
+  }
+
+  std::cout &lt;&lt; p.sum(vec) &lt;&lt; std::endl;
+  std::cout &lt;&lt; p.sum(vec) &lt;&lt; std::endl;
+  std::cout &lt;&lt; p.sum(vec) &lt;&lt; std::endl;
+  
+  std::cout &lt;&lt; serialSum(vec) &lt;&lt; std::endl;  
+  
+  return 0;
+}
+</pre>

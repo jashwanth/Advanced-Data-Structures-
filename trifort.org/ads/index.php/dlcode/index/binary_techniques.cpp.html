@@ -1,0 +1,17 @@
+<pre>
+int main(int argc, char * argv[])
+{
+  int num = 0x12345670;
+
+  num &= 0x0000ffff;    
+  //num now is equal to 0x00005670
+
+  num |= 1;
+  //num now is equal to 0x00005671
+
+  num &lt;&lt;= (4 * 4);
+  //num now is equal to 0x56710000
+
+  return 0;
+}
+</pre>

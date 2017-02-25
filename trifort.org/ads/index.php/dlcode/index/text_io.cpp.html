@@ -1,0 +1,16 @@
+<pre>#include &lt;fstream&gt;
+
+int main(int argc, char * argv[]){
+
+  std::ofstream fout("output.txt");
+  fout &lt;&lt; "hello world" &lt;&lt; std::endl;
+  fout.close();
+
+  //output.txt has:
+  //hello world
+
+  //or using a hex editor
+  //68 65 6C 6C 6F 20 77 6F 72 6C 64 0A
+  return 0;
+}
+</pre>

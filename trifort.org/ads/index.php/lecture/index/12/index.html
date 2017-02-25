@@ -1,0 +1,795 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse691 - advanced data strucures</title>
+  <link href="../../../../../css/styles.css" rel="stylesheet" type="text/css"></link>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+  <link rel="shortcut icon" href="http://trifort.org/cse382/img/favicon2.ico" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>12: graphs #1</h1>
+          Graph Basics | Graph Representation | Graph Traversals | Single-Source Shortest Paths | All-to-All Shortest Paths<br />
+        </div>
+        <div class="section">
+        <h2>Graph Basics</h2>
+        In trees, there is only one root and links can only go from parent to child.  Graphs do not have any roots and links can exist between any two nodes.<br />
+        <ul>
+          <li>Undirected Graph:<br />
+            <img src="../../../../img/pict/GraphIntro_0.bmp" alt="GraphIntro" />
+          </li>
+          <li>Directed Graph:<br />
+            <img src="../../../../img/pict/GraphIntro_1.bmp" alt="GraphIntro" />
+          </li>
+        </ul>
+        In graphs we call nodes "Vertices" and we call the connections "Edges".<br />
+        <br />
+        Edges can have weights associated with them.  For instance, if we made a graph with the Vertices be all the capitol cities in the US and the Edges being the major highways between them, the Edge Weights could be the distance of the connecting highways, in miles.<br />
+        <br />
+        In graphs, the existing nodes and the connections between them are what matter, the xy-positions on a drawing of the graph are irrelevant.<br />
+        <br />
+        Definitions:
+        <ul>
+          <li><b>Path: </b> sequence of edges from v1 to vn</li>
+          <li><b>Circuit: </b> a path where v1 = vn and no edge is repeated</li>
+          <li><b>Cycle: </b> a circuit where all the vertices are different</li>
+          <li><b>Complete Graph: </b> a graph where each distinct pair of vertices has exactly one edge connecting them. The number of edges in a complete graph is: |E| = |V|*(|V|-1) / 2 = O(|V|^2)</li>
+          <li><b>Subgraph: </b> G' of graph G = (V, E) is a graph (V', E') where V' is a subset of V and E' is a subset of E.</li>
+          <li><b>Adjacent Vertices: </b> Two vertices connected by and edge</li>
+          <li><b>Degree of a Vertex V: </b> The number of edges touching V.</li>
+          <li><b>Isolated Vertex: </b> A vertex with degree=0</li>  
+        </ul>
+        </div>
+        <div class="section">
+        <h2>Graph Representation</h2>
+        Most useful Graph Representations:
+        <ul>
+          <li><b>Adjacency List:</b><br />
+            <br />
+            <div style="overflow: auto; width: 100%">
+            <div style="float: left; border: 1px solid; width: 30px; padding: 5px 5px 5px 10px; background-color: #ffffcc;">
+              <b>
+                a<br />
+                b<br />
+                c<br />
+                d<br />
+                e<br />
+                f<br />
+                g<br />
+              </b>
+            </div>
+            <div style="float: left; border: 1px solid; width: 100px; padding: 5px 5px 5px 10px; background-color: #ffffaa;">
+              c&nbsp;&nbsp;&nbsp;&nbsp;d&nbsp;&nbsp;&nbsp;&nbsp;f<br />
+              d&nbsp;&nbsp;&nbsp;&nbsp;e<br />
+              a&nbsp;&nbsp;&nbsp;&nbsp;f<br />
+              a&nbsp;&nbsp;&nbsp;&nbsp;b&nbsp;&nbsp;&nbsp;&nbsp;e&nbsp;&nbsp;&nbsp;&nbsp;f<br />
+              b&nbsp;&nbsp;&nbsp;&nbsp;d<br />
+              a&nbsp;&nbsp;&nbsp;&nbsp;c&nbsp;&nbsp;&nbsp;&nbsp;d<br />
+              <br />
+            </div>
+            </div>
+            <br />
+            Processing all the edges in a vertex takes degree(v) steps.<br /><br />
+          </li>
+          <li><b>Adjacency Matrix:</b></li>
+            <div style="overflow: auto; width: 100%">
+            <div style="float: left; width: 30px; padding: 5px 5px 5px 10px;">
+            </div>
+            <div style="float: left; width: 300px; padding: 10px 10px 10px 10px;">
+              <b>a&nbsp;&nbsp;&nbsp;&nbsp;b&nbsp;&nbsp;&nbsp;&nbsp;c&nbsp;&nbsp;&nbsp;&nbsp;d&nbsp;&nbsp;&nbsp;&nbsp;e&nbsp;&nbsp;&nbsp;&nbsp;f&nbsp;&nbsp;&nbsp;&nbsp;g</b>
+            </div>
+            </div>
+            <div style="overflow: auto; width: 100%">
+            <div style="float: left; width: 30px; padding: 5px 5px 5px 10px;">
+              <b>
+                a<br />
+                b<br />
+                c<br />
+                d<br />
+                e<br />
+                f<br />
+                g<br />
+              </b>
+            </div>
+            <div style="float: left; border: 1px solid; width: 210px; padding: 5px 5px 5px 10px; background-color: #ffffcc;">
+              0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;0<br />
+              0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0<br />
+              1&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;0<br />
+              1&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;0<br />
+              0&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0<br />
+              1&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0<br />
+              0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;0<br />
+            </div>
+            </div>
+            <br />
+            Processing all the edges in a vertex takes |V| steps. There is also a lot of wasted space in sparse graphs.<br /><br />
+        </ul>
+        </div>
+        <div class="section">
+        <h2>Graph Traversals</h2>
+        In graphs, popular traversals are: 1) Depth-First Search and 2) Breadth-First Search
+        <h3>Depth-First Search</h3>
+        <div class="code_block">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">depthFirstSearch(</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>all&nbsp;</div><div class="code_nothing">vertices</i>&nbsp;</div><div class="code_nothing">u</div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>visited</i>(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">false;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>there&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">vertex</i>&nbsp;</div><div class="code_nothing">v&nbsp;</div><div class="code_nothing"><i>such&nbsp;</div><div class="code_nothing">that&nbsp;</div><div class="code_nothing">visited</i>(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">false</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">searchNode(</div><div class="code_nothing">v)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">searchNode(</div><div class="code_nothing">Node&nbsp;</div><div class="code_nothing">v)</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">visit&nbsp;</div><div class="code_nothing">node</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>all&nbsp;</div><div class="code_nothing">adjacent&nbsp;</div><div class="code_nothing">vertices</i>&nbsp;</div><div class="code_nothing">u</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">searchNode(</div><div class="code_nothing">u)</div><div class="code_nothing"></div><br />        </div>
+        <h3>Breadth-First Search</h3>
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">breadthFirstSearch(</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>all&nbsp;</div><div class="code_nothing">vertices</i>&nbsp;</div><div class="code_nothing">u</div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>visited</i>(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">false;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">edges&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing"><i>null</i></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>there&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">a&nbsp;</div><div class="code_nothing">vertex</i>&nbsp;</div><div class="code_nothing">v&nbsp;</div><div class="code_nothing"><i>such&nbsp;</div><div class="code_nothing">that&nbsp;</div><div class="code_nothing">visited</i>(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">false</div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>enqueue</i>(</div><div class="code_nothing">v)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>queue&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">empty</i></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">v&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing"><i>dequeue</i>(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>all&nbsp;</div><div class="code_nothing">vertices</i>&nbsp;</div><div class="code_nothing">u&nbsp;</div><div class="code_nothing"><i>adjacent&nbsp;</div><div class="code_nothing">to</i>&nbsp;</div><div class="code_nothing">v</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>visited</i>(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>is</i>&nbsp;</div><div class="code_nothing">false</div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>visited</i>(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">true;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>enqueue</i>(</div><div class="code_nothing">u)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>attach&nbsp;</div><div class="code_nothing">edge</i>(</div><div class="code_nothing">vu)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>to</i>&nbsp;</div><div class="code_nothing">edges;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>output</i>&nbsp;</div><div class="code_nothing">edges;</div><div class="code_nothing"></div><br />        </div>
+        </div>
+        <div class="section">
+        <h2>Single-Source Shortest Paths</h2>
+        A classical problem in graph theory is to find the shortest paths from one starting vertex to every other vertex in the graph. The solution to this problem is useful in internet routers.<br />
+        <br />
+        There are two main categories of solutions
+        <ul>
+          <li><b>label-setting methods</b>: in each pass through the vertices still to be processed, one vertex is set and never changes.</li>
+          <li><b>label-correcting methods</b>: any label may be changed during a pass</li>
+        </ul>
+        Label-setting methods only work with positive weights, while label-correcting works also with negative weights as long as there are no negative cycles (a cycle whose weights add up to a negative number).
+        </div>
+        <div class="section">
+        <h2>Dijkstra's Algorithm</h2>
+        Dijkstra's Algorithm is one of the first label-setting methods.
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">dijkstra(</div><div class="code_nothing"><i>weighted&nbsp;</div><div class="code_nothing">simple</i>&nbsp;</div><div class="code_nothing">digraph,&nbsp;</div><div class="code_nothing"><i>vertex</i>&nbsp;</div><div class="code_nothing">first)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>all&nbsp;</div><div class="code_nothing">vertices</i>&nbsp;</div><div class="code_nothing">v</div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">infinity;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">first)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">toBeChecked&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing"><i>all&nbsp;</div><div class="code_nothing">vertices</i>;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">toBeChecked&nbsp;</div><div class="code_nothing"><i>is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">empty</i></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">v&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing"><i>a&nbsp;</div><div class="code_nothing">vertex&nbsp;</div><div class="code_nothing">in</i>&nbsp;</div><div class="code_nothing">toBeChecked&nbsp;</div><div class="code_nothing"><i>with&nbsp;</div><div class="code_nothing">minimal&nbsp;</div><div class="code_nothing">currDist</i>(</div><div class="code_nothing">v)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>remove</i>&nbsp;</div><div class="code_nothing">v&nbsp;</div><div class="code_nothing"><i>from</i>&nbsp;</div><div class="code_nothing">toBeChecked;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>all&nbsp;</div><div class="code_nothing">vertices</i>&nbsp;</div><div class="code_nothing">u&nbsp;</div><div class="code_nothing"><i>adjacent&nbsp;</div><div class="code_nothing">to</i>&nbsp;</div><div class="code_nothing">v&nbsp;</div><div class="code_nothing"><i>and&nbsp;</div><div class="code_nothing">in</i>&nbsp;</div><div class="code_nothing">toBeChecked</div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&gt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing"><i>weight</i>(</div><div class="code_nothing"><i>edge</i>(</div><div class="code_nothing">vu)</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing"><i>weight</i>(</div><div class="code_nothing"><i>edge</i>(</div><div class="code_nothing">vu)</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>predecessor</i>(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">v;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br />        </div>
+        Example:<br />
+        <img src="../../../../img/pict/Dijkstra_0.bmp" alt="Dijkstra">
+        <table width="600px">
+          <tr>
+            <td width="150px"><b>iteration:</b></td>
+            <td width="50px"></td>
+            <td><b>init</b></td>
+            <td><b>1</b></td>
+            <td><b>2</b></td>
+            <td><b>3</b></td>
+            <td><b>4</b></td>
+            <td><b>5</b></td>
+            <td><b>6</b></td>
+            <td><b>7</b></td>
+            <td><b>8</b></td>
+            <td><b>9</b></td>
+            <td><b>10</b></td>
+          </tr>    
+          <tr>
+            <td><b>active vertex:</b></td>
+            <td></td>
+            <td></td>
+            <td><b>d</b></td>
+            <td><b>h</b></td>
+            <td><b>a</b></td>
+            <td><b>e</b></td>
+            <td><b>f</b></td>
+            <td><b>b</b></td>
+            <td><b>i</b></td>
+            <td><b>c</b></td>
+            <td><b>j</b></td>
+            <td><b>g</b></td>
+          </tr>  
+          <tr>
+            <td colspan="13" bgcolor="#000000"></td>
+          </tr>
+          <tr>
+            <td align="right">a</td>
+            <td></td>
+            <td>inf</td>
+            <td>4</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr> 
+          <tr>
+            <td align="right">b</td>
+            <td></td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>9</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>  
+          <tr>
+            <td align="right">c</td>
+            <td></td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>11</td>
+            <td>11</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>  
+          <tr>
+            <td align="right">d</td>
+            <td></td>
+            <td>0</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>  
+          <tr>
+            <td align="right">e</td>
+            <td></td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>6</td>
+            <td>5</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>  
+          <tr>
+            <td align="right">f</td>
+            <td></td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>8</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>   
+          <tr>
+            <td align="right">g</td>
+            <td></td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>15</td>
+            <td>15</td>
+            <td>15</td>
+            <td>15</td>
+            <td>12</td>
+            <td></td>
+          </tr>   
+          <tr>
+            <td align="right">h</td>
+            <td></td>
+            <td>inf</td>
+            <td>1</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>  
+          <tr>
+            <td align="right">i</td>
+            <td></td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>9</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>    
+          <tr>
+            <td align="right">j</td>
+            <td></td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>inf</td>
+            <td>11</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>         
+        </table>
+        <br />
+        <b><u>Order</u>:</b><br />
+        d h a e f b i c j g<br />
+        <h3>Dijkstra's Algorithm Time Complexity</h3>
+        <ul>
+          <li>Using a simple data structure for currDist that requires O(|V|) to find the min:
+            <ul>
+              <li>The while at line 6 is executed O(|V|) times. Then for each of these executions, the search for min requires O(|V|) time.</li>
+              <li>The for loop at line 9 is executed O(|E|) times.
+              <li>Total time: O(|V|^2+|E|)</li>
+            </ul>
+          </li>
+          <li>Using a min-heap for currDist:
+            <ul>
+              <li>The outer while executes O(|V|) times and for each of those, removing from the min-heap takes O(lg|V|) time. This step takes O(|V|*lg|V|) time.</li>
+              <li>Updating currDist when a min distance is found, updating the key in the min-heap takes O(lg|V|) time. This is executed for every edge in the graph so this step takes O(|E|*lg|V|) time</li>
+              <li>Total time: O((|V|+|E|)*lg|V|)</li>
+            </ul>
+          </li>
+          <li>The total number of edges in a complete graph: |E| = O(|V|^2)</li>
+          <li>In a complete graph, using a min-heap takes O((|V|+|V|^2)*lg|V|), but with a sparse graph, using a min-heap is faster. In sparse graphs, dijkstra's algorithm with a min-heap is the fastest known single-source shortest-path algorithm for graphs with nonnegative weights. [1]</li>
+        </ul>  
+        </div>
+        <div class="section">
+        <h2>Bellman-Ford Algorithm</h2>
+        The Bellman-Ford's Algorithm is a label-correcting algorithm (so it can process graphs with negative weights).
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">bellmanFord(</div><div class="code_nothing"><i>weighted&nbsp;</div><div class="code_nothing">simple</i>&nbsp;</div><div class="code_nothing">digraph,&nbsp;</div><div class="code_nothing"><i>vertex</i>&nbsp;</div><div class="code_nothing">first)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>all&nbsp;</div><div class="code_nothing">vertices</i>&nbsp;</div><div class="code_nothing">v</div><br /><div class="code_grey">3:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">infinity;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">first)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>there&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">an&nbsp;</div><div class="code_nothing">edge</i>(</div><div class="code_nothing">vu)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>such&nbsp;</div><div class="code_nothing">that&nbsp;</div><div class="code_nothing">currDist</i>(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&gt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing"><i>weight</i>(</div><div class="code_nothing"><i>edge</i>(</div><div class="code_nothing">vu)</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing"><i>currDist</i>(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing"><i>weight</i>(</div><div class="code_nothing"><i>edge</i>(</div><div class="code_nothing">vu)</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br />        </div>
+        Example:<br />
+        <img src="../../../../img/pict/FordAlgorithm_0.bmp" alt="FordAlgorithm" /><br />
+        <table width="300px">
+          <tr>
+            <td colspan="2"></td>
+            <td colspan="7" align="center"><b>iteration</b></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td><b>init</b></td>
+            <td><b>1</b></td>
+            <td></td>
+            <td><b>2</b></td>
+            <td></td>
+            <td><b>3</b></td>
+            <td><b>4</b></td>
+          </tr>
+          <tr>
+            <td colspan="9" bgcolor="#000000"></td>
+          </tr>
+          <tr>
+            <td>a</td>
+            <td></td>
+            <td>inf</td>
+            <td>3</td>
+            <td></td>
+            <td>2</td>
+            <td></td>
+            <td>1</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>b</td>
+            <td></td>
+            <td>inf</td>
+            <td></td>
+            <td></td>
+            <td>4</td>
+            <td></td>
+            <td>3</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>c</td>
+            <td></td>
+            <td>0</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>d</td>
+            <td></td>
+            <td>inf</td>
+            <td>1</td>
+            <td>0</td>
+            <td></td>
+            <td>-1</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>e</td>
+            <td></td>
+            <td>inf</td>
+            <td>5</td>
+            <td></td>
+            <td>4</td>
+            <td></td>
+            <td>3</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>f</td>
+            <td></td>
+            <td>inf</td>
+            <td>9</td>
+            <td>3</td>
+            <td>8</td>
+            <td>2</td>
+            <td>1</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>g</td>
+            <td></td>
+            <td>inf</td>
+            <td>1</td>
+            <td>0</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>h</td>
+            <td></td>
+            <td>inf</td>
+            <td>1</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>i</td>
+            <td></td>
+            <td>inf</td>
+            <td>2</td>
+            <td></td>
+            <td>1</td>
+            <td></td>
+            <td>0</td>
+            <td></td>
+          </tr>
+        </table> 
+        <br />
+        To impose an order on the edges, alphabetical order can be used.<br />
+        <br />
+        The order of the edges used here: <i>ab cd cg ch da de di ef gd hg if</i><br />
+        <br />
+        Each iteration, all edges are visited. If a distance is infinity in a source edge, it is skipped (anything plus infinity is still infinity and nothing can be greater than infinity).<br />
+        <br />
+        In the Bellman-Ford algorithm, the first pass finds all the one edge shortest paths, the second: two edge shortest paths, etc.<br />
+        <br />
+        The time complexity is: O(|V|*|E|). There will be at most |V|-1 passes through the sequence of |E| edges, because |V|-1 is the largest number of edges in any path.<br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>All-to-All Shortest Path Problem</h2>
+        The Warshall-Floyd-Ingerman algorithm is a simple way to compute the all-to-all shortest paths.
+        <ul>
+          <li>An adjacency matrix (rather than adjacency list) is required</li>
+        </ul>
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">warshalFloydIngerman(</div><div class="code_nothing"><i>adjacency&nbsp;</div><div class="code_nothing">matrix</i>&nbsp;</div><div class="code_nothing">weight)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">i&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">1&nbsp;</div><div class="code_nothing"><i>to</i>&nbsp;</div><div class="code_nothing">|V|</div><br /><div class="code_grey">3:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">j&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">1&nbsp;</div><div class="code_nothing"><i>to</i>&nbsp;</div><div class="code_nothing">|V|</div><br /><div class="code_grey">4:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">k&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">1&nbsp;</div><div class="code_nothing"><i>to</i>&nbsp;</div><div class="code_nothing">|V|</div><br /><div class="code_grey">5:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">weight[</div><div class="code_nothing">j]</div><div class="code_nothing">[</div><div class="code_nothing">k]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">>&nbsp;</div><div class="code_nothing">weight[</div><div class="code_nothing">j]</div><div class="code_nothing">[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">weight[</div><div class="code_nothing">i]</div><div class="code_nothing">[</div><div class="code_nothing">k]</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">weight[</div><div class="code_nothing">j]</div><div class="code_nothing">[</div><div class="code_nothing">k]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">weight[</div><div class="code_nothing">j]</div><div class="code_nothing">[</div><div class="code_nothing">i]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">weight[</div><div class="code_nothing">i]</div><div class="code_nothing">[</div><div class="code_nothing">k]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br />        </div>
+        <ul>
+          <li>The outermost loop refers to vertices that may be on a path between the vertex with index j and index k</li>
+        </ul>
+        <img src="../../../../img/pict/WfiAlgorithmGraph_0.bmp" alt="WfiAlgorithmGraph" /><br />
+        <br />
+        <ol>
+          <li>Start: 
+            <table>
+              <tr>
+                <td width="100px"></td>
+                <td width="40px"><b>a</b></td>
+                <td width="40px"><b>b</b></td>
+                <td width="40px"><b>c</b></td>
+                <td width="40px"><b>d</b></td>
+                <td width="40px"><b>e</b></td>
+              </tr>
+              <tr>
+                <td colspan="6" bgcolor="#000000"></td>
+              </tr>
+              <tr>
+                <td>a</td>
+                <td>0</td>
+                <td>2</td>
+                <td>inf</td>
+                <td>-4</td>
+                <td>inf</td>
+              </tr>
+              <tr>
+                <td>b</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>-2</td>
+                <td>1</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>c</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>inf</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>d</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td>e</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+              </tr>
+            </table><br />
+            <br />
+          </li>
+          <li>i == 1, all paths: v_j ... v_1 ... v_k are considered. a has no incoming edges, so the table remains the same.
+            <table>
+              <tr>
+                <td width="100px"></td>
+                <td width="40px"><b>a</b></td>
+                <td width="40px"><b>b</b></td>
+                <td width="40px"><b>c</b></td>
+                <td width="40px"><b>d</b></td>
+                <td width="40px"><b>e</b></td>
+              </tr>
+              <tr>
+                <td colspan="6" bgcolor="#000000"></td>
+              </tr>
+              <tr>
+                <td><font color="#ff0000"><b>a</b></font></td>
+                <td>0</td>
+                <td>2</td>
+                <td>inf</td>
+                <td>-4</td>
+                <td>inf</td>
+              </tr>
+              <tr>
+                <td>b</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>-2</td>
+                <td>1</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>c</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>inf</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>d</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td>e</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+              </tr>
+            </table><br />
+            <br />
+          </li>
+          <li>i == 2, all paths: v_j ... v_2 ... v_k are considered. (abc, abe, abd) 
+            <table>
+              <tr>
+                <td width="100px"></td>
+                <td width="40px"><b>a</b></td>
+                <td width="40px"><b>b</b></td>
+                <td width="40px"><b>c</b></td>
+                <td width="40px"><b>d</b></td>
+                <td width="40px"><b>e</b></td>
+              </tr>
+              <tr>
+                <td colspan="6" bgcolor="#000000"></td>
+              </tr>
+              <tr>
+                <td>a</td>
+                <td>0</td>
+                <td>2</td>
+                <td><font color="#ff0000"><b>0</b></font></td>
+                <td>-4</td>
+                <td><font color="#ff0000"><b>5</b></font></td>
+              </tr>
+              <tr>
+                <td><font color="#ff0000"><b>b</b></font></td>
+                <td>inf</td>
+                <td>0</td>
+                <td>-2</td>
+                <td>1</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>c</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>inf</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>d</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td>e</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+              </tr>
+            </table><br />
+            <br />
+          </li>
+          <li>i == 3, all paths: v_j ... v_3 ... v_k are considered. (bce) 
+            <table>
+              <tr>
+                <td width="100px"></td>
+                <td width="40px"><b>a</b></td>
+                <td width="40px"><b>b</b></td>
+                <td width="40px"><b>c</b></td>
+                <td width="40px"><b>d</b></td>
+                <td width="40px"><b>e</b></td>
+              </tr>
+              <tr>
+                <td colspan="6" bgcolor="#000000"></td>
+              </tr>
+              <tr>
+                <td>a</td>
+                <td>0</td>
+                <td>2</td>
+                <td>0</td>
+                <td>-4</td>
+                <td>5</td>
+              </tr>
+              <tr>
+                <td>b</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>-2</td>
+                <td>1</td>
+                <td><font color="#ff0000"><b>1</b></font></td>
+              </tr>
+              <tr>
+                <td><font color="#ff0000"><b>c</b></font></td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>inf</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>d</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td>e</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+              </tr>
+            </table><br />
+            <br />
+          </li>
+          <li>i == 4, all paths: v_j ... v_4 ... v_k are considered. (ade, bde). (no changes)
+            <table>
+              <tr>
+                <td width="100px"></td>
+                <td width="40px"><b>a</b></td>
+                <td width="40px"><b>b</b></td>
+                <td width="40px"><b>c</b></td>
+                <td width="40px"><b>d</b></td>
+                <td width="40px"><b>e</b></td>
+              </tr>
+              <tr>
+                <td colspan="6" bgcolor="#000000"></td>
+              </tr>
+              <tr>
+                <td>a</td>
+                <td>0</td>
+                <td>2</td>
+                <td>0</td>
+                <td>-4</td>
+                <td>5</td>
+              </tr>
+              <tr>
+                <td>b</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>-2</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>c</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>inf</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td><font color="#ff0000"><b>d</b></font></td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+                <td>4</td>
+              </tr>
+              <tr>
+                <td>e</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>inf</td>
+                <td>0</td>
+              </tr>
+            </table><br />
+            <br />
+          </li>
+          <li>i == 5, all paths: v_j ... v_5 ... v_k are considered. (no paths)</li>
+        </ol>
+        The time complexity of the WFI-Algorithm is O(|V|^3). This is good for dense graphs, but for sparse graphs we can repeatedly use a single-source method on all the vertices to get something like O((|V|^2+|E||V|)*lg|V|) (this uses dijkstra's algorithm with a heap).<br />
+        <br />
+        The WFI-Algorithm can be used to detect cycles in a graph if the diagonal is initialized to infinity. If any of the diagonal values are changed, the graph contains a cycle.<br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>References</h2>
+        <ol>
+          <li>http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm</li>
+          <li>http://en.wikipedia.org/wiki/Complete_graph</li>
+        </ol>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

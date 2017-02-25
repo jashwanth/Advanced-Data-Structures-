@@ -1,0 +1,57 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+
+void radixSort(std::vector&lt;long&gt;& data){
+  const int radix = 10;
+  const int digits = 10;  //(max number of digits for a long)
+  std::queue&lt;long&gt; queues[radix];
+  for(int i = 0, factor = 1; i &lt; digits; factor *= radix, ++i){
+    //fill up the queues
+    for(int j = 0; j &lt; data.size(); ++j){
+      queues[(data[j] / factor) % radix].push(data[j]);
+    }
+    //empty the queues 
+    int k = 0;
+    for(int j = 0; j &lt; radix; ++j){
+      while(!queues[j].empty()){
+        data[k] = queues[j].front();
+        queues[j].pop();
+        ++k;
+      }
+    }
+  }
+}
+
+int main(int argc, char * argv[]){
+
+  std::vector&lt;long&gt; array;
+  array.push_back(10);
+  array.push_back(5);
+  array.push_back(15);
+  array.push_back(7);
+  array.push_back(1);
+  array.push_back(6);
+  array.push_back(8);
+  array.push_back(3);
+  array.push_back(2);
+  array.push_back(4);
+  array.push_back(16);
+  array.push_back(12);
+  array.push_back(13);
+  array.push_back(11);
+  array.push_back(9);
+  array.push_back(14);
+  array.push_back(17);
+
+  radixSort(array);
+
+  for(size_t i = 0; i &lt; array.size(); ++i){
+    std::cout &lt;&lt; array[i] &lt;&lt; " ";
+  }
+  std::cout &lt;&lt; std::endl;
+  //prints: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
+
+  return 0;
+}
+</pre>

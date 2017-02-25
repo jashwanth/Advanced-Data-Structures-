@@ -1,0 +1,10 @@
+
+
+1. Apply Heapsort to the following array of numbers:
+
+A = [2, 4, 14, 10, 8, 15, 18, 17, 11, 16]
+
+Show the intermediate steps. 
+
+2. Apply MergeSort to the the array A. Show the intermediate steps.
+

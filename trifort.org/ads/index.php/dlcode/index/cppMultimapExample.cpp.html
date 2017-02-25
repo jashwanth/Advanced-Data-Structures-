@@ -1,0 +1,40 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+
+int main(int argc, char *argv[]){
+
+  std::multimap&lt;std::string, int&gt; course_catalog;
+  course_catalog.insert(std::pair&lt;std::string, int&gt;("cis", 252));
+  course_catalog.insert(std::pair&lt;std::string, int&gt;("cis", 275));
+  course_catalog.insert(std::pair&lt;std::string, int&gt;("cis", 300));
+  course_catalog.insert(std::pair&lt;std::string, int&gt;("cse", 283));
+  course_catalog.insert(std::pair&lt;std::string, int&gt;("cse", 382));
+  course_catalog.insert(std::pair&lt;std::string, int&gt;("cse", 484));
+  course_catalog.insert(std::pair&lt;std::string, int&gt;("ele", 231));
+  course_catalog.insert(std::pair&lt;std::string, int&gt;("ele", 232));
+  course_catalog.insert(std::pair&lt;std::string, int&gt;("ele", 312));
+
+  std::multimap&lt;std::string, int&gt;::iterator iter;
+  iter = course_catalog.find("cse");
+  std::cout &lt;&lt; "courses in cse: " &lt;&lt; std::endl;
+  while(true){
+    std::pair&lt;std::string, int&gt; item = *iter;
+    if(item.first == "cse"){
+      std::cout &lt;&lt; item.first &lt;&lt; item.second &lt;&lt; std::endl;
+      ++iter;
+    } else {
+      break;
+    }
+  }
+  
+  //prints:
+  //  courses in cse:
+  //  cse283
+  //  cse382
+  //  cse484
+
+  return 0;
+}
+
+</pre>

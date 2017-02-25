@@ -1,0 +1,26 @@
+<pre>void rotateRight(TreeNode * gr, TreeNode * par, TreeNode * ch){
+  //grandparent child becomes ch  
+  if(gr-&gt;getRight() == par){
+    gr-&gt;setRight(ch);
+  } else {
+    gr-&gt;setLeft(ch);
+  }
+
+  TreeNode * ch_right = ch-&gt;getRight();
+  par-&gt;setLeft(ch_right);
+  ch-&gt;setRight(par);
+}
+
+void rotateLeft(TreeNode * gr, TreeNode * par, TreeNode * ch){
+  //grandparent child becomes ch  
+  if(gr-&gt;getRight() == par){
+    gr-&gt;setRight(ch);
+  } else {
+    gr-&gt;setLeft(ch);
+  }
+  
+  TreeNode * ch_left = ch-&gt;getLeft();
+  par-&gt;setRight(ch_left);
+  ch-&gt;setLeft(par);
+}
+</pre>

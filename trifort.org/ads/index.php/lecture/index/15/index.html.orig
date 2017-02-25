@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+  <link href="/css/styles.css" rel="stylesheet" type="text/css"></link>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+  <link rel="shortcut icon" href="/cse382/img/favicon2.ico" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>15: hashing</h1>
+          Introduction | Hash Functions | Open Addressing | Coalesced Hashing<br /> 
+        </div>
+        <div class="section">
+        <h2>Hashing Introduction</h2>
+        With hashing we can create an associative container that has amortized O(1) insertion and lookup when the container is relatively empty.<br />
+        <br />
+        <ul>
+          <li>We can use integer keys and modulus as a hash function</li>
+          <li>Inserting: 5, 6, 50, 17, 9, 20, 21, 23, 989</li>
+          <li>I chose a prime number for the hash table size so there are less collisions</li>
+        </ul>
+        <img src="/ads/img/pict/HashingIntroduction_0.bmp" alt="HashingIntroduction" /><br />
+        <br />
+        (This is called separate chaining)
+        <h3>Insertion</h3>
+        <ol>
+          <li>Compute the index from hash(key)</li>
+          <li>Take a pointer to the head of the list</li>
+          <li>Make a new node in the linked list and set the next to the head</li>
+          <li>Make the head point to the new node</li>
+        </ol>
+        <h3>Deletion</h3>
+        <ol>
+          <li>Compute the index from hash(key)</li>
+          <li>Search the linked list to find the prev and next of the curr</li>
+          <li>Use regular linked list removal</li>
+        </ol>
+        </div>
+        <div class="section">
+        <h2>Hash Functions</h2>
+        Below are some hash functions:
+        <h3>Shift Folding</h3>
+        Take parts of the key and add them together:
+        <ul>
+          <li>A social security number (123-45-6789) can be divided into three parts and added</li>
+          <li>123 + 45 + 6789 = 6957</li>
+          <li>Then you can take the modulus of the table size</li>
+        </ul>
+        <h3>Boundry Folding</h3>
+        <ul>
+          <li>The key is again divided into parts, but every other part is reversed</li>
+          <li>(123-45-6789) = 123 + 54 + 6789 = 6966</li>
+          <li>Again, then you can take the modulus of the table size</li>
+          <li>Using bits that than actually reversing 456 is faster. Drozdek says you can XOR together the pieces to achieve this.</li>
+        </ul>
+        <h3>Mid-Square Function</h3>
+        <ul>
+          <li>Take the key, square it, and take the middle bits</li>
+          <li>With this hash function in practice it is okay to have a power-of-two sized hashtable</li>
+        </ul>
+        <h3>Extraction</h3>
+        <ul>
+          <li>Take only some of the bits or digits in a key</li>
+          <li>Maybe all student id's start with 999, use the rest of the id as the key</li>
+        </ul>
+        <h3>Radix Transformation</h3>
+        <ul>
+          <li>Convert a number from one base to another and then use modulus</li>
+          <li>You could represent a string of letters as a base26 number and convert to base10 and then take the modulus</li>
+        </ul>
+        <h3>Composite Object Hashing</h3>
+        <ol>
+          <li>Start the hashcode at 1</li>
+          <li>For each element in the composite object, multiply the hashcode by a small prime and add the element</li>
+          <li>In the previous step, if the element is a composite object, add the hashcode of that composite object</li>
+        </ol>
+<div class="algorithm">
+<pre>
+int hashCode(){
+  int ret = 1;
+  ret = 31 * ret + number0;
+  ret = 31 * ret + number1;
+  ret = 31 * ret + nameString.hashCode();
+  ret = 31 * ret + array.hashCode();
+  return ret;
+}
+</pre>
+</div>
+        </div>
+        <div class="section">
+        <h2>Open Addressing</h2>
+        We can use Linear Probing, Quadratic Probing or Double Hashing to get around having a linked list in the hash table.<br />
+        <br />
+        A probing function looks like: norm(hash(key) + p(1)), norm(hash(key) + p2), norm(hash(key) + p3), ...
+        <h3>Linear Probing</h3>
+        In linear probing, the function is:<br />
+        index(i) = mod(hash(key) + i), table_size)<br />
+        <br />
+        Inserting: 
+        <ul>
+          <li>5 -> 5 mod 11 = 5. Index 5 is open.</li>
+          <li>6 -> 6 mod 11 = 6. Index 6 is open.</li>
+          <li>50 -> 50 mod 11 = 6. Index 6 is full. Index 7 is open</li>
+          <li>17 -> 17 mod 11 = 6. Index 6 is full. Index 7 is full. Index 8 is open.</li>
+          <li>9 -> 9 mod 11 = 9. Index 9 is open.</li>
+          <li>20 -> 20 mod 11 = 9. Index 9 is full. Index 10 is open.</li>
+          <li>21 -> 21 mod 11 = 10. Index 10 is full. Index 0 is open.</li>
+          <li>23 -> 23 mod 11 = 1. Index 1 is open.</li>
+          <li>989 -> 989 mod 11 = 10. Index 10 is full. Index 0 is full. Index 1 is full. Index 2 is open.</li>
+        </ul>
+        <img src="/ads/img/pict/OpenAddressing_0.bmp" alt="OpenAddressing" /><br />
+        <br />
+        Lookup of key in the table:
+        <ul>
+          <li>Is 989 in the table?</li>
+          <li>989 mod 11 = 10. table[10] = 20. Go to next step of probe</li>
+          <li>(10 + 1) mod 11 = 0. table[0] = 21. Go to next step of probe</li>
+          <li>(10 + 2) mod 11 = 1. table[1] = 23. Go to next step of probe</li>
+          <li>(10 + 3) mod 11 = 2. table[2] = 989. Yes, 989 is in the table</li>
+        </ul>
+        Lookup of key not in the table:
+        <ul>
+          <li>Is 22 in the table?</li>
+          <li>22 mod 11 = 0. table[0] = 21. Go to next step of probe</li>
+          <li>(0 + 1) mod 11 = 1. table[1] = 23. Go to next step of probe</li>
+          <li>(0 + 2) mod 11 = 2. table[2] = 989. Go to next step of probe</li>
+          <li>(0 + 3) mod 11 = 3. table[3] = uninitialized. No, 22 is not in the table</li>
+        </ul>
+        Deletion:
+        <ul>
+          <li>You can't just remove an element from the table with open addressing</li>
+          <li>This would cause a probe search to possibly stop prematurely</li>
+          <li>You can mark a cell as deleted and if a search comes across a deleted cell, it won't stop there</li>
+          <li>If you want to insert an you come across a cell marked as deleted, you can insert there</li>
+          <li>After a while, if there are many deleted cells, you might want to rehash the table. This will cause performance to be a little unpredictable, which may not be allowed in some situations.</li>
+        </ul>
+        <h3>Quadratic Probing</h3>
+        In linear probing:
+        <ul>
+          <li>Empty cells following clusters have a larger chance to be filled than other positions</li>
+          <li>The larger a cluster grows, the more probability it has to grow even larger.</li>
+          <li>When we are inserting and sorting this translates into increase the time to make it much more linear than constant. (It is like increasing the linked list length in chaining.</li>
+        </ul>
+        Quadtratic Probing Has the Following Formula for the Probe: <br />
+        <ul>
+          <li>p(i) = hash(key) + (-1)^(i-1) * ((i + 1) / 2)^2 for i=1,2,...,TableSize-1</li>
+        </ul>
+        Or as a sequence of probes:<br />
+        <ul>
+          <li>hash(key) + i^2, hash(key) - i^2 for i=1,2,...,TableSize-1</li>
+        </ul>
+        This leads to the sequence:<br />
+        <ul>
+          <li>hash(key), hash(key) + 1, hash(key) - 1, hash(key) + 4, hash(key) - 4, ...</li>
+        </ul>
+        Inserting: 
+        <ul>
+          <li>5 -> 5 mod 11 = 5. Index 5 is open.</li>
+          <li>6 -> 6 mod 11 = 6. Index 6 is open.</li>
+          <li>50 -> 50 mod 11 = 6. Index 6 is full. 6+1=7 is open.</li>
+          <li>17 -> 17 mod 11 = 6. Index 6 is full. 6+1=7 is full. 6-1=5 is full. 6+4=10 is open.</li>
+          <li>9 -> 9 mod 11 = 9. Index 9 is open.</li>
+          <li>20 -> 20 mod 11 = 9. Index 9 is full. 9+1=10 is full. 9-1=8 is open.</li>
+          <li>21 -> 21 mod 11 = 10. Index 10 is full. 10+1=0 is open.</li>
+          <li>23 -> 23 mod 11 = 1. Index 1 is open.</li>
+          <li>989 -> 989 mod 11 = 10. Index 10 is full. 10+1=0 is full. 10-1=9 is full. 10+4=3 is open.</li>
+        </ul>
+        <img src="/ads/img/pict/OpenAddressing_1.bmp" alt="OpenAddressing" /><br />
+        <br />
+        <ul>
+          <li>Quadratic probing gives better results than linear probing because clusters don't build up as much.</li>
+          <li>But with keys that hash to the same index, clusters will still occur. These are called secondary clusters.</li>
+          <li>Double Hashing tries to get rid of secondary clusters</li> 
+        </ul>
+        <h3>Double Hashing</h3>
+        Double Hashing eliminates secondary clusters (this was found experimentally).
+        <ul>
+          <li>We choose the probing sequence to be dependent on the key, so different keys hashing to the same original index have different sequences</li>
+          <li>When choosing the second hash function, we have to make sure that it never evaluates to zero, or there will be an infinite loop</li>
+          <li>Sedgewick says: "One way to enforce this it to make the table_size a prime number and make hashtwo return values less than the prime. In practice the following simple hashtwo function will work when table_size is not small."</li>
+        </ul>
+        <div class="code_block">
+        <div class="code_grey">1:&nbsp;</div><div class="code_comment">// hashtwo.cpp - download <a href="/ads/index.php/dlcode/index/hashtwo.cpp">here</a></div><br /><div class="code_grey">2:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">hashtwo(</div><div class="code_green">int</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">key)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">key&nbsp;</div><div class="code_nothing">%&nbsp;</div><div class="code_nothing">97)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+        <br />
+        Probing sequence
+        <ul>
+          <li>i = hash(key)
+          <li>k = hashtwo(key)
+          <li>i = (i + k) % table_size</li>
+        </ul>
+        </div>
+        <div class="section">
+        <h2>Coalesced hashing</h2>
+        Coalesced hashing maintains a linked list in a different way than separate chaining. In Coalesced hashing each array element has a key and link associated with it. The list nodes are "allocated" by choosing the last available position in the table.<br />
+        <br />
+        Insertion: 
+        <ul>
+          <li>5 -> 5 mod 11 = 5. Index 5 is open.</li>
+          <li>6 -> 6 mod 11 = 6. Index 6 is open.</li>
+          <li>17 -> 17 mod 11 = 6. Index 6 is full. Put into index 10 and set index 6 ptr to 10.</li>
+          <li>9 -> 9 mod 11 = 9. Index 9 is open.</li>
+          <li>20 -> 20 mod 11 = 9. Index 9 is full. Put into index 8 and set index 9 ptr to 8.</li>
+          <li>21 -> 21 mod 11 = 10. Index 10 is full. Put into index 7 and set index 10 ptr to 7.</li>
+          <li>23 -> 23 mod 11 = 1. Index 1 is open.</li>
+          <li>50 -> 50 mod 11 = 6. Index 6 is full. Follow index 6 ptr to 10. Index 10 is full. Follow index 10 ptr to 7. Put 50 in index 4 and set index 7 ptr to 4.</li>
+          <li>989 -> 989 mod 11 = 10. Index 10 is full. Follow index 10 ptr to 7, Follow index 7 ptr to 4. Put 989 in index 3 and set index 4 ptr to 3.</li>
+        </ul>
+        </ul>
+        <img src="/ads/img/pict/CoalescedHashing_0.bmp" alt="CoalescedHashing" />
+        </div>
+        <div class="section">
+        <h2>LinkedHashMap</h2>
+        In Java there is a collection that keeps a linked list of the elements as they are inserted. 
+        This allows for traversal in the order of insertion.<br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>References</h2>
+        <ol> 
+          <li>Sedgewick, Algorithms in C++, Parts 1-4, page 608.</li>
+          <li>Cormen, Leiserson, Rivest, Stein, "Introduction to Algorithms", Second Edition. pages 245 to 249</li>
+          <li>http://videolectures.net/mit6046jf05_leiserson_lec08/</li>
+        </ol>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

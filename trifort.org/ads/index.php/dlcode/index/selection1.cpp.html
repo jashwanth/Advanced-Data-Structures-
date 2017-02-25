@@ -1,0 +1,38 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+void exch(std::vector&lt;int&gt;& data, int index1, int index2){
+  int lhs = data[index1];
+  int rhs = data[index2];
+  data[index1] = rhs;
+  data[index2] = lhs;
+}
+
+int select(std::vector&lt;int&gt;& data, int k){
+  for(int i = 0; i &lt;= k; ++i){
+    int min_index = i;
+    int min_value = data[i];
+    for(int j = i + 1; j &lt; data.size(); ++j){
+      if(data[j] &lt; min_value){
+        min_index = j;
+        min_value = data[j];
+      }
+    }
+    exch(data, i, min_index);    
+  }
+  return data[k];
+}
+
+int main(int argc, char *argv[]){
+  
+  std::vector&lt;int&gt; data;
+  data.push_back(20);
+  data.push_back(5);
+  data.push_back(10);
+  data.push_back(6);
+  std::cout &lt;&lt; "1st min: " &lt;&lt; select(data, 1) &lt;&lt; std::endl;
+  //prints: 1st min: 6
+
+  return 0;
+}
+</pre>

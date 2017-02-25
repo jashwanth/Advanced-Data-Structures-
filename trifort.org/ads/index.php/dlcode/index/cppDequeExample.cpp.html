@@ -1,0 +1,17 @@
+<pre>#include &lt;deque&gt;
+#include &lt;iostream&gt;
+
+int main(int argc, char * argv[]){
+  
+  std::deque&lt;int&gt; dq1;
+  dq1.push_front(1);
+  dq1.push_front(2);
+  dq1.push_back(3);
+
+  for(size_t i = 0; i &lt; dq1.size(); ++i){
+    std::cout &lt;&lt; dq1[i] &lt;&lt; " ";
+  }
+
+  return 0;
+}
+</pre>

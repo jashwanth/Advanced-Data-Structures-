@@ -1,0 +1,39 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+void shiftAnd(std::string pattern, std::string text){
+
+  int state = 0;
+  int matchBit = 1;
+  for(size_t i = 1; i &lt; pattern.length(); ++i){
+    matchBit &lt;&lt;= 1;
+  }
+  std::vector&lt;int&gt; charactersInP;
+  for(int i = 0; i &lt;= 255; ++i){
+    charactersInP.push_back(0);
+  }
+  for(size_t i = 0, j = 1; i &lt; pattern.length(); ++i, j &lt;&lt;= 1){
+    charactersInP[pattern[i]] |= j;
+    std::cout &lt;&lt; "charactersInP[" &lt;&lt; pattern[i];
+    std::cout &lt;&lt; "]=" &lt;&lt; charactersInP[pattern[i]] &lt;&lt; std::endl;
+  }
+  std::cout &lt;&lt; "search: " &lt;&lt; std::endl;
+  for(int i = 0; i &lt; text.length(); ++i){
+    std::cout &lt;&lt; "charactersInP[" &lt;&lt; text[i] &lt;&lt; "]="; 
+    std::cout &lt;&lt; charactersInP[text[i]] &lt;&lt; std::endl;
+    state = ((state &lt;&lt; 1) | 1) & charactersInP[text[i]];
+    std::cout &lt;&lt; "state: " &lt;&lt; state &lt;&lt; std::endl;
+    if((matchBit & state) != 0){
+      std::cout &lt;&lt; "match at: " &lt;&lt; i - (int) pattern.length() + 1;
+      std::cout &lt;&lt; std::endl;;
+    }
+  }
+}
+
+int main(int argc, char * argv[]){
+
+  shiftAnd("ababab", "ababxabababababa");
+  return 0;
+}
+</pre>

@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+    <link href="../../../../../css/styles.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>05: restricted containers #2</h1>
+          Priority Queues | Binomial Heaps | Fibonacci Heaps<br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>binomial heaps</h2>
+          A heap based priority queue has efficient (O(lg(n))) insertion and
+          remove the maximum, but cannot do efficient merge.  Binomial heaps can
+          solve this.
+          <ul>
+            <li><b>Left Heap Ordered: </b> The key in each node of a binary tree 
+              is larger than or equal to all the keys in that node's left 
+              subtree</li>
+            <li><b>Power-of-2 Heap: </b> A left heap ordered tree consisting of a
+              root node with an empty right subtree and a complete left subtree
+            </li>
+            <li><b>Binomial Queue: </b> A set of power-of-2 heaps, no two of the 
+              same size.</li>
+          </ul>
+          A binomial heap of size 13<br />
+          <img src="../../../../img/pict/BinomialQueueIntro_0.bmp" alt="BinomialQueueIntro" />
+          <h3>Joining of two equal-sized power-of-2 heaps</h3>
+          <ol>
+            <li>Start: <br />
+              <img src="../../../../img/pict/BinomialQueueJoinEqual_0.bmp" alt="BinomialQueueJoinEqual" />
+            </li>
+            <li>Put the larger roots at the top with that root's left subtree as 
+              the right subtree of the other original root<br />
+              <img src="../../../../img/pict/BinomialQueueJoinEqual_1.bmp" alt="BinomialQueueJoinEqual" />
+            </li>
+            <li>Note: this isn't a max heap, this is a left heap ordered binomial
+              tree with the largest element at the root</li>
+          </ol>
+          <h3>Joining of two binomial heaps (no carry)</h3>
+          <ol>
+            <li>Start: <br />
+              <img src="../../../../img/pict/BinomialQueueJoinNoCarry_0.bmp" alt="BinomialQueueJoinNoCarry" />
+            </li>
+            <li>Join <br />
+              <img src="../../../../img/pict/BinomialQueueJoinNoCarry_1.bmp" alt="BinomialQueueJoinNoCarry" />
+            </li>
+          </ol>
+          <h3>Joining of two binomial heaps (carry)</h3>
+          <ol>
+            <li>Start: <br />
+              <img src="../../../../img/pict/BinomialQueueJoinCarry_0.bmp" alt="BinomialQueueJoinCarry" />
+            </li>
+            <li>Join Two 1-Heaps using "Equal Size Join" to create another 2-Heap<br />
+              <img src="../../../../img/pict/BinomialQueueJoinCarry_1.bmp" alt="BinomialQueueJoinCarry" />
+            </li>
+            <li>Join Two 2-Heaps using "Equal Size Join" to create another 4-Heap<br />
+              <img src="../../../../img/pict/BinomialQueueJoinCarry_2.bmp" alt="BinomialQueueJoinCarry" />
+            </li>
+            <li>Join Two 4-Heaps using "Equal Size Join" to create an 8-Heap<br />
+              <img src="../../../../img/pict/BinomialQueueJoinCarry_3.bmp" alt="BinomialQueueJoinCarry" />
+            </li>
+          </ol>
+          <h3>Insertion of a new element into a binomial heap (this is joining of
+            a sized 1 heap with the existing heap)</h3>
+          <ol>
+            <li>Start: <br />
+              <img src="../../../../img/pict/BinomialQueueInsert_0.bmp" alt="BinomialQueueInsert" />
+            </li>
+            <li>Join Two 1-Heaps using "Equal Size Join" to create another 2-Heap<br />
+              <img src="../../../../img/pict/BinomialQueueInsert_1.bmp" alt="BinomialQueueInsert" />
+            </li>
+            <li>Join Two 2-Heaps using "Equal Size Join" to create another 4-Heap<br />
+              <img src="../../../../img/pict/BinomialQueueInsert_2.bmp" alt="BinomialQueueInsert" />
+            </li>
+            <li>Join Two 4-Heaps using "Equal Size Join" to create an 8-Heap<br />
+              <img src="../../../../img/pict/BinomialQueueInsert_3.bmp" alt="BinomialQueueInsert" />
+            </li>
+          </ol>
+          <h3>Removal of a maximum in a power-of-2 heap</h3>
+          <ol>
+            <li>Start: <br />
+              <img src="../../../../img/pict/BinomialQueueRemoval_0.bmp" alt="BinomialQueueRemoval" />
+            </li>
+            <li>Removal: <br />
+              <img src="../../../../img/pict/BinomialQueueRemoval_1.bmp" alt="BinomialQueueRemoval" />
+            </li>
+          </ol>
+          <h3>Increase Key</h3>
+          <ol>
+            <li>Start: <br />
+              <img src="../../../../img/pict/BinomialQueueIncreaseKey_0.bmp" alt="BinomialQueueIncreaseKey" />
+            </li>
+            <li>Increase: <br />
+              <img src="../../../../img/pict/BinomialQueueIncreaseKey_1.bmp" alt="BinomialQueueIncreaseKey" />
+            </li>
+            <li>Fixup: <br />
+              <img src="../../../../img/pict/BinomialQueueIncreaseKey_2.bmp" alt="BinomialQueueIncreaseKey" />
+            </li>
+            <li>Fixup: <br />
+              <img src="../../../../img/pict/BinomialQueueIncreaseKey_3.bmp" alt="BinomialQueueIncreaseKey" />
+            </li>
+          </ol>
+          <h3>Decrease Key</h3>
+          <ul>
+            <li>Use fixdown</li>
+          </ul>
+          <h3>Delete Internal Element</h3>
+          <ul>
+            <li>Increase Key to beyond Maximum</li>
+            <li>Remove Maximum</li>
+          </ul>
+        </div>
+        <div class="section">
+          <h2>Fibonacci Heaps</h2>
+          Fibonacci Heaps are Binomial Heaps with delayed merging.<br />
+          <h3>Constant Time Insertion</h3>
+          <ol>
+            <li>Start: <br />
+              <img src="../../../../img/pict/FibonacciHeapInsert_0.bmp" alt="FibonacciHeapInsert" />
+            </li>
+            <li>Insert One Element: <br />
+              <img src="../../../../img/pict/FibonacciHeapInsert_1.bmp" alt="FibonacciHeapInsert" />
+            </li>
+            <li>Insert One Element: <br />
+              <img src="../../../../img/pict/FibonacciHeapInsert_2.bmp" alt="FibonacciHeapInsert" />
+            </li>
+            <li>Insert One Element: <br />
+              <img src="../../../../img/pict/FibonacciHeapInsert_3.bmp" alt="FibonacciHeapInsert" />
+            </li>
+          </ol>
+          <h3>Remove Max</h3>
+          <ol>
+            <li>Start: <br />
+              <img src="../../../../img/pict/FibonacciHeapInsert_3.bmp" alt="FibonacciHeapRemoval" />
+            </li>
+            <li>Remove Max and Consolidate Two Single Nodes: <br />
+              <img src="../../../../img/pict/FibonacciHeapRemoval_0.bmp" alt="FibonacciHeapRemoval" />
+            </li>
+            <li>Consolidate Two Double Nodes: <br />
+              <img src="../../../../img/pict/FibonacciHeapRemoval_1.bmp" alt="FibonacciHeapRemoval" />
+            </li>
+            <li>Consolidate Two Quad Nodes: <br />
+              <img src="../../../../img/pict/FibonacciHeapRemoval_2.bmp" alt="FibonacciHeapRemoval" />
+            </li>
+          </ol>
+          <h3>Merge Heaps</h3>
+          <ol>
+            <li>Simply Merge and Combine During Remove Max: <br />
+              <img src="../../../../img/pict/FibonacciHeapMerge_0.bmp" alt="FibonacciHeapMerge" />
+            </li>
+            <li>Fix Max: <br />
+              <img src="../../../../img/pict/FibonacciHeapMerge_1.bmp" alt="FibonacciHeapMerge" />
+            </li>
+          </ol>
+          <h3>Increase Key</h3>
+          <ol>
+            <li>Start: <br />
+              <img src="../../../../img/pict/FibonacciHeapDecrease_0.bmp" alt="FibonacciHeapDecrease" />
+            </li>
+            <li>Increase 8 to 10, Cut Element and Mark Parent: <br />
+              <img src="../../../../img/pict/FibonacciHeapDecrease_1.bmp" alt="FibonacciHeapDecrease" />
+            </li>
+            <li>Increase 7 to 26, Cut Element and Mark Parent: <br />
+              <img src="../../../../img/pict/FibonacciHeapDecrease_2.bmp" alt="FibonacciHeapDecrease" />
+            </li>
+            <li>20 is Marked, Do a Cascading Cut and Mark the Parent: <br />
+              <img src="../../../../img/pict/FibonacciHeapDecrease_3.bmp" alt="FibonacciHeapDecrease" />
+            </li>
+            <li>Increase 15 to 40. Cut Children: <br />
+              <img src="../../../../img/pict/FibonacciHeapDecrease_4.bmp" alt="FibonacciHeapDecrease" />
+            </li>
+            <li>30 is marked, Do a Cascading Cut:<br />
+              <img src="../../../../img/pict/FibonacciHeapDecrease_5.bmp" alt="FibonacciHeapDecrease" />
+            </li>
+          </ol>
+        </div>
+        <div class="section">
+          <h2>Priority Queue Time Complexities</h2>
+          <table class="nice_table">
+            <tr>
+              <td class="grey">&nbsp;</td>
+              <td class="grey">Double List</td>
+              <td class="grey">Binary Heap</td>
+              <td class="grey">Binomial Heap</td>
+              <td class="grey">Fibonacci Heap</td>
+            </tr>
+            <tr>
+              <td class="grey">insert</td>
+              <td>O(n)</td>
+              <td>O(lgn)</td>
+              <td>O(lgn)</td>
+              <td>O(1)</td>
+            </tr>
+            <tr>
+              <td class="grey">highest</td>
+              <td>O(1)</td>
+              <td>O(1)</td>
+              <td>O(lgn)</td>
+              <td>O(1)</td>
+            </tr>
+            <tr>
+              <td class="grey">delete highest</td>
+              <td>O(1)</td>
+              <td>O(lgn)</td>
+              <td>O(lgn)</td>
+              <td>O(lgn)*</td>
+            </tr>
+            <tr>
+              <td class="grey">delete any</td>
+              <td>O(1)</td>
+              <td>O(lgn)</td>
+              <td>O(lgn)</td>
+              <td>O(lgn)*</td>
+            </tr>
+            <tr>
+              <td class="grey">merge</td>
+              <td>O(n+m)</td>
+              <td>O(nlgm)</td>
+              <td>O(lg(n+m))</td>
+              <td>O(1)</td>
+            </tr>
+            <tr>
+              <td class="grey">sort</td>
+              <td>O(1)</td>
+              <td>O(nlgn)</td>
+              <td>O(nlgn)</td>
+              <td>O(nlgn)</td>
+            </tr>
+          </table>
+          <br />
+          * amortized<br />
+          <br />
+        </div>
+        <div class="section">
+          <h2>references</h2>
+          <ol>
+            <li>Adam Drozdek. "Data Structures and Algorithms in C++"</li>
+            <li>Algorithms in C++, Parts 1-4: Robert Sedgewick.  pages 383-387, 406-414</li>
+            <li>Introduction to Algorithms: Cormen, Leiserson, Rivest and Stein.  pages 410-411</li>
+            <li>Introduction to Algorithms: Cormen, Leiserson, Rivest and Stein.  pages 412-415</li>
+          </ol>
+          <br />
+        </div>
+        <div class="clear_section">
+          <br />
+          <br />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

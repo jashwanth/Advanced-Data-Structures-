@@ -1,0 +1,16 @@
+<pre>// array - the unsorted input array
+// len   - the length of the unsorted input array
+// the result is stored in array 
+void insertionSort(int * array, int len){
+  for(int j = 1; j &lt; len; ++j){
+    int key = array[j];
+    int i = j - 1;
+    //insert key into sorted sequence
+    while((i &gt;= 0) && (array[i] &gt; key))
+      array[i + 1] = array[i];
+      --i;
+    }
+    array[i + 1] = key;
+  }
+}
+</pre>

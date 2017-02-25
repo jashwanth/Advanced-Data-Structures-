@@ -1,0 +1,28 @@
+<pre>#include &lt;queue&gt;
+#include &lt;iostream&gt;
+#include &lt;functional&gt;
+
+int main(int argc, char *argv[]){
+ 
+  std::priority_queue&lt;int&gt; max_queue;
+  std::priority_queue&lt;int, std::vector&lt;int&gt;, std::greater&lt;int&gt; &gt; min_queue;
+  //std::priority_queue&lt;int&gt; uses std::vector&lt;int&gt; and std::less&lt;int&gt; by default
+
+  min_queue.push(3);
+  min_queue.push(2);
+  min_queue.push(1);
+
+  max_queue.push(3);
+  max_queue.push(2);
+  max_queue.push(1);
+
+  std::cout &lt;&lt; "top of max_queue: " &lt;&lt; max_queue.top() &lt;&lt; std::endl;
+  //prints: top of max_queue: 3
+  max_queue.pop();
+
+  std::cout &lt;&lt; "top of min_queue: " &lt;&lt; min_queue.top() &lt;&lt; std::endl;
+  //prints: top of min_queue: 1
+  min_queue.pop();
+  return 0;
+}
+</pre>

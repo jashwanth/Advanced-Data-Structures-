@@ -1,0 +1,96 @@
+<pre>#include &lt;iostream&gt;
+
+class TreeNode {
+public:
+  TreeNode(int value);
+  int getValue();
+  void setLeft(TreeNode * left);
+  void setRight(TreeNode * right);
+  TreeNode * getLeft();
+  TreeNode * getRight();
+private:
+  int m_Value;
+  TreeNode * m_Left;
+  TreeNode * m_Right;
+};
+
+TreeNode::TreeNode(int value)
+  : m_Value(value), m_Left(NULL), m_Right(NULL)
+{
+}
+
+int TreeNode::getValue(){
+  return m_Value;
+}
+
+void TreeNode::setLeft(TreeNode * left){
+  m_Left = left;
+}
+
+void TreeNode::setRight(TreeNode * right){
+  m_Right = right;
+}
+
+TreeNode * TreeNode::getLeft(){
+  return m_Left;
+}
+
+TreeNode * TreeNode::getRight(){
+  return m_Right;
+}
+
+TreeNode * makeTree(){
+  TreeNode * root = new TreeNode(20);
+  TreeNode * left0 = new TreeNode(10);
+  TreeNode * right0 = new TreeNode(40);
+  root-&gt;setLeft(left0);
+  root-&gt;setRight(right0);
+  TreeNode * leftleft1 = new TreeNode(5);
+  TreeNode * leftright1 = new TreeNode(15);
+  left0-&gt;setLeft(leftleft1);
+  left0-&gt;setRight(leftright1);
+  leftleft1-&gt;setLeft(new TreeNode(2));
+  leftright1-&gt;setLeft(new TreeNode(11));
+  leftright1-&gt;setRight(new TreeNode(17));
+  TreeNode * rightright1 = new TreeNode(45);
+  right0-&gt;setRight(rightright1);
+  rightright1-&gt;setLeft(new TreeNode(43));
+  rightright1-&gt;setRight(new TreeNode(53));
+  return root;
+}
+
+//Robert Sedgewick, Algorithms in C++, Parts 1-4, page 250.
+int countNodes(TreeNode * curr){
+  if(curr == NULL){
+    return 0;
+  }
+  return countNodes(curr-&gt;getLeft()) + countNodes(curr-&gt;getRight()) + 1;
+}
+
+//Robert Sedgewick, Algorithms in C++, Parts 1-4, page 250.
+int calcHeight(TreeNode * curr){
+  if(curr == NULL){
+    return 0;
+  }
+  int left_height = calcHeight(curr-&gt;getLeft());
+  int right_height = calcHeight(curr-&gt;getRight());
+  if(left_height &gt; right_height){
+    return left_height + 1;
+  } else {
+    return right_height + 1;
+  }
+}
+
+int main(int argc, char * argv[]){
+
+  TreeNode * root = makeTree();
+  std::cout &lt;&lt; "num nodes: " &lt;&lt; countNodes(root) &lt;&lt; std::endl; 
+  std::cout &lt;&lt; "height: " &lt;&lt; calcHeight(root) &lt;&lt; std::endl;
+  //prints:
+  //  num nodes: 11
+  //  height: 4
+
+  return 0;
+}
+
+</pre>

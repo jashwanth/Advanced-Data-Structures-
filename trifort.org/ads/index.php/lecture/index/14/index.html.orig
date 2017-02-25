@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>cse674 - advanced data strucures</title>
+  <link href="/css/styles.css" rel="stylesheet" type="text/css"></link>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+  <link rel="shortcut icon" href="/cse382/img/favicon2.ico" />
+  </head>
+  <body>
+    <div class="page_block1">
+      <div class="page_block2">
+        <div class="section">
+          <h1>14: graphs #3</h1>
+          Maximum Flows | Maximum Matching | Graph Clustering<br />
+        </div>
+        <div class="section">
+        <h2>Maximum Flows</h2>
+        A network is a type of graph that can be used to represent water flow through pipes (or maybe packets through cat5e cables).<br />
+        <img src="/ads/img/pict/MaximumFlows_0.bmp" alt="MaximumFlows" /><br />
+        <br />
+        A network has one vertex (source) with no incoming edges and one vertex (sink) with no outgoing edges. 
+        Each edge has a capacity associated with it.<br />
+        <br />
+        A flow is a real function that assigns a number to each edge of the network that meets these two conditions:
+        <ol>
+          <li>The flow through an edge cannot be greater than it's capacity</li>
+          <li>The total flow coming to a vertex is the same as the total flow coming out of it</li>
+        </ol>
+        The problem we are trying to solve is to find a flow function so that the summation of the flow at each edge is maximized.<br />
+        <br />
+        A cut separating s and t is as follows:
+        <ul>
+          <li>X = {s, a}</li>
+          <li>X_bar = {b, c, d, t}</li>
+          <li>The cut = {(a,b), (s,c), (s,d)}</li>
+        </ul>
+        In any network, the maximal flow from s to t is equal to the minimal capacity of any cut.<br />
+        <br />
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">findPath(</div><div class="code_nothing">node&nbsp;</div><div class="code_nothing">source,&nbsp;</div><div class="code_nothing">node&nbsp;</div><div class="code_nothing">sink,&nbsp;</div><div class="code_nothing">path)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">source&nbsp;</div><div class="code_nothing">==&nbsp;</div><div class="code_nothing">sink)</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">path;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">foreach&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">source.edges</div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">residual&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">edge.capacity&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">edge.flow;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">residual&nbsp;</div><div class="code_nothing">>&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">path</div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">new_path&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">findPath(</div><div class="code_nothing">edge.target,&nbsp;</div><div class="code_nothing">sink,&nbsp;</div><div class="code_nothing">path&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">edge)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">new_path&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">EMPTY_PATH</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">new_path;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">foreach&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">edges&nbsp;</div><div class="code_nothing">pointing&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">source&nbsp;</div><div class="code_nothing">(</div><div class="code_nothing">reverse&nbsp;</div><div class="code_nothing">edge)</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">flow&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">forward&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_nothing">flow</div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">flow&nbsp;</div><div class="code_nothing">>&nbsp;</div><div class="code_nothing">0&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">path</div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">new_path&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">findPath(</div><div class="code_nothing">edge.target,&nbsp;</div><div class="code_nothing">sink,&nbsp;</div><div class="code_nothing">path&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">edge)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">new_path&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">EMPTY_PATH</div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">new_path;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">print&nbsp;</div><div class="code_string">"backtracking&nbsp;at:&nbsp;"</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">source;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">EMPTY_PATH;</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">fordFulkerson(</div><div class="code_nothing">digraph&nbsp;</div><div class="code_nothing">g,&nbsp;</div><div class="code_nothing">node&nbsp;</div><div class="code_nothing">source,&nbsp;</div><div class="code_nothing">node&nbsp;</div><div class="code_nothing">sink)</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">path&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">findPath(</div><div class="code_nothing">g,&nbsp;</div><div class="code_nothing">source,&nbsp;</div><div class="code_nothing">sink,&nbsp;</div><div class="code_nothing">NULL)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">printPath(</div><div class="code_nothing">path)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">path&nbsp;</div><div class="code_nothing">!=&nbsp;</div><div class="code_nothing">EMPTY_PATH</div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">foward_flow&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">min&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">all&nbsp;</div><div class="code_nothing">residuals&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">forward&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">path</div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">reverse_flow&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">min&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">all&nbsp;</div><div class="code_nothing">forwards&nbsp;</div><div class="code_nothing">flows&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">each&nbsp;</div><div class="code_nothing">reverse&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">path</div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">min_flow&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">min(</div><div class="code_nothing">forward_flow,&nbsp;</div><div class="code_nothing">reverse_flow)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//augment&nbsp;path</div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">foreach&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">path</div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">forward</div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">edge.flow&nbsp;</div><div class="code_nothing">+=&nbsp;</div><div class="code_nothing">min_flow;</div><div class="code_nothing"></div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">reverse</div><br /><div class="code_grey">32:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">fedge&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">find&nbsp;</div><div class="code_nothing">foward&nbsp;</div><div class="code_nothing">edge&nbsp;</div><div class="code_red">for</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">edge</div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">fedge.flow&nbsp;</div><div class="code_nothing">-=&nbsp;</div><div class="code_nothing">min_flow;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">path&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">findPath(</div><div class="code_nothing">g,&nbsp;</div><div class="code_nothing">source,&nbsp;</div><div class="code_nothing">sink,&nbsp;</div><div class="code_nothing">NULL)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">35:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">printPath(</div><div class="code_nothing">path)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">36:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">return</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">sum&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">edge.flow&nbsp;</div><div class="code_nothing">forall&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">edges&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">source.edges</div><br />        </div>
+        <ol>
+          <li>Start:<br />
+            <img src="/ads/img/pict/MaxFlow_0.bmp" alt="MaxFlow" />
+          </li>
+          <li>End:<br />
+            <img src="/ads/img/pict/MaxFlow_1.bmp" alt="MaxFlow" />
+          </li>
+        </ol>
+        <h3>Time Complexity</h3>
+        <ul>
+          <li>The algorithm is never guarenteed to terminate, but if it does:</li>
+          <li>O(Ef) - E is the number of edges, f is the max flow value</li>
+          <li>Each edge gets incremented a flow value by at least 1 each time until the max is reached</li>
+        </ul>
+        The algorithm may not be able to complete if there are irrational flow values.<br />
+        <br />
+        <h2>Backward Edges</h2>
+        <ol>
+          <li>Start: <br />
+            <img src="/ads/img/pict/MaxFlowsFixed_0.bmp" alt="MaxFlowsFixed" />
+          </li>
+          <li>Follow forward edges: <br />
+            <img src="/ads/img/pict/MaxFlowsFixed_1.bmp" alt="MaxFlowsFixed" />
+          </li>
+          <li>Follow backward edge: <br />
+            <img src="/ads/img/pict/MaxFlowsFixed_2.bmp" alt="MaxFlowsFixed" />
+          </li>
+        </ol>
+        </div>
+        <div class="section">
+        <h2>Maximum Matching</h2>
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">findMaximumMatching(</div><div class="code_nothing">bipartite&nbsp;</div><div class="code_nothing">graph)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_nothing">all&nbsp;</div><div class="code_nothing">unmatched&nbsp;</div><div class="code_nothing">vertices&nbsp;</div><div class="code_nothing">v)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">set&nbsp;</div><div class="code_nothing">level&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">all&nbsp;</div><div class="code_nothing">vertices&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">0;</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">set&nbsp;</div><div class="code_nothing">parent&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">all&nbsp;</div><div class="code_nothing">vertices&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">null;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">level(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">last&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">null;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">clear&nbsp;</div><div class="code_nothing">queue;</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">enqueue(</div><div class="code_nothing">v)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">queue&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">empty&nbsp;</div><div class="code_nothing">and&nbsp;</div><div class="code_nothing">last&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">null)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">v&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">dequeue(</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">level(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">an&nbsp;</div><div class="code_nothing">odd&nbsp;</div><div class="code_nothing">number)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_nothing">all&nbsp;</div><div class="code_nothing">vertices&nbsp;</div><div class="code_nothing">u&nbsp;</div><div class="code_nothing">adjacent&nbsp;</div><div class="code_nothing">to&nbsp;</div><div class="code_nothing">v&nbsp;</div><div class="code_nothing">such&nbsp;</div><div class="code_nothing">that&nbsp;</div><div class="code_nothing">level(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">0)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">u&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">unmatched)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">parent(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">v;</div><div class="code_nothing"></div><br /><div class="code_grey">15:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">last&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">u;</div><div class="code_nothing"></div><br /><div class="code_grey">16:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">break</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">17:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">u&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">matched&nbsp;</div><div class="code_nothing">but&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">with&nbsp;</div><div class="code_nothing">v)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">18:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">parent(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">v;</div><div class="code_nothing"></div><br /><div class="code_grey">19:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">level(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">level(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">20:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">enqueue(</div><div class="code_nothing">u)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">21:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">22:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">23:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_red">else</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">{</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//if&nbsp;level(v)&nbsp;is&nbsp;an&nbsp;even&nbsp;number</div><br /><div class="code_grey">24:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">enqueue(</div><div class="code_nothing">vertex&nbsp;</div><div class="code_nothing">u&nbsp;</div><div class="code_nothing">matched&nbsp;</div><div class="code_nothing">with&nbsp;</div><div class="code_nothing">v)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">25:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">parent(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">v;</div><div class="code_nothing"></div><br /><div class="code_grey">26:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">level(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">level(</div><div class="code_nothing">v)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">+&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">27:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">28:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">29:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">last&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">null)</div><div class="code_nothing">{</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//augment&nbsp;matching&nbsp;by&nbsp;updating&nbsp;the&nbsp;augmenting&nbsp;path;</div><br /><div class="code_grey">30:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">for</div><div class="code_nothing">(</div><div class="code_nothing">u&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">last;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">u&nbsp;</div><div class="code_nothing">is&nbsp;</div><div class="code_nothing">not&nbsp;</div><div class="code_nothing">null;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">u&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">parent(</div><div class="code_nothing">parent(</div><div class="code_nothing">u)</div><div class="code_nothing">)</div><div class="code_nothing">)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">31:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">matchedWith(</div><div class="code_nothing">u)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">parent(</div><div class="code_nothing">u)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">32:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">matchedWith(</div><div class="code_nothing">parent(</div><div class="code_nothing">u)</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">u;</div><div class="code_nothing"></div><br /><div class="code_grey">33:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">34:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">35:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">36:&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+        <img src="/ads/img/pict/MaximumMatching_0.bmp" alt="MaximumMatching" /><br />
+        <br />
+        <img src="/ads/img/pict/MaximumMatching_1.bmp" alt="MaximumMatching" /><br />
+        <br />
+        Steps of the algorithm:<br />
+        <table class="nice_table">
+          <tr bgcolor="#e5e5e5">
+            <td width="75px">v</td>
+            <td width="75px">level</td>
+            <td width="75px">u</td>
+            <td width="240px">matching</td>
+            <td width="120px">queue</td>
+            <td width="200px">path</td>
+          </tr>
+          <tr>
+            <td>a</td>
+            <td>1</td>
+            <td>d</td>
+            <td>d is unmatched. d a</td>
+            <td>empty</td>
+            <td>[d a]</td>
+          </tr>
+          <tr>
+            <td>b</td>
+            <td>1</td>
+            <td>c</td>
+            <td>c is unmatched. c b</td>
+            <td>empty</td>
+            <td>[c b]</td>
+          </tr>
+          <tr>
+            <td>e</td>
+            <td>1</td>
+            <td>j</td>
+            <td>j is unmatched. j e</td>
+            <td>empty</td>
+            <td>[j e]</td>
+          </tr>
+          <tr>
+            <td>f</td>
+            <td>1</td>
+            <td>b</td>
+            <td>b is matched but not with f</td>
+            <td>[b]</td>
+            <td>[b f]</td>
+          </tr>
+          <tr>
+            <td>f</td>
+            <td>1</td>
+            <td>c</td>
+            <td>c is matched but not with f</td>
+            <td>[b c]</td>
+            <td>[b f] [c f]</td>
+          </tr>
+          <tr>
+            <td>b</td>
+            <td>2</td>
+            <td>&nbsp;</td>
+            <td>match = c. parent[c] = b</td>
+            <td>[c c]</td>
+            <td>[c b f]</td>
+          </tr>
+          <tr>
+            <td>c</td>
+            <td>3</td>
+            <td>a</td>
+            <td>a is matched but not with c</td>
+            <td>[c a]</td>
+            <td>[a c b f]</td>
+          </tr>
+          <tr>
+            <td>c</td>
+            <td>3</td>
+            <td>b</td>
+            <td>level[b] != 0</td>
+            <td>[c a]</td>
+            <td>[a c b f]</td>
+          </tr>
+          <tr>
+            <td>c</td>
+            <td>3</td>
+            <td>f</td>
+            <td>level[f] != 0</td>
+            <td>[c a]</td>
+            <td>[a c b f]</td>
+          </tr>
+          <tr>
+            <td>c</td>
+            <td>3</td>
+            <td>g</td>
+            <td>g is unmatched. g c. b f.</td>
+            <td>[c a]</td>
+            <td>[a c b f] [g c b f]</td>
+          </tr>
+          <tr>
+            <td>h</td>
+            <td>1</td>
+            <td>g</td>
+            <td>g is matched but not with v</td>
+            <td>[g]</td>
+            <td>[g h]</td>
+          </tr>
+          <tr>
+            <td>h</td>
+            <td>1</td>
+            <td>j</td>
+            <td>j is matched but not with h</td>
+            <td>[g j]</td>
+            <td>[j h] [g h]</td>
+          </tr>
+          <tr>
+            <td>h</td>
+            <td>1</td>
+            <td>i</td>
+            <td>i is unmatched. i h</td>
+            <td>[g j]</td>
+            <td>[j h] [i h] [g h]</td>
+          </tr>
+        </table>
+        </div>
+        <div class="section">
+        <h2>K-Core Graph Clustering</h2>
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">kcoreCreation(</div><div class="code_nothing">Graph&nbsp;</div><div class="code_nothing">g)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">compute&nbsp;</div><div class="code_nothing">the&nbsp;</div><div class="code_nothing">degrees&nbsp;</div><div class="code_nothing">of&nbsp;</div><div class="code_nothing">vertices</div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">sort&nbsp;</div><div class="code_nothing">vertices&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">increasing&nbsp;</div><div class="code_nothing">order&nbsp;</div><div class="code_nothing">by&nbsp;</div><div class="code_nothing">degrees</div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">foreach(</div><div class="code_nothing">vertex&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">V&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">order)</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">core[</div><div class="code_nothing">v]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">:</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">degree[</div><div class="code_nothing">v]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">foreach(</div><div class="code_nothing">u&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">neighbors(</div><div class="code_nothing">v)</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">if</div><div class="code_nothing">(</div><div class="code_nothing">degree[</div><div class="code_nothing">u]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">>&nbsp;</div><div class="code_nothing">degree[</div><div class="code_nothing">v]</div><div class="code_nothing">)</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">degree[</div><div class="code_nothing">u]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">:</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">degree[</div><div class="code_nothing">u]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">-&nbsp;</div><div class="code_nothing">1;</div><div class="code_nothing"></div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">reorder&nbsp;</div><div class="code_nothing">V&nbsp;</div><div class="code_nothing">accordingly</div><br />        </div>
+        <img src="/ads/img/pict/KCoreAssign_0.bmp" alt="KCoreAssign" /><br />
+        <br />
+        <table class="nice_table">
+          <tr bgcolor="#e5e5e5">
+            <td>Node</td>
+            <td>Degree</td>
+            <td>K Number</td>
+            <td>Node</td>
+            <td>Degree</td>
+            <td>K Number</td>
+          </tr>
+          <tr>
+            <td>A</td>
+            <td>1</td>
+            <td>1</td>
+            <td>I</td>
+            <td>4</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>B</td>
+            <td>1</td>
+            <td>1</td>
+            <td>J</td>
+            <td>3</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>C</td>
+            <td>4</td>
+            <td>2</td>
+            <td>K</td>
+            <td>3</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>D</td>
+            <td>3</td>
+            <td>3</td>
+            <td>L</td>
+            <td>5</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>E</td>
+            <td>5</td>
+            <td>3</td>
+            <td>M</td>
+            <td>4</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>F</td>
+            <td>3</td>
+            <td>3</td>
+            <td>N</td>
+            <td>2</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>G</td>
+            <td>3</td>
+            <td>3</td>
+            <td>O</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>H</td>
+            <td>6</td>
+            <td>3</td>
+          </tr>
+        </table>
+        <div class="algorithm">
+        <div class="code_grey">1:&nbsp;&nbsp;</div><div class="code_red">algorithm</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">kcoreCluster(</div><div class="code_nothing">Graph&nbsp;</div><div class="code_nothing">g)</div><div class="code_nothing"></div><br /><div class="code_grey">2:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">C&nbsp;</div><div class="code_nothing">:</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">V;</div><div class="code_nothing"></div><br /><div class="code_grey">3:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">foreach(</div><div class="code_nothing">vertex&nbsp;</div><div class="code_nothing">v&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">V)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">4:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">p[</div><div class="code_nothing">v]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">:</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">degree(</div><div class="code_nothing">v)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">5:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br /><div class="code_grey">6:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">build_min_heap(</div><div class="code_nothing">v,&nbsp;</div><div class="code_nothing">p)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">7:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_red">while</div><div class="code_nothing">(</div><div class="code_nothing">heap.size(</div><div class="code_nothing">)</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&gt;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">0)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">8:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">C&nbsp;</div><div class="code_nothing">:</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">C\{</div><div class="code_nothing">top}</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_comment">//remove&nbsp;top&nbsp;from&nbsp;C</div><br /><div class="code_grey">9:&nbsp;&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">core[</div><div class="code_nothing">top]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">:</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">p[</div><div class="code_nothing">top]</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">10:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">foreach(</div><div class="code_nothing">vertex&nbsp;</div><div class="code_nothing">v&nbsp;</div><div class="code_nothing">in&nbsp;</div><div class="code_nothing">neighbors(</div><div class="code_nothing">top,&nbsp;</div><div class="code_nothing">C)</div><div class="code_nothing">{</div><div class="code_nothing"></div><br /><div class="code_grey">11:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">p[</div><div class="code_nothing">v]</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">:</div><div class="code_nothing">=&nbsp;</div><div class="code_nothing">max(</div><div class="code_nothing">p[</div><div class="code_nothing">top]</div><div class="code_nothing">,&nbsp;</div><div class="code_nothing">p(</div><div class="code_nothing">v,&nbsp;</div><div class="code_nothing">N(</div><div class="code_nothing">v,&nbsp;</div><div class="code_nothing">C)</div><div class="code_nothing">)</div><div class="code_nothing">)</div><div class="code_nothing">;</div><div class="code_nothing"></div><br /><div class="code_grey">12:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">update_heap(</div><div class="code_nothing">v,&nbsp;</div><div class="code_nothing">p)</div><div class="code_nothing"></div><br /><div class="code_grey">13:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing"></div><br /><div class="code_grey">14:&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">&nbsp;</div><div class="code_nothing">}</div><div class="code_nothing"></div><br />        </div>
+        <img src="/ads/img/k_core.png" alt="k_core" /><br />
+        (image from [7])<br />
+        <br />
+        Time complexity:<br />
+        <ol>
+          <li>O(m): cores decomposition</li>
+          <li>O(m * max(deg, lgn)): finding cores</li>
+        </ol>
+        m: number of edges.<br />
+        deg: maximum degree.<br />
+        n: number of vertices.<br />
+        <br />
+        </div>
+        <div class="section">
+        <h2>References</h2>
+        <ol>
+          <li>http://en.wikipedia.org/wiki/Ford-Fulkerson</li>
+          <li>http://en.wikipedia.org/wiki/Traveling_salesman_problem</li>
+          <li>http://en.wikipedia.org/wiki/NP_%28complexity%29</li>
+          <li>http://en.wikipedia.org/wiki/Polynomial_time#Polynomial_time</li>
+          <li>http://en.wikipedia.org/wiki/NP-hard</li>
+          <li>http://en.wikipedia.org/wiki/P_%3D_NP_problem</li>
+          <li>Fast algorithms for determining (generalized) core groups in social networks, Vladimir Batagelj, Matjaž Zaveršnik. Discussions with Mubarek Kedir Mohammed</li>
+          <li>Cormen, Leiserson, Rivest, Stein, "Introduction to Algorithms", Second Edition. pages 966 -1021</li> 
+        </ol>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

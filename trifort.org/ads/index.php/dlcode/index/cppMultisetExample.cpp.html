@@ -1,0 +1,28 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;set&gt;
+
+int main(int argc, char * argv[]){
+
+  std::multiset&lt;int&gt; mset1;
+  mset1.insert(20);
+  mset1.insert(10);
+  mset1.insert(50);
+  mset1.insert(23);
+  mset1.insert(20);
+
+  std::multiset&lt;int&gt;::iterator iter;
+  std::cout &lt;&lt; "items in mset1: " &lt;&lt; std::endl;
+  for(iter = mset1.begin(); iter != mset1.end(); ++iter){
+    std::cout &lt;&lt; "  " &lt;&lt; *iter &lt;&lt; std::endl;
+  }
+  //prints:
+  //  items in mset1:
+  //    10
+  //    20
+  //    20
+  //    23
+  //    50
+
+  return 0;
+}
+</pre>

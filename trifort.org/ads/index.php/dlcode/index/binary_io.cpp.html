@@ -1,0 +1,20 @@
+<pre>#include &lt;fstream&gt;
+
+int main(int argc, char * argv[]){
+
+  std::ofstream fout("output.bin", std::ios::binary);
+  int array[4];
+  for(int i = 0; i &lt; 4; ++i){
+    array[i] = i + 1;
+  }
+  fout.write((const char *)array, sizeof(int) * 4);
+  fout.close();
+
+  //output.bin has:
+  //
+
+  //or viewing using a hex editor
+  //01 00 00 00 02 00 00 00 03 00 00 00 04 00 00 00
+  return 0;
+}
+</pre>

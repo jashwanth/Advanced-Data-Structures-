@@ -1,0 +1,33 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+
+void computeChecksum(std::string filename)
+{
+  char checksum = 0;
+  char prev_checksum = 0;
+  int rollovers = 0;
+  std::ifstream fin(filename.c_str(), std::ios::binary);
+  while(fin.good()){
+    char c;
+    fin.get(c);
+    checksum += c;
+    if(checksum &lt; prev_checksum){
+      rollovers++;
+    }
+    prev_checksum = checksum;
+  }
+  std::cout &lt;&lt; "checksum for " &lt;&lt; filename &lt;&lt; ": " &lt;&lt; (int) checksum;
+  std::cout &lt;&lt; " (" &lt;&lt; rollovers &lt;&lt; " rollovers)" &lt;&lt; std::endl;
+}
+
+int main(int argc, char * argv[]){
+ 
+  computeChecksum("output.bin");
+  computeChecksum("output.txt");
+
+  //prints:
+  //  checksum for output.bin: 10 (0 rollovers)
+  //  checksum for output.txt: 112 (4 rollovers)
+  return 0;
+}
+</pre>

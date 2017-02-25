@@ -1,0 +1,46 @@
+<pre>#include &lt;iostream&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+
+int main(int argc, char *argv[]){
+
+  std::map&lt;std::string, std::string&gt; dictionary;
+  dictionary["array"] = "a systematic arrangement of objects, usually in rows and columns";
+  dictionary["vector"] = "an automatically resizable array";
+  dictionary["queue"] = "a container where the next element is given in FIFO order";
+  dictionary["stack"] = "a container where the next element is given in LIFO order";
+
+  std::cout &lt;&lt; "an array is: " &lt;&lt; dictionary["array"] &lt;&lt; std::endl;
+  std::cout &lt;&lt; std::endl;  
+
+  std::cout &lt;&lt; "the dictionary contents: " &lt;&lt; std::endl;
+  std::map&lt;std::string, std::string&gt;::iterator iter;
+  for(iter = dictionary.begin(); iter != dictionary.end(); ++iter){
+    std::pair&lt;std::string, std::string&gt; item = *iter;
+    std::cout &lt;&lt; item.first &lt;&lt; ": " &lt;&lt; item.second &lt;&lt; std::endl;
+  }
+  std::cout &lt;&lt; std::endl;
+
+  dictionary.erase("array");
+  std::cout &lt;&lt; "after erasing 'array', ";
+  if(dictionary.find("array") != dictionary.end()){
+    std::cout &lt;&lt; "dictionary contains array" &lt;&lt; std::endl;
+  } else {
+    std::cout &lt;&lt; "dictionary does not contain array" &lt;&lt; std::endl;
+  }
+  
+  //prints:
+  //  an array is: a systematic arrangement of objects, usually in rows and columns
+  //
+  //  the dictionary contents: 
+  //  array: a systematic arrangement of objects, usually in rows and columns
+  //  queue: a container where the next element is given in FIFO order
+  //  stack: a container where the next element is given in LIFO order
+  //  vector: an automatically resizable array
+  //
+  //  after erasing 'array', dictionary does not contain array
+
+  return 0;
+}
+
+</pre>
