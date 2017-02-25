@@ -1,0 +1,301 @@
+
+
+*****Begin of Testcase1 Execution*****
+
+Constructed graph from file fig1.csv
+list of all vertices is 
+r, 1   s, 2   t, 3   u, 4   v, 5   w, 6   x, 7   y, 8   
+Adjaceny list is 
+1-->2(1), 5(1)
+
+2-->1(1), 6(1)
+
+3-->4(1), 6(1), 7(1)
+
+4-->3(1), 7(1), 8(1)
+
+5-->1(1)
+
+6-->2(1), 3(1), 7(1)
+
+7-->3(1), 4(1), 6(1), 8(1)
+
+8-->4(1), 7(1)
+
+Created dot file t1.dot 
+
+
+*****End of Testcase1 Execution*****
+
+
+
+*****Begin of Testcase2 Execution*****
+
+Constructed graph from file fig2.csv
+list of all vertices is 
+1, 1   2, 2   3, 3   4, 4   5, 5   6, 6   
+Adjaceny list is 
+1-->2(1), 4(1)
+
+2-->5(1)
+
+3-->5(1), 6(1)
+
+4-->2(1)
+
+5-->4(1)
+
+6-->6(1)
+
+Created dot file t2.dot 
+
+
+*****End of Testcase2 Execution*****
+
+
+
+*****Begin of Testcase3 Execution*****
+
+constructed graph from fig3.csv file
+list of all vertices is 
+s, 1   t, 2   x, 3   y, 4   z, 5   
+Adjaceny list is 
+1-->2(1), 4(1)
+
+2-->3(1), 4(1)
+
+3-->5(1)
+
+4-->2(1), 3(1), 5(1)
+
+5-->1(1), 3(1)
+
+Adding weights to the graph from fig3-w.csv
+
+Adjaceny list is 
+1-->2(10), 4(5)
+
+2-->3(1), 4(2)
+
+3-->5(4)
+
+4-->2(3), 3(9), 5(2)
+
+5-->1(7), 3(6)
+
+Created dot file t3.dot 
+
+
+*****End of Testcase3 Execution*****
+
+
+
+*****Begin of Testcase4 Execution*****
+
+list of all vertices is 
+r, 1   s, 2   t, 3   u, 4   v, 5   w, 6   x, 7   y, 8   
+Adjaceny list is 
+1-->2(1), 5(1)
+
+2-->1(1), 6(1)
+
+3-->4(1), 6(1), 7(1)
+
+4-->3(1), 7(1), 8(1)
+
+5-->1(1)
+
+6-->2(1), 3(1), 7(1)
+
+7-->3(1), 4(1), 6(1), 8(1)
+
+8-->4(1), 7(1)
+
+Added the vertex "z" to the graph
+Inserted the edge between "z" and "w" 
+Inserted the edge between "z" and "x" 
+Inserted the edge between "z" and "y" 
+Created dot file t4a.dot
+Removed the vertext "s" from the graph 
+Removed the vertext "x" from the graph 
+Removed the edge between "u" and "t" from the graph
+Created dot file t4b.dot
+
+
+*****End of Testcase4 Execution*****
+
+
+
+*****Begin of Testcase5 Execution*****
+
+Inserted a new edge between "6" and "7" to the graph
+Inserted a new edge between "7" and "8" to the graph
+Inserted a new edge between "8" and "9" to the graph
+Inserted a new edge between "9" and "10" to the graph
+Inserted a new edge between "6" and "10" to the graph
+Inserted vertices 1,2,3,4,5 to the graph
+Inserted a new edge between "6" and "1" to the graph
+Inserted a new edge between "2" and "7" to the graph
+Inserted a new edge between "3" and "8" to the graph
+Inserted a new edge between "4" and "9" to the graph
+Inserted a new edge between "5" and "10" to the graph
+Created dot file t5a.dot
+Removed the vertex "8" from the graph
+Removed the vertex "6" from the graph
+Created dot file t5b.dot
+
+
+*****End of Testcase5 Execution*****
+
+
+
+*****Begin of Testcase6 Execution*****
+
+Inserted vertices 2,4,6,8,10 to the graph
+Inserted a new edge between "2" and "4" to the graph
+Inserted a new edge between "2" and "6" to the graph
+Inserted a new edge between "4" and "6" to the graph
+Inserted a new edge between "4" and "8" to the graph
+Inserted a new edge between "6" and "8" to the graph
+Inserted a new edge between "6" and "10" to the graph
+Inserted a new edge between "8" and "10" to the graph
+Inserted a new edge between "8" and "2" to the graph
+Inserted vertices 1,3,5,7,9 to the graph
+Inserted a new edge between "1" and "2" to the graph
+Inserted a new edge between "3" and "4" to the graph
+Inserted a new edge between "5" and "6" to the graph
+Inserted a new edge between "7" and "8" to the graph
+Inserted a new edge between "9" and "10" to the graph
+Created a dot file t6a.dot 
+Removed vertex "2" from the graph
+Removed vertex "7" from the graph
+Created a dot file t6b.dot 
+
+
+*****End of Testcase6 Execution*****
+
+
+
+*****Begin of Testcase7 Execution*****
+
+constructed graph from fig3.csv file
+list of all vertices is 
+-----------------------------------
+     s     t     x     y     z
+------------------------------------
+
+s      0     8     9     5     7
+t     11     0     1     2     4
+x     11    19     0    16     4
+y      9     3     4     0     2
+z      7    15     6    12     0
+Adjaceny list is 
+1-->2(10), 4(5)
+
+2-->3(1), 4(2)
+
+3-->5(4)
+
+4-->2(3), 3(9), 5(2)
+
+5-->1(7), 3(6)
+
+
+
+*****End of Testcase7 Execution*****
+
+
+
+*****Begin of Testcase8 Execution*****
+
+list of all vertices is 
+-----------------------------------
+     s     t     x     y     z
+------------------------------------
+s      0     7     8     5     7
+t      7     0     1     2     4
+x      8     1     0     3     4
+y      5     2     3     0     2
+z      7     4     4     2     0
+
+
+*****End of Testcase8 Execution*****
+
+
+
+*****Begin of Testcase9 Execution*****
+
+
+------------------------------------------
+Vertex   The path from source vertex s    
+         to this vertex in G3             
+------------------------------------------
+s     nil
+t     s---y---t
+x     s---y---t---x
+y     s---y
+z     s---y---z
+
+------------------------------------------
+Vertex   The path from source vertex z    
+         to this vertex in G3             
+------------------------------------------
+s     z---s
+t     z---s---y---t
+x     z---x
+y     z---s---y
+z     nil
+
+
+*****End of Testcase9 Execution*****
+
+
+
+*****Begin of Testcase10 Execution*****
+
+
+------------------------------------------
+Vertex   The path from source vertex s    
+         to this vertex in G4             
+------------------------------------------
+s     nil
+t     s---y---t
+x     s---y---t---x
+y     s---y
+z     s---z
+
+------------------------------------------
+Vertex   The path from source vertex z    
+         to this vertex in G4             
+------------------------------------------
+s     z---s
+t     z---y---t
+x     z---x
+y     z---y
+z     nil
+
+
+*****End of Testcase10 Execution*****
+
+
+
+*****Begin of Testcase11 Execution*****
+
+Final longest cost path between two vertices is 
+
+x---z---s---y---t
+
+
+*****End of Testcase11 Execution*****
+
+
+
+*****Begin of Testcase12 Execution*****
+
+Final longest cost path between two vertices is 
+
+s---y---t---x
+
+
+*****End of Testcase12 Execution*****
+

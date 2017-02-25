@@ -1,0 +1,17 @@
+
+ digraph G {
+	// define direction
+	// rankdir=TD; 
+        rankdir=LR;
+        // define image size
+        size = "2, 2"
+        // define node shape
+        // node[shape = circle];
+        R -> A;
+        R -> B;
+        A -> C;
+        A -> D;
+        B -> E;
+        B -> F;
+        C -> G;
+ }

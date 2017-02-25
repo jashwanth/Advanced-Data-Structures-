@@ -1,0 +1,20 @@
+ strict graph {  
+ node [shape= ellipse];
+s	t	x	y	z	t--x[color=red, label=1];
+y--t[color=red, label=2];
+s--z[color=red, label=7];
+s--y[color=red, label=5];
+
+s--t[ label=10];
+t--s[ label=10];
+t--y[ label=2];
+x--t;
+x--y[ label=9];
+x--z[ label=4];
+y--s[ label=5];
+y--x[ label=9];
+y--z[ label=2];
+z--s[ label=7];
+z--y[ label=2];
+z--x[ label=4];
+}
