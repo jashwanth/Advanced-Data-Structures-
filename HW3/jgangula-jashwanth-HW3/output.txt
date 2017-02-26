@@ -1,0 +1,544 @@
+
+
+*****Begin of Testcase1 Execution*****
+
+[0, 0] [500, 2] [625, 4] [656, 6] [663, 8] [665, 15] [665, 14] [665, 13] [665, 12] [665, 10] [666, 11] [667, 9] [671, 7] [687, 5] [750, 3] [1000, 1] 
+digraph G { 
+null0[shape=point];
+   "0,0" -> null0 ;
+   "0,0" -> "1000,1";
+   "1000,1" -> "500,2";
+null1[shape=point];
+   "500,2" -> null1 ;
+   "500,2" -> "750,3";
+   "750,3" -> "625,4";
+null2[shape=point];
+   "625,4" -> null2 ;
+   "625,4" -> "687,5";
+   "687,5" -> "656,6";
+null3[shape=point];
+   "656,6" -> null3 ;
+   "656,6" -> "671,7";
+   "671,7" -> "663,8";
+null4[shape=point];
+   "663,8" -> null4 ;
+   "663,8" -> "667,9";
+   "667,9" -> "665,10";
+   "665,10" -> "665,12";
+   "665,12" -> "665,13";
+   "665,13" -> "665,14";
+   "665,14" -> "665,15";
+null5[shape=point];
+   "665,15" -> null5 ;
+null6[shape=point];
+   "665,15" -> null6 ;
+null7[shape=point];
+   "665,14" -> null7 ;
+null8[shape=point];
+   "665,13" -> null8 ;
+null9[shape=point];
+   "665,12" -> null9 ;
+   "665,10" -> "666,11";
+null10[shape=point];
+   "666,11" -> null10 ;
+null11[shape=point];
+   "666,11" -> null11 ;
+null12[shape=point];
+   "667,9" -> null12 ;
+null13[shape=point];
+   "671,7" -> null13 ;
+null14[shape=point];
+   "687,5" -> null14 ;
+null15[shape=point];
+   "750,3" -> null15 ;
+null16[shape=point];
+   "1000,1" -> null16 ;
+}
+
+
+
+*****End of Testcase1 Execution*****
+
+
+
+*****Begin of Testcase2 Execution*****
+
+print inorder traversal 
+[0,500,0] [500,0,1] [250,250,2] [375,125,3] [312,188,4] [343,157,5] [327,173,6] [335,165,7] [331,169,8] [333,167,9] [332,168,15] [332,168,14] [332,168,13] [332,168,12] [332,168,11] [332,168,10] 
+end of inorder traversal 
+
+digraph G { 
+null0[shape=point];
+   "0,500,0" -> null0 ;
+   "0,500,0" -> "500,0,1";
+null1[shape=point];
+   "500,0,1" -> null1 ;
+   "500,0,1" -> "250,250,2";
+null2[shape=point];
+   "250,250,2" -> null2 ;
+   "250,250,2" -> "375,125,3";
+null3[shape=point];
+   "375,125,3" -> null3 ;
+   "375,125,3" -> "312,188,4";
+null4[shape=point];
+   "312,188,4" -> null4 ;
+   "312,188,4" -> "343,157,5";
+null5[shape=point];
+   "343,157,5" -> null5 ;
+   "343,157,5" -> "327,173,6";
+null6[shape=point];
+   "327,173,6" -> null6 ;
+   "327,173,6" -> "335,165,7";
+null7[shape=point];
+   "335,165,7" -> null7 ;
+   "335,165,7" -> "331,169,8";
+null8[shape=point];
+   "331,169,8" -> null8 ;
+   "331,169,8" -> "333,167,9";
+null9[shape=point];
+   "333,167,9" -> null9 ;
+   "333,167,9" -> "332,168,10";
+   "332,168,10" -> "332,168,11";
+   "332,168,11" -> "332,168,12";
+   "332,168,12" -> "332,168,13";
+   "332,168,13" -> "332,168,14";
+   "332,168,14" -> "332,168,15";
+null10[shape=point];
+   "332,168,15" -> null10 ;
+null11[shape=point];
+   "332,168,15" -> null11 ;
+null12[shape=point];
+   "332,168,14" -> null12 ;
+null13[shape=point];
+   "332,168,13" -> null13 ;
+null14[shape=point];
+   "332,168,12" -> null14 ;
+null15[shape=point];
+   "332,168,11" -> null15 ;
+null16[shape=point];
+   "332,168,10" -> null16 ;
+}
+
+
+
+*****End of Testcase2 Execution*****
+
+
+
+*****Begin of Testcase3 Execution*****
+
+----------------------------------------------------------------------
+n = No. of Nodes in the tree    Height of BST T3      lg n    sqrt(n) 
+----------------------------------------------------------------------
+                           0                  -1      N.A.          0
+                          20                   7   2.99573    4.47214
+                          40                   8   3.68888    6.32456
+                          60                  11   4.09434    7.74597
+                          80                  12   4.38203    8.94427
+                         100                  13   4.60517         10
+                         120                  13   4.78749    10.9545
+                         140                  14   4.94164    11.8322
+                         160                  14   5.07517    12.6491
+                         180                  14   5.19296    13.4164
+                         200                  14   5.29832    14.1421
+
+
+*****End of Testcase3 Execution*****
+
+
+
+*****Begin of Testcase4 Execution*****
+
+----------------------------------------------------------------------
+n = No. of Nodes in the tree    Height of BST T4      lg n    sqrt(n) 
+----------------------------------------------------------------------
+                           0                  -1      N.A.          0
+                          20                   7   2.99573    4.47214
+                          40                   9   3.68888    6.32456
+                          60                   9   4.09434    7.74597
+                          80                  11   4.38203    8.94427
+                         100                  12   4.60517         10
+                         120                  13   4.78749    10.9545
+                         140                  13   4.94164    11.8322
+                         160                  13   5.07517    12.6491
+                         180                  13   5.19296    13.4164
+                         200                  14   5.29832    14.1421
+
+
+*****End of Testcase4 Execution*****
+
+
+
+*****Begin of Testcase5 Execution*****
+
+
+ Performed reservoir sampling to fetch 10 elements from List1 
+Inorder traversal before removing root
+[0, 0] [500, 2] [656, 6] [663, 8] [665, 14] [665, 12] [665, 10] [665, 15] [687, 5] [1000, 1] 
+digraph G { 
+null0[shape=point];
+   "0,0" -> null0 ;
+   "0,0" -> "1000,1";
+   "1000,1" -> "500,2";
+null1[shape=point];
+   "500,2" -> null1 ;
+   "500,2" -> "665,15";
+   "665,15" -> "665,10";
+   "665,10" -> "656,6";
+null2[shape=point];
+   "656,6" -> null2 ;
+   "656,6" -> "665,12";
+   "665,12" -> "663,8";
+null3[shape=point];
+   "663,8" -> null3 ;
+   "663,8" -> "665,14";
+null4[shape=point];
+   "665,14" -> null4 ;
+null5[shape=point];
+   "665,14" -> null5 ;
+null6[shape=point];
+   "665,12" -> null6 ;
+null7[shape=point];
+   "665,10" -> null7 ;
+   "665,15" -> "687,5";
+null8[shape=point];
+   "687,5" -> null8 ;
+null9[shape=point];
+   "687,5" -> null9 ;
+null10[shape=point];
+   "1000,1" -> null10 ;
+}
+
+
+Deleting the root node
+
+Inorder traversal after removing root
+[500, 2] [656, 6] [663, 8] [665, 14] [665, 12] [665, 10] [665, 15] [687, 5] [1000, 1] 
+digraph G { 
+   "1000,1" -> "500,2";
+null11[shape=point];
+   "500,2" -> null11 ;
+   "500,2" -> "665,15";
+   "665,15" -> "665,10";
+   "665,10" -> "656,6";
+null12[shape=point];
+   "656,6" -> null12 ;
+   "656,6" -> "665,12";
+   "665,12" -> "663,8";
+null13[shape=point];
+   "663,8" -> null13 ;
+   "663,8" -> "665,14";
+null14[shape=point];
+   "665,14" -> null14 ;
+null15[shape=point];
+   "665,14" -> null15 ;
+null16[shape=point];
+   "665,12" -> null16 ;
+null17[shape=point];
+   "665,10" -> null17 ;
+   "665,15" -> "687,5";
+null18[shape=point];
+   "687,5" -> null18 ;
+null19[shape=point];
+   "687,5" -> null19 ;
+null20[shape=point];
+   "1000,1" -> null20 ;
+}
+
+
+
+*****End of Testcase5 Execution*****
+
+
+
+*****Begin of Testcase6 Execution*****
+
+
+reserve array is 
+[0,500,0][500,0,1][250,250,2][375,125,3][332,168,14][332,168,10][327,173,6][332,168,15][332,168,11][333,167,9]
+print inorder traversal before deletion 
+[0,500,0] [500,0,1] [250,250,2] [375,125,3] [332,168,11] [332,168,15] [332,168,10] [327,173,6] [332,168,14] [333,167,9] 
+end of inorder traversal before deletion 
+
+digraph G { 
+null0[shape=point];
+   "0,500,0" -> null0 ;
+   "0,500,0" -> "500,0,1";
+null1[shape=point];
+   "500,0,1" -> null1 ;
+   "500,0,1" -> "250,250,2";
+null2[shape=point];
+   "250,250,2" -> null2 ;
+   "250,250,2" -> "375,125,3";
+null3[shape=point];
+   "375,125,3" -> null3 ;
+   "375,125,3" -> "332,168,14";
+   "332,168,14" -> "332,168,10";
+   "332,168,10" -> "332,168,15";
+   "332,168,15" -> "332,168,11";
+null4[shape=point];
+   "332,168,11" -> null4 ;
+null5[shape=point];
+   "332,168,11" -> null5 ;
+null6[shape=point];
+   "332,168,15" -> null6 ;
+   "332,168,10" -> "327,173,6";
+null7[shape=point];
+   "327,173,6" -> null7 ;
+null8[shape=point];
+   "327,173,6" -> null8 ;
+   "332,168,14" -> "333,167,9";
+null9[shape=point];
+   "333,167,9" -> null9 ;
+null10[shape=point];
+   "333,167,9" -> null10 ;
+}
+
+Deleting the root node.. 
+print inorder traversal after deletion 
+[250,250,2] [500,0,1] [327,173,6] [375,125,3] [332,168,11] [332,168,15] [332,168,10] [332,168,14] [333,167,9] 
+digraph G { 
+null11[shape=point];
+   "250,250,2" -> null11 ;
+   "250,250,2" -> "500,0,1";
+null12[shape=point];
+   "500,0,1" -> null12 ;
+   "500,0,1" -> "327,173,6";
+null13[shape=point];
+   "327,173,6" -> null13 ;
+   "327,173,6" -> "375,125,3";
+null14[shape=point];
+   "375,125,3" -> null14 ;
+   "375,125,3" -> "332,168,14";
+   "332,168,14" -> "332,168,10";
+   "332,168,10" -> "332,168,15";
+   "332,168,15" -> "332,168,11";
+null15[shape=point];
+   "332,168,11" -> null15 ;
+null16[shape=point];
+   "332,168,11" -> null16 ;
+null17[shape=point];
+   "332,168,15" -> null17 ;
+null18[shape=point];
+   "332,168,10" -> null18 ;
+   "332,168,14" -> "333,167,9";
+null19[shape=point];
+   "333,167,9" -> null19 ;
+null20[shape=point];
+   "333,167,9" -> null20 ;
+}
+
+
+end of inorder traversal after deletion 
+
+
+*****End of Testcase6 Execution*****
+
+
+
+*****Begin of Testcase7 Execution*****
+
+
+Testdata is 
+[1000,1] [500,2] [750,3] [625,4] [687,5] [656,6] [671,7] [663,8] [667,9] [665,10] [1000,11] [500,12] [750,13] [625,14] [687,15] [656,16] [671,17] [663,18] [667,19] [665,20] 
+
+print inorder traversal before deletion 
+[500, 12] [500, 2] [625, 14] [625, 4] [656, 16] [656, 6] [663, 18] [663, 8] [665, 20] [665, 10] [667, 19] [667, 9] [671, 17] [671, 7] [687, 15] [687, 5] [750, 13] [750, 3] [1000, 11] [1000, 1] 
+end of inorder traversal before deletion 
+---------------------------------------------------------------------------------
+ stage   data item at root  the root(after deletion)     search for data with key
+---------------------------------------------------------------------------------
+     0            [1000,1]                   [500,2]                    [1000,11]
+     1             [500,2]                  [625,14]                     [500,12]
+     2            [625,14]                   [625,4]                      [625,4]
+     3             [625,4]                  [656,16]                          nil
+     4            [656,16]                   [656,6]                      [656,6]
+     5             [656,6]                  [663,18]                          nil
+     6            [663,18]                   [663,8]                      [663,8]
+     7             [663,8]                  [665,20]                          nil
+     8            [665,20]                  [665,10]                     [665,10]
+     9            [665,10]                  [667,19]                          nil
+    10            [667,19]                   [667,9]                      [667,9]
+    11             [667,9]                  [671,17]                          nil
+    12            [671,17]                   [671,7]                      [671,7]
+    13             [671,7]                  [687,15]                          nil
+    14            [687,15]                   [687,5]                      [687,5]
+    15             [687,5]                  [750,13]                          nil
+    16            [750,13]                   [750,3]                      [750,3]
+    17             [750,3]                 [1000,11]                          nil
+    18           [1000,11]                  [500,12]                          nil
+    19            [500,12]                       nil                          nil
+    20                 nil                       nil                          nil
+---------------------------------------------------------------------------------
+
+
+*****End of Testcase7 Execution*****
+
+
+
+*****Begin of Testcase8 Execution*****
+
+Test data is : 
+[500,0,1][250,250,2][375,125,3][312,188,4][343,157,5][327,173,6]
+[500,165,7][250,169,8][375,167,9][312,168,10][343,168,11][327,168,12]
+[335,0,13][331,250,14][333,125,15][332,188,16][332,157,17][332,173,18]
+
+root is [500,0,1]
+Deleted the root and updated the tree
+Searching for element [0,0,0] in the tree
+ELement [0,0,0] is not found in the Kd tree
+
+root is [250,169,8]
+Deleted the root and updated the tree
+Searching for element [500,0,1] in the tree
+ELement [500,0,1] is not found in the Kd tree
+
+root is [250,250,2]
+Deleted the root and updated the tree
+Searching for element [250,250,2] in the tree
+ELement [250,250,2] is not found in the Kd tree
+
+root is [312,168,10]
+Deleted the root and updated the tree
+Searching for element [375,125,3] in the tree
+ELement [375,125,3] is present in the Kd tree
+
+root is [312,188,4]
+Deleted the root and updated the tree
+Searching for element [312,188,4] in the tree
+ELement [312,188,4] is not found in the Kd tree
+
+root is [327,168,12]
+Deleted the root and updated the tree
+Searching for element [343,157,5] in the tree
+ELement [343,157,5] is present in the Kd tree
+printing the dot file when there are 12 elements in the tree 
+
+digraph G { 
+null0[shape=point];
+   "327,173,6" -> null0 ;
+   "327,173,6" -> "335,0,13";
+null1[shape=point];
+   "335,0,13" -> null1 ;
+   "335,0,13" -> "375,125,3";
+   "375,125,3" -> "331,250,14";
+   "331,250,14" -> "343,157,5";
+   "343,157,5" -> "332,188,16";
+   "332,188,16" -> "332,157,17";
+null2[shape=point];
+   "332,157,17" -> null2 ;
+   "332,157,17" -> "332,173,18";
+   "332,173,18" -> "343,168,11";
+   "343,168,11" -> "333,125,15";
+null3[shape=point];
+   "333,125,15" -> null3 ;
+null4[shape=point];
+   "333,125,15" -> null4 ;
+null5[shape=point];
+   "343,168,11" -> null5 ;
+null6[shape=point];
+   "332,173,18" -> null6 ;
+null7[shape=point];
+   "332,188,16" -> null7 ;
+   "343,157,5" -> "375,167,9";
+null8[shape=point];
+   "375,167,9" -> null8 ;
+null9[shape=point];
+   "375,167,9" -> null9 ;
+null10[shape=point];
+   "331,250,14" -> null10 ;
+   "375,125,3" -> "500,165,7";
+null11[shape=point];
+   "500,165,7" -> null11 ;
+null12[shape=point];
+   "500,165,7" -> null12 ;
+}
+
+
+root is [327,173,6]
+Deleted the root and updated the tree
+Searching for element [327,173,6] in the tree
+ELement [327,173,6] is not found in the Kd tree
+
+root is [331,250,14]
+Deleted the root and updated the tree
+Searching for element [500,165,7] in the tree
+ELement [500,165,7] is present in the Kd tree
+
+root is [332,157,17]
+Deleted the root and updated the tree
+Searching for element [250,169,8] in the tree
+ELement [250,169,8] is not found in the Kd tree
+
+root is [332,173,18]
+Deleted the root and updated the tree
+Searching for element [375,167,9] in the tree
+ELement [375,167,9] is present in the Kd tree
+
+root is [332,188,16]
+Deleted the root and updated the tree
+Searching for element [312,168,10] in the tree
+ELement [312,168,10] is not found in the Kd tree
+
+root is [333,125,15]
+Deleted the root and updated the tree
+Searching for element [343,168,11] in the tree
+ELement [343,168,11] is present in the Kd tree
+printing the dot file when there are 6 elements in the tree 
+
+digraph G { 
+null13[shape=point];
+   "335,0,13" -> null13 ;
+   "335,0,13" -> "375,125,3";
+null14[shape=point];
+   "375,125,3" -> null14 ;
+   "375,125,3" -> "500,165,7";
+   "500,165,7" -> "343,157,5";
+null15[shape=point];
+   "343,157,5" -> null15 ;
+   "343,157,5" -> "375,167,9";
+   "375,167,9" -> "343,168,11";
+null16[shape=point];
+   "343,168,11" -> null16 ;
+null17[shape=point];
+   "343,168,11" -> null17 ;
+null18[shape=point];
+   "375,167,9" -> null18 ;
+null19[shape=point];
+   "500,165,7" -> null19 ;
+}
+
+
+root is [335,0,13]
+Deleted the root and updated the tree
+Searching for element [327,168,12] in the tree
+ELement [327,168,12] is not found in the Kd tree
+
+root is [343,168,11]
+Deleted the root and updated the tree
+Searching for element [335,0,13] in the tree
+ELement [335,0,13] is not found in the Kd tree
+
+root is [343,157,5]
+Deleted the root and updated the tree
+Searching for element [331,250,14] in the tree
+ELement [331,250,14] is not found in the Kd tree
+
+root is [375,167,9]
+Deleted the root and updated the tree
+Searching for element [333,125,15] in the tree
+ELement [333,125,15] is not found in the Kd tree
+
+root is [375,125,3]
+Deleted the root and updated the tree
+Searching for element [332,188,16] in the tree
+ELement [332,188,16] is not found in the Kd tree
+
+root is [500,165,7]
+Deleted the root and updated the tree
+Searching for element [332,157,17] in the tree
+ELement [332,157,17] is not found in the Kd tree
+
+
+*****End of Testcase8 Execution*****
+

@@ -1,0 +1,30 @@
+ strict graph {  
+ node [shape= ellipse];
+r	s	t	u	v	w	x	y	z	
+r--s;
+r--v;
+s--r;
+s--w;
+t--u;
+t--w;
+t--x;
+u--t;
+u--x;
+u--y;
+v--r;
+w--s;
+w--t;
+w--x;
+w--z;
+x--t;
+x--u;
+x--w;
+x--y;
+x--z;
+y--u;
+y--x;
+y--z;
+z--w;
+z--x;
+z--y;
+}

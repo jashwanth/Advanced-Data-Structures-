@@ -1,0 +1,22 @@
+graph { 
+        1 -- 2 [color=red,penwidth=3.0];
+        1-- 5 -- 3 [color=green,penwidth=3.0]; 
+        1-- 4 [color=antiquewhite4,penwidth=3.0];
+        1 -- 5 [color=aquamarine,penwidth=3.0]; 
+        2 -- 1 [color=aquamarine2,penwidth=3.0]; 
+                2 -- 1--5--3 [color=aliceblue,penwidth=3.0];
+                2 -- 4 [color=antiquewhite,penwidth=3.0];
+                2 -- 1--5 [color=aquamarine1,penwidth=3.0];
+                3 -- 5--1 [color=aquamarine3,penwidth=3.0];
+            3 -- 5--2 [color=aquamarine4,penwidth=3.0];
+                3 -- 5--4 [color=azure4,penwidth=3.0] ;
+                3 -- 5 [color=blanchedalmond,penwidth=3.0];
+                4 -- 1 [color=blue,penwidth=3.0];
+                4 -- 2 [color=beige,penwidth=3.0];
+                4 -- 5 [color=bisque4,penwidth=3.0];
+                4 -- 5-- 3 [color=azure3,penwidth=3.0];
+                5 -- 4 [color=brown,penwidth=3.0];
+                5 -- 3 [color=brown4,penwidth=3.0];
+                5 -- 1[color=bisque3,penwidth=3.0] ;
+                5 -- 1 -- 2 [color=chocolate1,penwidth=3.0];
+                }

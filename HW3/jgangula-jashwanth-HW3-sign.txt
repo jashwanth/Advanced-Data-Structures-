@@ -1,0 +1,1930 @@
+digraph G { 
+null0[shape=point];
+   "0,0" -> null0 ;
+   "0,0" -> "1000,1";
+   "1000,1" -> "665,15";
+   "665,15" -> "665,12";
+   "665,12" -> "625,4";
+null1[shape=point];
+   "625,4" -> null1 ;
+   "625,4" -> "665,10";
+   "665,10" -> "665,14";
+   "665,14" -> "663,8";
+null2[shape=point];
+   "663,8" -> null2 ;
+   "663,8" -> "665,13";
+null3[shape=point];
+   "665,13" -> null3 ;
+null4[shape=point];
+   "665,13" -> null4 ;
+null5[shape=point];
+   "665,14" -> null5 ;
+null6[shape=point];
+   "665,10" -> null6 ;
+null7[shape=point];
+   "665,12" -> null7 ;
+   "665,15" -> "687,5";
+null8[shape=point];
+   "687,5" -> null8 ;
+null9[shape=point];
+   "687,5" -> null9 ;
+null10[shape=point];
+   "1000,1" -> null10 ;
+}
+digraph G { 
+   "1000,1" -> "665,15";
+   "665,15" -> "665,12";
+   "665,12" -> "625,4";
+null11[shape=point];
+   "625,4" -> null11 ;
+   "625,4" -> "665,10";
+   "665,10" -> "665,14";
+   "665,14" -> "663,8";
+null12[shape=point];
+   "663,8" -> null12 ;
+   "663,8" -> "665,13";
+null13[shape=point];
+   "665,13" -> null13 ;
+null14[shape=point];
+   "665,13" -> null14 ;
+null15[shape=point];
+   "665,14" -> null15 ;
+null16[shape=point];
+   "665,10" -> null16 ;
+null17[shape=point];
+   "665,12" -> null17 ;
+   "665,15" -> "687,5";
+null18[shape=point];
+   "687,5" -> null18 ;
+null19[shape=point];
+   "687,5" -> null19 ;
+null20[shape=point];
+   "1000,1" -> null20 ;
+}
+digraph G { 
+null0[shape=point];
+   "0,500,0" -> null0 ;
+   "0,500,0" -> "332,168,15";
+   "332,168,15" -> "332,168,11";
+   "332,168,11" -> "332,168,13";
+null1[shape=point];
+   "332,168,13" -> null1 ;
+null2[shape=point];
+   "332,168,13" -> null2 ;
+   "332,168,11" -> "375,125,3";
+null3[shape=point];
+   "375,125,3" -> null3 ;
+   "375,125,3" -> "343,157,5";
+   "343,157,5" -> "335,165,7";
+null4[shape=point];
+   "335,165,7" -> null4 ;
+   "335,165,7" -> "333,167,9";
+null5[shape=point];
+   "333,167,9" -> null5 ;
+null6[shape=point];
+   "333,167,9" -> null6 ;
+null7[shape=point];
+   "343,157,5" -> null7 ;
+   "332,168,15" -> "312,188,4";
+null8[shape=point];
+   "312,188,4" -> null8 ;
+   "312,188,4" -> "327,173,6";
+null9[shape=point];
+   "327,173,6" -> null9 ;
+null10[shape=point];
+   "327,173,6" -> null10 ;
+}
+digraph G { 
+null11[shape=point];
+   "312,188,4" -> null11 ;
+   "312,188,4" -> "332,168,15";
+   "332,168,15" -> "332,168,11";
+   "332,168,11" -> "332,168,13";
+null12[shape=point];
+   "332,168,13" -> null12 ;
+null13[shape=point];
+   "332,168,13" -> null13 ;
+   "332,168,11" -> "375,125,3";
+null14[shape=point];
+   "375,125,3" -> null14 ;
+   "375,125,3" -> "343,157,5";
+   "343,157,5" -> "335,165,7";
+null15[shape=point];
+   "335,165,7" -> null15 ;
+   "335,165,7" -> "333,167,9";
+null16[shape=point];
+   "333,167,9" -> null16 ;
+null17[shape=point];
+   "333,167,9" -> null17 ;
+null18[shape=point];
+   "343,157,5" -> null18 ;
+   "332,168,15" -> "327,173,6";
+null19[shape=point];
+   "327,173,6" -> null19 ;
+null20[shape=point];
+   "327,173,6" -> null20 ;
+}
+#include "bst.h"
+#include <string>
+#include <sstream>
+using namespace std;
+
+void binarySearchTree::resetCounter()
+{
+  emptyNodeCount = 0;
+}
+
+void binarySearchTree::searchKeyInBst(node* cur, int key, vector<bstElem> &storeKeys)
+{
+  if (cur == NULL)
+    return ;
+  if (cur->elem.key == key)
+  {
+    storeKeys.push_back(cur->elem);
+  }
+  /* Search for the key in left and right subtree */
+  if (cur->elem.key >= key)
+  {
+    searchKeyInBst(cur->left, key, storeKeys);
+  }
+  if(cur->elem.key <= key)
+  {
+    searchKeyInBst(cur->right, key, storeKeys);
+  }
+}
+
+void binarySearchTree::showDotFile(node* cur)
+{
+  if (cur == NULL)
+  {
+    return;
+  }
+  if (cur->left != NULL)
+  {
+    ss << "   " << "\"" << cur->elem.key << "," << cur->elem.data << "\"" << " -> " 
+       << "\"" << cur->left->elem.key << "," << cur->left->elem.data << "\"" << ";" << endl;
+    showDotFile(cur->left);
+  }
+  else
+  {
+    ss << "null" << emptyNodeCount << "[shape=point];" << endl;
+    ss << "   " << "\"" << cur->elem.key << "," << cur->elem.data << "\"" << " -> " 
+       << "null" << emptyNodeCount << " ;" << endl;
+    emptyNodeCount++;
+  }
+  if (cur->right != NULL)
+  {
+    ss << "   " << "\"" << cur->elem.key << "," << cur->elem.data << "\"" << " -> "
+       << "\"" << cur->right->elem.key << "," << cur->right->elem.data << "\"" << ";" << endl;
+  //  ss << "   " << cur->elem.key << " -> " << cur->right->elem.key << ";" << endl;
+    showDotFile(cur->right);
+  }
+  else
+  {
+    ss << "null" << emptyNodeCount << "[shape=point];" << endl;
+    ss << "   " << "\"" << cur->elem.key << "," << cur->elem.data << "\"" << " -> " 
+       << "null"  << emptyNodeCount << " ;" << endl;
+    emptyNodeCount++;
+  }
+}
+
+int binarySearchTree::ElementEquals(node* cur, bstElem elem)
+{
+  if (cur == NULL)return 0;
+  else
+  {
+    if ((cur->elem.key == elem.key) && (cur->elem.data == elem.data))
+	return 1;
+  }
+  return 0;
+}
+
+node* binarySearchTree::FindInorderSuccessor(node* cur)
+{
+  if (cur == NULL)return NULL;
+  while(cur->left != NULL)
+  {
+    cur = cur->left;
+  }
+  return cur;
+}
+
+void binarySearchTree::ReplaceCurrentNodeWithSuccessor(node* cur, node* temp)
+{
+  if ((cur == NULL) || (temp == NULL))return;
+  cur->elem.key  = temp->elem.key;
+  cur->elem.data = temp->elem.data;
+}
+
+node* binarySearchTree::deleteBstNode(node* cur, bstElem elem)
+{
+  if (cur == NULL)return NULL;
+  if (cur->elem.key < elem.key)
+  {
+   cur->right = deleteBstNode(cur->right, elem);
+  }
+  else if(cur->elem.key >= elem.key)
+  {
+   /* Found the element . 
+    Check if it has one/two/no children */
+   if (ElementEquals(cur, elem) == 1)
+   {
+     if ((cur->left == NULL) && (cur->right != NULL))
+     {
+       node* temp = cur->right;
+       delete(cur);
+       return temp;
+     }
+     else if ((cur->right == NULL) && (cur->left != NULL))
+     {
+       node* temp = cur->left;
+       delete(cur);
+       return temp;
+     }
+     else if ((cur->left == NULL) && (cur->right == NULL))
+     {
+       delete(cur);
+       return NULL;
+     }
+     else if ((cur->left != NULL) && (cur->right != NULL))
+     {
+       /* Two children are not NULL 
+         We replace the current node with the minimum element in
+         the right subtree */
+        node* temp = FindInorderSuccessor(cur->right);
+        ReplaceCurrentNodeWithSuccessor(cur, temp);
+        bstElem myElem;
+        myElem.key  = temp->elem.key;
+        myElem.data = temp->elem.data;
+        cur->right = deleteBstNode(cur->right, myElem);
+     }
+   }
+   else
+   {
+     cur->left = deleteBstNode(cur->left, elem);
+   }
+  }
+}
+
+node* binarySearchTree::addToTree(node* cur, node* newNode)
+{
+  if (cur == NULL)return newNode;
+  if (cur->elem.key >= newNode->elem.key)
+  {
+    cur->left = addToTree(cur->left, newNode);
+  }
+  else
+  {
+    cur->right = addToTree(cur->right, newNode);
+  }
+  return cur;
+}
+
+void binarySearchTree::insertIntoBst(node* newNode)
+{
+  if (root == NULL)
+  {
+    root = newNode;
+    return;
+  }
+  root = addToTree(root, newNode);
+}
+
+void binarySearchTree::printInorderTree(node* cur)
+{
+  if (cur != NULL)
+  {
+    printInorderTree(cur->left);
+    cout << "[" << cur->elem.key << ", " << cur->elem.data << "] " ;
+    printInorderTree(cur->right);
+  }
+}
+
+int  binarySearchTree::heightOfBST(node* cur)
+{
+  /*Empty tree return height of -1 */
+  if (cur == NULL)return -1;
+  else
+  {
+     return (max(heightOfBST(cur->left), heightOfBST(cur->right))+1);
+  }
+}
+#ifndef bst_h
+#define bst_h
+
+#include <iostream>
+#include <cstdlib>
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+#include <sstream>
+#include <fstream>
+#include <cmath>
+#include <vector>
+
+using namespace std;
+
+/* Hold key and data in each node */
+struct bstElem
+{
+  int key;
+  int data;
+};
+/* For each node hold data and pointers to it's children
+   left and right */
+struct node
+{
+  bstElem elem;
+  struct node* left;
+  struct node* right;
+  node(bstElem elem)
+  {
+    this->elem = elem;
+    this->left = NULL;
+    this->right = NULL;
+  }
+};
+
+class binarySearchTree
+{
+    public:
+    node* root;
+    /* Useful to print null nodes in dot file */
+    int emptyNodeCount;
+    /*needed to draw a DotFile */
+    std::stringstream ss;
+    void resetCounter();
+    void insertIntoBst(node* newNode);
+    /* utility function to recursively check and addtoTree */
+    node* addToTree(node* cur, node* newNode);
+    void printInorderTree(node* cur);
+    int heightOfBST(node* );
+    void showDotFile(node* );
+    /* This function deletes the element from the tree with start node cur
+     and returns the root of that tree after deletion of bstElem in the tree */
+    node* deleteBstNode(node* cur, bstElem );
+    /*Check if the current node is same as element to be deleted/searched  */
+    int ElementEquals(node* ,bstElem );
+    /* To find the minimum element in the right subtree, to replace it with current
+     node during deletion */
+    node* FindInorderSuccessor(node *);
+    void ReplaceCurrentNodeWithSuccessor(node* , node* );
+    /* Search for the key in the current subtree with root node */
+    void searchKeyInBst(node* , int, vector<bstElem>& );
+};
+
+#endif
+#include "kdtree.h"
+
+/* Hold key and data in each node */
+/*struct kdElem
+{
+  int arr[2];
+  int data;
+};*/
+
+/* For each node hold data and pointers to it's children
+   left and right */
+/*struct Knode
+{
+  kdElem elem;
+  struct Knode* left;
+  struct Knode* right;
+  Knode(kdElem elem)
+  {
+    this->elem = elem;
+    this->left = NULL;
+    this->right = NULL;
+  }
+};*/
+
+/*class kdSearchTree
+{
+    public:
+    Knode* root;
+    //needed to draw a DotFile 
+    std::stringstream ss;
+    void insertIntoKdTree(Knode* newNode);
+   // utility function to recursively check and addtoKdTree 
+//  Knode* addToKdTree(node* cur, node* newNode);
+    void printInorderKdTree(Knode* cur);
+    int heightOfKdTree(Knode* );
+//    void showDotFile(Knode* );
+};*/
+/* Here align parameter is to find whether the current node to be inserted
+ based on X alignment or Y alignment */
+
+void kdSearchTree::resetCounter()
+{
+  emptyNodeCount = 0;
+}
+
+void kdSearchTree::showDotFile(Knode* cur)
+{
+  if (cur == NULL)
+    return;
+  if (cur->left != NULL)
+  {
+    ss << "   " << "\"" << cur->elem.arr[0] << "," << cur->elem.arr[1] << ","
+       << cur->elem.data << "\"" << " -> " << "\"" << cur->left->elem.arr[0] << ","
+     << cur->left->elem.arr[1] << "," << cur->left->elem.data << "\"" << ";" << endl;
+    showDotFile(cur->left);
+  }
+  else
+  {
+    ss << "null" << emptyNodeCount << "[shape=point];" << endl;
+    ss << "   " << "\"" << cur->elem.arr[0] << "," << cur->elem.arr[1] << ","
+       << cur->elem.data << "\"" << " -> " << "null" << emptyNodeCount << " ;" << endl;
+    emptyNodeCount++;
+  }
+  if (cur->right != NULL)
+  {
+    ss << "   " << "\"" << cur->elem.arr[0] << "," << cur->elem.arr[1] << ","
+       << cur->elem.data << "\"" << " -> " << "\"" << cur->right->elem.arr[0] << ","
+       << cur->right->elem.arr[1] << "," << cur->right->elem.data << "\"" << ";" << endl;
+    showDotFile(cur->right);
+  }
+  else
+  {
+    ss << "null" << emptyNodeCount << "[shape=point];" << endl;
+    ss << "   " << "\"" << cur->elem.arr[0] << "," << cur->elem.arr[1] << ","
+       << cur->elem.data << "\"" << " -> " << "null" << emptyNodeCount << " ;" << endl;
+    emptyNodeCount++;
+  }
+}
+
+int kdSearchTree::searchKeyInKdtree(Knode* cur, kdElem elem)
+{
+  if (cur == NULL)
+    return 0;
+   return (ElementEquals(cur, elem) || 
+           searchKeyInKdtree(cur->left, elem) ||
+           searchKeyInKdtree(cur->right, elem));
+}
+
+int kdSearchTree::ElementEquals(Knode* cur, kdElem elem)
+{
+  if (cur == NULL)return 0;
+  else
+  {
+    if ((cur->elem.arr[0] == elem.arr[0]) && (cur->elem.arr[1] == elem.arr[1])
+	&& (cur->elem.data == elem.data))
+      return 1;
+  }
+  return 0;
+}
+
+Knode* minNodeAmongKDimension(Knode* root, Knode* left, Knode* right, int align)
+{
+  Knode* temp = root;
+  if ((left != NULL) && (root != NULL) && (left->elem.arr[align] <= root->elem.arr[align]))
+  {
+    temp = left;
+  }
+  if ((right != NULL) && (temp != NULL) && (right->elem.arr[align] <= temp->elem.arr[align]))
+  {
+    temp = right;
+  }
+  return temp;
+}
+
+Knode* kdSearchTree::findMinKnode(Knode* cur, int align, int curDepth)
+{
+  if (cur==NULL)return NULL;
+  if (align == curDepth)
+  {
+    if (cur->left == NULL)
+      return cur;
+    return findMinKnode(cur->left, align, (curDepth+1)%2);
+  }
+  /* If current dimension is different from the required dimension
+   search in all possible directions */
+  else
+  {
+    return minNodeAmongKDimension(cur, findMinKnode(cur->left,  align, (curDepth+1)%2), 
+	                          findMinKnode(cur->right, align, (curDepth+1)%2), align);
+  }
+}
+
+void kdSearchTree::ReplaceCurrentNodeWithSuccessor(Knode* cur,Knode* replace)
+{
+  if ((cur == NULL) || (replace == NULL))
+  {
+    return;
+  }
+  cur->elem.arr[0] = replace->elem.arr[0];
+  cur->elem.arr[1] = replace->elem.arr[1];
+  cur->elem.data   = replace->elem.data;
+}
+
+Knode* kdSearchTree::deleteKdNode(Knode* cur, kdElem elem, int align)
+{
+  if (cur == NULL)return NULL;
+  if (ElementEquals(cur, elem) == 1)
+  {
+    if (cur->right != NULL)
+    {
+      Knode* temp = findMinKnode(cur->right, align, (align+1)%2);
+      ReplaceCurrentNodeWithSuccessor(cur, temp);
+      /* Verify if need to do null check for temp or
+         taken care automatically */
+      cur->right = deleteKdNode(cur->right, temp->elem, (align+1)%2);
+    }
+    else if(cur->left != NULL)
+    {
+      Knode* temp = findMinKnode(cur->left, align, (align+1)%2); 
+      ReplaceCurrentNodeWithSuccessor(cur, temp);
+      /* Verify if need to do null check for temp or
+         taken care automatically */
+      /* Swap the left and right nodes */
+      cur->right = deleteKdNode(cur->left, temp->elem, (align+1)%2);
+      cur->left = NULL;
+    }
+    else
+    {
+      delete(cur);
+      return NULL;
+    }
+    return cur;
+  }
+  else if (elem.arr[align] <= cur->elem.arr[align])
+  {
+     cur->left = deleteKdNode(cur->left, elem, (align+1)%2);
+  }
+  else
+  {
+    cur->right = deleteKdNode(cur->right, elem, (align+1)%2);
+  }
+
+  return cur;
+}
+
+void kdSearchTree::printInorderKdTree(Knode* cur)
+{
+  if (cur != NULL)
+  {
+    printInorderKdTree(cur->left);
+    cout << "[" << cur->elem.arr[0] << "," << cur->elem.arr[1] << "," << cur->elem.data << "] ";
+    printInorderKdTree(cur->right);
+  }
+}
+
+Knode* kdSearchTree::addToKdTree(Knode* cur, Knode* newNode, int align)
+{
+  if (cur == NULL)return newNode;
+  if (cur->elem.arr[(align%2)] >= newNode->elem.arr[(align%2)])
+  {
+    cur->left = addToKdTree(cur->left, newNode, (align+1)%2);
+  }
+  else
+  {
+    cur->right = addToKdTree(cur->right, newNode, (align+1)%2);
+  }
+}
+
+void kdSearchTree::insertIntoKdTree(Knode* newNode)
+{
+  if (root == NULL)
+  {
+    root = newNode;
+    return;
+  }
+  root = addToKdTree(root, newNode, 0);
+}
+
+int kdSearchTree::heightOfKdTree(Knode* cur)
+{
+  /* Return -1 for any empty tree */
+  if (cur == NULL)return -1;
+  else
+  {
+    return (max(heightOfKdTree(cur->left), heightOfKdTree(cur->right))+1);
+  }
+}
+
+#ifndef Kdtree_h
+#define Kdtree_h
+
+#include <iostream>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+#include <algorithm>
+#include <sstream>
+#include <fstream>
+
+using namespace std;
+
+/* Hold key and data in each node */
+struct kdElem
+{
+  /* array of dimension k here
+   we are restricted to 2D trees */
+  int arr[2];
+  int data;
+};
+/* For each node hold data and pointers to it's children
+   left and right */
+struct Knode
+{
+  kdElem elem;
+  struct Knode* left;
+  struct Knode* right;
+  Knode(kdElem elem)
+  {
+    this->elem = elem;
+    this->left = NULL;
+    this->right = NULL;
+  }
+};
+
+class kdSearchTree
+{
+    public:
+    Knode* root;
+    int emptyNodeCount;
+    /*needed to draw a DotFile */
+    std::stringstream ss;
+    void resetCounter();
+    void insertIntoKdTree(Knode* newNode);
+    /* utility function to recursively check and addtoKdTree */
+    Knode* addToKdTree(Knode* , Knode* , int);
+    void printInorderKdTree(Knode* cur);
+    int heightOfKdTree(Knode* );
+    /* Delete the KElem in the tree with current node Knode* . Also
+     pass alignement for correct processing */
+    Knode* deleteKdNode(Knode* , kdElem, int );
+    /*Check if the node at current element is same as passed element */
+    int ElementEquals(Knode* ,kdElem );
+    /* Find the min Knode in the given subtree along with the alignment
+     information for correct processing */
+    Knode* findMinKnode(Knode* ,int ,int );
+    void ReplaceCurrentNodeWithSuccessor(Knode*, Knode* );
+    void showDotFile(Knode* );
+    /* Search if the element exists in the tree */
+    int searchKeyInKdtree(Knode* , kdElem);
+};
+#endif
+#include "bst.h"
+#include "kdtree.h"
+#include <cstring>
+
+/*
+void testcase9()
+{
+  cout << endl << endl << "*****Begin of Testcase9 Execution*****" << endl << endl;
+  kdElem store[6];
+  store[0].arr[0] = 500, store[0].arr[1] = 0, store[0].data = 1;
+  store[1].arr[0] = 250, store[1].arr[1] = 250, store[1].data = 2;
+  store[2].arr[0] = 375, store[2].arr[1] = 125, store[2].data = 3;
+  store[3].arr[0] = 312, store[3].arr[1] = 188, store[3].data = 4;
+  store[4].arr[0] = 343, store[4].arr[1] = 157, store[4].data = 5;
+  store[5].arr[0] = 327, store[5].arr[1] = 173, store[5].data = 6;
+  
+  kdSearchTree* mykd9 = new kdSearchTree();
+  for (int i = 0; i < 6; i++)
+  {
+    mykd9->insertIntoKdTree(new Knode(store[i]));
+  }
+  while (mykd9->root != NULL)
+  {
+    cout << endl << "root is " << "[" << mykd9->root->elem.arr[0] << "," << 
+         mykd9->root->elem.arr[1] << "," << mykd9->root->elem.data << "]" << endl;
+    mykd9->root = mykd9->deleteKdNode(mykd9->root, mykd9->root->elem, 0);
+    cout << "Deleted the root and updated the tree" << endl;
+  }
+  cout << endl << endl << "*****End of Testcase9 Execution*****" << endl << endl;
+}*/
+
+void testcase8()
+{
+  cout << endl << endl << "*****Begin of Testcase8 Execution*****" << endl << endl;
+  kdElem store[19];
+  store[0].arr[0] = 0, store[0].arr[1]=0, store[0].data = 0; 
+  store[1].arr[0] = 500, store[1].arr[1]=0, store[1].data = 1; 
+  store[2].arr[0] = 250, store[2].arr[1]=250, store[2].data = 2;
+  int i;
+  for (i = 3; i <= 18; i++)
+  {
+    store[i].arr[0] = (store[i-1].arr[0] + store[i-2].arr[0])/2;
+    store[i].arr[1] = 500 - store[i].arr[0];
+    store[i].data   = i;
+  }
+  for (i = 13; i <= 18; i++)
+  {
+    store[i].arr[0] = store[i-6].arr[0];
+    store[i].arr[1] = store[i-12].arr[1];
+  }
+  for (i = 7; i <= 12; i++)
+  {
+    store[i].arr[0] = store[i-6].arr[0];
+  }
+  cout << "Test data is : " << endl;
+  for ( i= 1; i <= 18; i++)
+  {
+    cout << "[" << store[i].arr[0] << "," << store[i].arr[1] << "," << store[i].data << "]";
+    if (i%6 == 0)cout << endl;
+  }
+
+  kdSearchTree* mykd8 = new kdSearchTree();
+  mykd8->resetCounter();
+  for (i = 1; i <= 18; i++)
+  {
+    mykd8->insertIntoKdTree(new Knode(store[i]));
+  }
+
+  i = 0;
+  while (mykd8->root != NULL)
+  {
+    cout << endl << "root is " << "[" << mykd8->root->elem.arr[0] << "," << 
+         mykd8->root->elem.arr[1] << "," << mykd8->root->elem.data << "]" << endl;
+    mykd8->root = mykd8->deleteKdNode(mykd8->root, mykd8->root->elem, 0);
+    cout << "Deleted the root and updated the tree" << endl;
+    cout << "Searching for element " << "[" << store[i].arr[0] << "," << store[i].arr[1] << "," << store[i].data << "]"
+          << " in the tree" << endl;
+    if (mykd8->searchKeyInKdtree(mykd8->root, store[i]) == 1)
+    {
+      cout << "ELement " << "[" << store[i].arr[0] << "," << store[i].arr[1] << "," << store[i].data << "]"
+           << " is present in the Kd tree" << endl;
+    }
+    else
+    {
+      cout << "ELement " << "[" << store[i].arr[0] << "," << store[i].arr[1] << "," << store[i].data << "]"
+           << " is not found in the Kd tree" << endl;
+
+    }
+    /* construct t8a.dot file*/
+    if (i == 5)
+    {
+      fstream fsa8;
+      remove("t8a.dot");
+      fsa8.open("t8a.dot", std::fstream::in|std::fstream::out|std::fstream::app);
+      mykd8->ss << "digraph G { " << endl;
+      mykd8->showDotFile(mykd8->root);
+      mykd8->ss <<  "}" << endl; 
+      fsa8 << mykd8->ss.str() ;
+      cout << "printing the dot file when there are 12 elements in the tree " << endl;
+      cout << endl << mykd8->ss.str() << endl;
+      fsa8.close();
+    }
+    /* Construct t8b.dot file */
+    if (i == 11)
+    {
+      fstream fsb8;
+      remove("t8b.dot");
+      fsb8.open("t8b.dot", std::fstream::in|std::fstream::out|std::fstream::app);
+      mykd8->ss.str("");
+      mykd8->ss << "digraph G { " << endl;
+      mykd8->showDotFile(mykd8->root);
+      mykd8->ss <<  "}" << endl; 
+      fsb8 << mykd8->ss.str() ;
+      cout << "printing the dot file when there are 6 elements in the tree " << endl;
+      cout << endl << mykd8->ss.str() << endl;
+      fsb8.close();
+    }
+    i++;
+  //  cout << "value of i is " << i << endl;
+  //  if ( i > 18)break;
+  }
+  cout << endl << endl << "*****End of Testcase8 Execution*****" << endl << endl;
+}
+
+void testcase7()
+{
+  cout << endl << endl << "*****Begin of Testcase7 Execution*****" << endl << endl;
+  bstElem arr[21];
+  int first = 0, last = 1000, i, flag = 0;
+  arr[1].key = 1000, arr[1].data = 1;
+  arr[2].key = 500; arr[2].data = 2;
+  for (i = 3; i <= 20; i++)
+  {
+    if ( i <= 10)
+    {
+      arr[i].key = (arr[i-1].key + arr[i-2].key)/2;
+    }
+    else if(i > 10)
+    {
+      arr[i].key = arr[i-10].key;
+    }
+    arr[i].data = i;
+  }
+  cout << endl << "Testdata is " << endl;
+  for (i = 1; i <= 20; i++)
+  {
+    cout << "[" << arr[i].key << "," << arr[i].data << "] ";
+  }
+  cout << endl;
+  binarySearchTree* mybst7 = new binarySearchTree();
+  mybst7->resetCounter();
+  for (i = 1; i <= 20;i++)
+    mybst7->insertIntoBst(new node(arr[i]));
+  cout << endl << "print inorder traversal before deletion " << endl;
+  mybst7->printInorderTree(mybst7->root);
+  cout << endl << "end of inorder traversal before deletion " << endl;
+  cout << "---------------------------------------------------------------------------------" << endl;
+  cout << " stage   data item at root  the root(after deletion)     search for data with key" << endl;
+  cout << "---------------------------------------------------------------------------------" << endl;
+  for (i = 0; i <= 20 ;i++)
+  {
+    cout.width(6); cout << i;
+    if (mybst7->root != NULL)
+    {
+      bstElem storekey = mybst7->root->elem;
+      stringstream mystr;
+      mystr.clear();
+      mystr <<  "[" << mybst7->root->elem.key << "," << mybst7->root->elem.data << "]";
+      cout.width(20); cout << mystr.str();
+//      cout << mybst7->root->elem.key << "," << mybst7->root->elem.data << "]";
+      mybst7->root = mybst7->deleteBstNode(mybst7->root, mybst7->root->elem);
+      if (mybst7->root != NULL)
+      {
+        stringstream mystr2;
+        mystr2.clear();
+        mystr2 <<  "[" << mybst7->root->elem.key << "," << mybst7->root->elem.data << "]";
+        cout.width(26); cout << mystr2.str();
+        vector<bstElem> myvector;
+        myvector.clear();
+//      searchKeyInBst(node* cur, int key, vector<bstElem> &storeKeys);
+        mybst7->searchKeyInBst(mybst7->root, storekey.key, myvector);
+        stringstream mystr3;
+        mystr3.clear();
+        for (int j = 0; j < myvector.size(); j++)
+        {
+          mystr3 << "[" << myvector[j].key << "," << myvector[j].data << "]";
+          flag = 1;
+        }
+        if (flag == 1)
+        {
+          flag = 0;
+          cout.width(29);cout << mystr3.str();
+        }
+	else
+	{
+	  cout.width(29);cout << "nil";
+	}
+      }
+      else
+      {
+	cout.width(26); cout << "nil";
+	cout.width(29); cout << "nil";
+      }
+    }
+    else
+    {
+      cout.width(20);cout << "nil";
+      cout.width(26); cout << "nil";
+      cout.width(29); cout << "nil";
+    }
+    /* Print dot file after stage 10 */
+    if (i == 10)
+    {
+       fstream fs7;
+       remove("t7.dot");
+       fs7.open("t7.dot", std::fstream::in|std::fstream::out|std::fstream::app);
+       mybst7->ss << "digraph G { " << endl;
+       mybst7->showDotFile(mybst7->root);
+       mybst7->ss <<  "}" << endl; 
+       fs7 << mybst7->ss.str() ;
+       fs7.close();
+   //    cout << "Printing the tree after stage 10 " << endl;
+   //    cout << endl << mybst7->ss.str() << endl;
+       mybst7->ss.str("");
+    }
+    cout << endl;
+  }
+  cout << "---------------------------------------------------------------------------------" << endl;
+  cout << endl << endl << "*****End of Testcase7 Execution*****" << endl << endl;
+}
+
+
+void testcase6()
+{
+  cout << endl << endl << "*****Begin of Testcase6 Execution*****" << endl << endl;
+  kdElem store[16];
+  int i;
+  store[0].arr[0] = 0  , store[0].arr[1] = 500 - store[0].arr[0], store[0].data = 0;
+  store[1].arr[0] = 500, store[1].arr[1] = 500 - store[1].arr[0], store[1].data = 1;
+  for (i = 2; i <= 15; i++)
+  {
+    store[i].arr[0] = (store[i-1].arr[0] + store[i-2].arr[0])/2;
+    store[i].arr[1] = 500 - store[i].arr[0];
+    store[i].data = i;
+  }
+  /* Use reservoir sampling to select 10 items randomly from the above list */
+  kdElem reserve[10];
+  for (i = 0; i < 10; i++)
+  {
+    reserve[i] = store[i];
+  }
+  for (; i < 16; i++)
+  {
+    int j = rand()%(i+1);
+    if ( j < 10)reserve[j] = store[i];
+  }
+/*  kdElem reserve[10] = {{0,500,0}, {500,0,1}, {332,168,2}, {375,125,3}, {312,188,4}, {332,168,5}, 
+                        {332,168,6}, {335,165,7}, {331,169,8}, {333,167,9}};*/
+  kdSearchTree* mykd6 = new kdSearchTree();
+  mykd6->resetCounter();
+  cout << endl << "reserve array is " << endl;
+  for (int i = 0; i < 10; i++)
+  {
+    cout << "[" << reserve[i].arr[0] << "," << reserve[i].arr[1] << "," << reserve[i].data << "]";
+    mykd6->insertIntoKdTree(new Knode(reserve[i]));
+  }
+  cout << endl << "print inorder traversal before deletion " << endl;
+  mykd6->printInorderKdTree(mykd6->root);
+  cout << endl << "end of inorder traversal before deletion " << endl;
+  fstream fsa6;
+  remove("6a.dot");
+  fsa6.open("6a.dot", std::fstream::in|std::fstream::out|std::fstream::app);
+  mykd6->ss << "digraph G { " << endl;
+  mykd6->showDotFile(mykd6->root);
+  mykd6->ss <<  "}" << endl; 
+  fsa6 << mykd6->ss.str() ;
+  fsa6.close();
+  cout << endl << mykd6->ss.str() << endl;
+  mykd6->ss.str("");
+//  mybst5->ss.str(std::string());
+  cout << "Deleting the root node.. " << endl;
+  mykd6->root = mykd6->deleteKdNode(mykd6->root, mykd6->root->elem, 0);
+  cout << "print inorder traversal after deletion " << endl;
+  mykd6->printInorderKdTree(mykd6->root);
+  fstream fsb6;
+  remove("6b.dot");
+  fsb6.open("6b.dot", std::fstream::in|std::fstream::out|std::fstream::app);
+  mykd6->ss << "digraph G { " << endl;
+  mykd6->showDotFile(mykd6->root);
+  mykd6->ss <<  "}" << endl; 
+  fsb6 << mykd6->ss.str();
+  fsb6.close();
+  cout << endl << mykd6->ss.str() << endl;
+  cout << endl << "end of inorder traversal after deletion " << endl;
+  cout << endl << endl << "*****End of Testcase6 Execution*****" << endl << endl;
+}
+
+void testcase5()
+{
+  cout << endl << endl << "*****Begin of Testcase5 Execution*****" << endl << endl;
+  bstElem arr[16];
+  int first = 0, last = 1000, i;
+  arr[0].key = first, arr[0].data = 0;
+  arr[1].key = last, arr[1].data = 1;
+  for (i = 2; i <= 15; i++)
+  {
+    arr[i].key  = (arr[i-1].key + arr[i-2].key)/2;
+    arr[i].data = i;
+  }
+  /* Use reservoir sampling to select 10 items randomly from the above list */
+  bstElem reserve[10];
+  for (i = 0; i < 10; i++)
+  {
+    reserve[i] = arr[i];
+  }
+  for (; i < 16; i++)
+  {
+    int j = rand()%(i+1);
+    if ( j < 10)reserve[j] = arr[i];
+  }
+/*  for (i = 0; i < 10; i++)
+  {
+    cout << "[" << reserve[i].key << "," << reserve[i].data << "] ";
+  }*/
+  cout << endl << " Performed reservoir sampling to fetch 10 elements from List1 " << endl;
+  binarySearchTree* mybst5 = new binarySearchTree();
+  mybst5->resetCounter();
+  for (i = 0; i < 10;i++)
+    mybst5->insertIntoBst(new node(reserve[i]));
+
+  cout << "Inorder traversal before removing root" << endl;
+  mybst5->printInorderTree(mybst5->root);
+  remove("5a.dot");
+  fstream fsa5;
+  fsa5.open("5a.dot", std::fstream::in|std::fstream::out|std::fstream::app);
+  mybst5->ss << "digraph G { " << endl;
+  mybst5->showDotFile(mybst5->root);
+  mybst5->ss <<  "}" << endl; 
+  fsa5 << mybst5->ss.str() ;
+  fsa5.close();
+  cout << endl << mybst5->ss.str() << endl;
+//  mybst5->ss.str(std::string());
+//  mybst5->ss.empty();
+  mybst5->ss.str("");
+
+  cout << endl << "Deleting the root node" << endl;
+  mybst5->root = mybst5->deleteBstNode(mybst5->root, reserve[0]);
+  cout << endl << "Inorder traversal after removing root" << endl;
+  mybst5->printInorderTree(mybst5->root);
+  remove("5b.dot");
+  fstream fsb5;
+  fsb5.open("5b.dot", std::fstream::in|std::fstream::out|std::fstream::app);
+  mybst5->ss << "digraph G { " << endl;
+  mybst5->showDotFile(mybst5->root);
+  mybst5->ss <<  "}" << endl; 
+  fsb5 << mybst5->ss.str() ;
+  fsb5.close();
+  cout << endl << mybst5->ss.str() << endl;
+
+  cout << endl << endl << "*****End of Testcase5 Execution*****" << endl << endl;
+}
+
+void testcase4()
+{
+  kdSearchTree* mykd4 = new kdSearchTree();
+  mykd4->resetCounter();
+  kdElem elem;
+  cout << endl << endl << "*****Begin of Testcase4 Execution*****" << endl << endl;
+  srand(time(NULL));
+  elem.arr[0] = 0, elem.arr[1]=0, elem.data = 0;
+  cout << "----------------------------------------------------------------------" << endl;
+  cout << "n = No. of Nodes in the tree    Height of BST T4      lg n    sqrt(n) " << endl;
+  cout << "----------------------------------------------------------------------" << endl;
+  for (int i = 0; i<= 200; i++)
+  {
+    elem.arr[0] = (rand()%50);
+    elem.arr[1] = (rand()%50);
+    elem.data = i;
+    if (i % 20 == 0)
+    {
+      cout.width(28); cout << i;
+      cout.width(20);cout << mykd4->heightOfKdTree(mykd4->root);
+      cout.width(10);((i == 0) ? cout << "N.A." : cout << log(i));
+      cout.width(11);cout << sqrt(i) << endl;
+    }
+    mykd4->insertIntoKdTree(new Knode(elem)); 
+  }
+  cout << endl << endl << "*****End of Testcase4 Execution*****" << endl << endl;
+}
+
+void testcase3()
+{
+/*  wchar_t *sqrootsymbol = (wchar_t *)calloc(20, sizeof(wchar_t));
+  strcpy(sqrootsymbol, (wchar_t *)"\u221A");*/
+//  wchar_t *sym = L"221A";
+//  wstring ws(L"221A");
+//  string sqrtsym(ws.begin(), ws.end());
+  cout << endl << endl << "*****Begin of Testcase3 Execution*****" << endl << endl;
+  cout << "----------------------------------------------------------------------" << endl;
+  cout << "n = No. of Nodes in the tree    Height of BST T3      lg n    sqrt(n) " << endl;
+  cout << "----------------------------------------------------------------------" << endl;
+  binarySearchTree* mybst3 = new binarySearchTree();
+  mybst3->resetCounter();
+  bstElem elem = {0,0};
+  for (int i = 0; i <= 200; i++)
+  {
+    if (i % 20 == 0)
+    {
+      cout.width(28); cout << i;
+      cout.width(20);cout << mybst3->heightOfBST(mybst3->root);
+      cout.width(10);((i == 0) ? cout << "N.A." : cout << log(i));
+      cout.width(11);cout << sqrt(i) << endl;
+    }
+    elem.key = rand();
+    elem.data++;
+    mybst3->insertIntoBst(new node(elem));
+  }
+  cout << endl << endl << "*****End of Testcase3 Execution*****" << endl << endl;
+}
+
+void testcase2()
+{
+  kdSearchTree* mykd2 = new kdSearchTree();
+  mykd2->resetCounter();
+  cout << endl << endl << "*****Begin of Testcase2 Execution*****" << endl << endl;
+  kdElem store[16];
+  store[0].arr[0] = 0  , store[0].arr[1] = 500 - store[0].arr[0], store[0].data = 0;
+  store[1].arr[0] = 500, store[1].arr[1] = 500 - store[1].arr[0], store[1].data = 1;
+  for (int i = 2; i <= 15; i++)
+  {
+    /* New x value of element is the floor of
+     average of previous two x elements 
+     and y value is always 500 - xvalue as per test case */
+    store[i].arr[0] = (store[i-1].arr[0] + store[i-2].arr[0])/2;
+    store[i].arr[1] = 500 - store[i].arr[0];
+    store[i].data = i;
+  }
+  for (int i = 0; i <= 15; i++)
+  {
+    mykd2->insertIntoKdTree(new Knode(store[i]));
+  }
+  cout << "print inorder traversal " << endl;
+  mykd2->printInorderKdTree(mykd2->root);
+  cout << endl << "end of inorder traversal " << endl;
+  mykd2->ss << "digraph G { " << endl;
+  mykd2->showDotFile(mykd2->root);
+  mykd2->ss <<  "}" << endl; 
+  remove("t2.dot");
+  fstream fs2;
+  fs2.open("t2.dot", std::fstream::in|std::fstream::out|std::fstream::app);
+  fs2 << mykd2->ss.str() ;
+  fs2.close();
+  cout << endl << mykd2->ss.str() << endl;
+
+  cout << endl << endl << "*****End of Testcase2 Execution*****" << endl << endl;
+}
+
+void testcase1()
+{
+  binarySearchTree* mybst1 = new binarySearchTree();
+  mybst1->resetCounter();
+  cout << endl << endl << "*****Begin of Testcase1 Execution*****" << endl << endl;
+  /* Insert elements for n=0,1*/
+  bstElem arr[16];
+  int first = 0, last = 1000, i;
+  arr[0].key = first, arr[0].data = 0;
+  arr[1].key = last, arr[1].data = 1;
+  for (i = 2; i <= 15; i++)
+  {
+    arr[i].key  = (arr[i-1].key + arr[i-2].key)/2;
+    arr[i].data = i;
+  }
+  for (int i = 0; i <= 15; i++)
+  {
+    mybst1->insertIntoBst(new node(arr[i]));
+  }
+//  cout << "print inorder traversal " << endl;
+  mybst1->printInorderTree(mybst1->root);
+//  cout << endl << "end of inorder traversal " << endl;
+  mybst1->ss << "digraph G { " << endl;
+//  cout << endl << mybst1->ss.str() << endl;
+  mybst1->showDotFile(mybst1->root);
+  mybst1->ss <<  "}" << endl; 
+  remove("t1.dot");
+  fstream fs1;
+  fs1.open("t1.dot", std::fstream::in|std::fstream::out|std::fstream::app);
+  fs1 << mybst1->ss.str() ;
+  fs1.close();
+  cout << endl << mybst1->ss.str() << endl;
+//  cout << endl << mybst1->ss.rdbuf() << endl;
+  cout << endl << endl << "*****End of Testcase1 Execution*****" << endl << endl;
+}
+
+int main()
+{
+  testcase1();
+  testcase2();
+  testcase3();
+  testcase4();
+  testcase5();
+  testcase6();
+  testcase7();
+  testcase8();
+ // testcase9();
+}
+
+
+*****Begin of Testcase1 Execution*****
+
+[0, 0] [500, 2] [625, 4] [656, 6] [663, 8] [665, 15] [665, 14] [665, 13] [665, 12] [665, 10] [666, 11] [667, 9] [671, 7] [687, 5] [750, 3] [1000, 1] 
+digraph G { 
+null0[shape=point];
+   "0,0" -> null0 ;
+   "0,0" -> "1000,1";
+   "1000,1" -> "500,2";
+null1[shape=point];
+   "500,2" -> null1 ;
+   "500,2" -> "750,3";
+   "750,3" -> "625,4";
+null2[shape=point];
+   "625,4" -> null2 ;
+   "625,4" -> "687,5";
+   "687,5" -> "656,6";
+null3[shape=point];
+   "656,6" -> null3 ;
+   "656,6" -> "671,7";
+   "671,7" -> "663,8";
+null4[shape=point];
+   "663,8" -> null4 ;
+   "663,8" -> "667,9";
+   "667,9" -> "665,10";
+   "665,10" -> "665,12";
+   "665,12" -> "665,13";
+   "665,13" -> "665,14";
+   "665,14" -> "665,15";
+null5[shape=point];
+   "665,15" -> null5 ;
+null6[shape=point];
+   "665,15" -> null6 ;
+null7[shape=point];
+   "665,14" -> null7 ;
+null8[shape=point];
+   "665,13" -> null8 ;
+null9[shape=point];
+   "665,12" -> null9 ;
+   "665,10" -> "666,11";
+null10[shape=point];
+   "666,11" -> null10 ;
+null11[shape=point];
+   "666,11" -> null11 ;
+null12[shape=point];
+   "667,9" -> null12 ;
+null13[shape=point];
+   "671,7" -> null13 ;
+null14[shape=point];
+   "687,5" -> null14 ;
+null15[shape=point];
+   "750,3" -> null15 ;
+null16[shape=point];
+   "1000,1" -> null16 ;
+}
+
+
+
+*****End of Testcase1 Execution*****
+
+
+
+*****Begin of Testcase2 Execution*****
+
+print inorder traversal 
+[0,500,0] [500,0,1] [250,250,2] [375,125,3] [312,188,4] [343,157,5] [327,173,6] [335,165,7] [331,169,8] [333,167,9] [332,168,15] [332,168,14] [332,168,13] [332,168,12] [332,168,11] [332,168,10] 
+end of inorder traversal 
+
+digraph G { 
+null0[shape=point];
+   "0,500,0" -> null0 ;
+   "0,500,0" -> "500,0,1";
+null1[shape=point];
+   "500,0,1" -> null1 ;
+   "500,0,1" -> "250,250,2";
+null2[shape=point];
+   "250,250,2" -> null2 ;
+   "250,250,2" -> "375,125,3";
+null3[shape=point];
+   "375,125,3" -> null3 ;
+   "375,125,3" -> "312,188,4";
+null4[shape=point];
+   "312,188,4" -> null4 ;
+   "312,188,4" -> "343,157,5";
+null5[shape=point];
+   "343,157,5" -> null5 ;
+   "343,157,5" -> "327,173,6";
+null6[shape=point];
+   "327,173,6" -> null6 ;
+   "327,173,6" -> "335,165,7";
+null7[shape=point];
+   "335,165,7" -> null7 ;
+   "335,165,7" -> "331,169,8";
+null8[shape=point];
+   "331,169,8" -> null8 ;
+   "331,169,8" -> "333,167,9";
+null9[shape=point];
+   "333,167,9" -> null9 ;
+   "333,167,9" -> "332,168,10";
+   "332,168,10" -> "332,168,11";
+   "332,168,11" -> "332,168,12";
+   "332,168,12" -> "332,168,13";
+   "332,168,13" -> "332,168,14";
+   "332,168,14" -> "332,168,15";
+null10[shape=point];
+   "332,168,15" -> null10 ;
+null11[shape=point];
+   "332,168,15" -> null11 ;
+null12[shape=point];
+   "332,168,14" -> null12 ;
+null13[shape=point];
+   "332,168,13" -> null13 ;
+null14[shape=point];
+   "332,168,12" -> null14 ;
+null15[shape=point];
+   "332,168,11" -> null15 ;
+null16[shape=point];
+   "332,168,10" -> null16 ;
+}
+
+
+
+*****End of Testcase2 Execution*****
+
+
+
+*****Begin of Testcase3 Execution*****
+
+----------------------------------------------------------------------
+n = No. of Nodes in the tree    Height of BST T3      lg n    sqrt(n) 
+----------------------------------------------------------------------
+                           0                  -1      N.A.          0
+                          20                   7   2.99573    4.47214
+                          40                   8   3.68888    6.32456
+                          60                  11   4.09434    7.74597
+                          80                  12   4.38203    8.94427
+                         100                  13   4.60517         10
+                         120                  13   4.78749    10.9545
+                         140                  14   4.94164    11.8322
+                         160                  14   5.07517    12.6491
+                         180                  14   5.19296    13.4164
+                         200                  14   5.29832    14.1421
+
+
+*****End of Testcase3 Execution*****
+
+
+
+*****Begin of Testcase4 Execution*****
+
+----------------------------------------------------------------------
+n = No. of Nodes in the tree    Height of BST T4      lg n    sqrt(n) 
+----------------------------------------------------------------------
+                           0                  -1      N.A.          0
+                          20                   7   2.99573    4.47214
+                          40                   9   3.68888    6.32456
+                          60                   9   4.09434    7.74597
+                          80                  11   4.38203    8.94427
+                         100                  12   4.60517         10
+                         120                  13   4.78749    10.9545
+                         140                  13   4.94164    11.8322
+                         160                  13   5.07517    12.6491
+                         180                  13   5.19296    13.4164
+                         200                  14   5.29832    14.1421
+
+
+*****End of Testcase4 Execution*****
+
+
+
+*****Begin of Testcase5 Execution*****
+
+
+ Performed reservoir sampling to fetch 10 elements from List1 
+Inorder traversal before removing root
+[0, 0] [500, 2] [656, 6] [663, 8] [665, 14] [665, 12] [665, 10] [665, 15] [687, 5] [1000, 1] 
+digraph G { 
+null0[shape=point];
+   "0,0" -> null0 ;
+   "0,0" -> "1000,1";
+   "1000,1" -> "500,2";
+null1[shape=point];
+   "500,2" -> null1 ;
+   "500,2" -> "665,15";
+   "665,15" -> "665,10";
+   "665,10" -> "656,6";
+null2[shape=point];
+   "656,6" -> null2 ;
+   "656,6" -> "665,12";
+   "665,12" -> "663,8";
+null3[shape=point];
+   "663,8" -> null3 ;
+   "663,8" -> "665,14";
+null4[shape=point];
+   "665,14" -> null4 ;
+null5[shape=point];
+   "665,14" -> null5 ;
+null6[shape=point];
+   "665,12" -> null6 ;
+null7[shape=point];
+   "665,10" -> null7 ;
+   "665,15" -> "687,5";
+null8[shape=point];
+   "687,5" -> null8 ;
+null9[shape=point];
+   "687,5" -> null9 ;
+null10[shape=point];
+   "1000,1" -> null10 ;
+}
+
+
+Deleting the root node
+
+Inorder traversal after removing root
+[500, 2] [656, 6] [663, 8] [665, 14] [665, 12] [665, 10] [665, 15] [687, 5] [1000, 1] 
+digraph G { 
+   "1000,1" -> "500,2";
+null11[shape=point];
+   "500,2" -> null11 ;
+   "500,2" -> "665,15";
+   "665,15" -> "665,10";
+   "665,10" -> "656,6";
+null12[shape=point];
+   "656,6" -> null12 ;
+   "656,6" -> "665,12";
+   "665,12" -> "663,8";
+null13[shape=point];
+   "663,8" -> null13 ;
+   "663,8" -> "665,14";
+null14[shape=point];
+   "665,14" -> null14 ;
+null15[shape=point];
+   "665,14" -> null15 ;
+null16[shape=point];
+   "665,12" -> null16 ;
+null17[shape=point];
+   "665,10" -> null17 ;
+   "665,15" -> "687,5";
+null18[shape=point];
+   "687,5" -> null18 ;
+null19[shape=point];
+   "687,5" -> null19 ;
+null20[shape=point];
+   "1000,1" -> null20 ;
+}
+
+
+
+*****End of Testcase5 Execution*****
+
+
+
+*****Begin of Testcase6 Execution*****
+
+
+reserve array is 
+[0,500,0][500,0,1][250,250,2][375,125,3][332,168,14][332,168,10][327,173,6][332,168,15][332,168,11][333,167,9]
+print inorder traversal before deletion 
+[0,500,0] [500,0,1] [250,250,2] [375,125,3] [332,168,11] [332,168,15] [332,168,10] [327,173,6] [332,168,14] [333,167,9] 
+end of inorder traversal before deletion 
+
+digraph G { 
+null0[shape=point];
+   "0,500,0" -> null0 ;
+   "0,500,0" -> "500,0,1";
+null1[shape=point];
+   "500,0,1" -> null1 ;
+   "500,0,1" -> "250,250,2";
+null2[shape=point];
+   "250,250,2" -> null2 ;
+   "250,250,2" -> "375,125,3";
+null3[shape=point];
+   "375,125,3" -> null3 ;
+   "375,125,3" -> "332,168,14";
+   "332,168,14" -> "332,168,10";
+   "332,168,10" -> "332,168,15";
+   "332,168,15" -> "332,168,11";
+null4[shape=point];
+   "332,168,11" -> null4 ;
+null5[shape=point];
+   "332,168,11" -> null5 ;
+null6[shape=point];
+   "332,168,15" -> null6 ;
+   "332,168,10" -> "327,173,6";
+null7[shape=point];
+   "327,173,6" -> null7 ;
+null8[shape=point];
+   "327,173,6" -> null8 ;
+   "332,168,14" -> "333,167,9";
+null9[shape=point];
+   "333,167,9" -> null9 ;
+null10[shape=point];
+   "333,167,9" -> null10 ;
+}
+
+Deleting the root node.. 
+print inorder traversal after deletion 
+[250,250,2] [500,0,1] [327,173,6] [375,125,3] [332,168,11] [332,168,15] [332,168,10] [332,168,14] [333,167,9] 
+digraph G { 
+null11[shape=point];
+   "250,250,2" -> null11 ;
+   "250,250,2" -> "500,0,1";
+null12[shape=point];
+   "500,0,1" -> null12 ;
+   "500,0,1" -> "327,173,6";
+null13[shape=point];
+   "327,173,6" -> null13 ;
+   "327,173,6" -> "375,125,3";
+null14[shape=point];
+   "375,125,3" -> null14 ;
+   "375,125,3" -> "332,168,14";
+   "332,168,14" -> "332,168,10";
+   "332,168,10" -> "332,168,15";
+   "332,168,15" -> "332,168,11";
+null15[shape=point];
+   "332,168,11" -> null15 ;
+null16[shape=point];
+   "332,168,11" -> null16 ;
+null17[shape=point];
+   "332,168,15" -> null17 ;
+null18[shape=point];
+   "332,168,10" -> null18 ;
+   "332,168,14" -> "333,167,9";
+null19[shape=point];
+   "333,167,9" -> null19 ;
+null20[shape=point];
+   "333,167,9" -> null20 ;
+}
+
+
+end of inorder traversal after deletion 
+
+
+*****End of Testcase6 Execution*****
+
+
+
+*****Begin of Testcase7 Execution*****
+
+
+Testdata is 
+[1000,1] [500,2] [750,3] [625,4] [687,5] [656,6] [671,7] [663,8] [667,9] [665,10] [1000,11] [500,12] [750,13] [625,14] [687,15] [656,16] [671,17] [663,18] [667,19] [665,20] 
+
+print inorder traversal before deletion 
+[500, 12] [500, 2] [625, 14] [625, 4] [656, 16] [656, 6] [663, 18] [663, 8] [665, 20] [665, 10] [667, 19] [667, 9] [671, 17] [671, 7] [687, 15] [687, 5] [750, 13] [750, 3] [1000, 11] [1000, 1] 
+end of inorder traversal before deletion 
+---------------------------------------------------------------------------------
+ stage   data item at root  the root(after deletion)     search for data with key
+---------------------------------------------------------------------------------
+     0            [1000,1]                   [500,2]                    [1000,11]
+     1             [500,2]                  [625,14]                     [500,12]
+     2            [625,14]                   [625,4]                      [625,4]
+     3             [625,4]                  [656,16]                          nil
+     4            [656,16]                   [656,6]                      [656,6]
+     5             [656,6]                  [663,18]                          nil
+     6            [663,18]                   [663,8]                      [663,8]
+     7             [663,8]                  [665,20]                          nil
+     8            [665,20]                  [665,10]                     [665,10]
+     9            [665,10]                  [667,19]                          nil
+    10            [667,19]                   [667,9]                      [667,9]
+    11             [667,9]                  [671,17]                          nil
+    12            [671,17]                   [671,7]                      [671,7]
+    13             [671,7]                  [687,15]                          nil
+    14            [687,15]                   [687,5]                      [687,5]
+    15             [687,5]                  [750,13]                          nil
+    16            [750,13]                   [750,3]                      [750,3]
+    17             [750,3]                 [1000,11]                          nil
+    18           [1000,11]                  [500,12]                          nil
+    19            [500,12]                       nil                          nil
+    20                 nil                       nil                          nil
+---------------------------------------------------------------------------------
+
+
+*****End of Testcase7 Execution*****
+
+
+
+*****Begin of Testcase8 Execution*****
+
+Test data is : 
+[500,0,1][250,250,2][375,125,3][312,188,4][343,157,5][327,173,6]
+[500,165,7][250,169,8][375,167,9][312,168,10][343,168,11][327,168,12]
+[335,0,13][331,250,14][333,125,15][332,188,16][332,157,17][332,173,18]
+
+root is [500,0,1]
+Deleted the root and updated the tree
+Searching for element [0,0,0] in the tree
+ELement [0,0,0] is not found in the Kd tree
+
+root is [250,169,8]
+Deleted the root and updated the tree
+Searching for element [500,0,1] in the tree
+ELement [500,0,1] is not found in the Kd tree
+
+root is [250,250,2]
+Deleted the root and updated the tree
+Searching for element [250,250,2] in the tree
+ELement [250,250,2] is not found in the Kd tree
+
+root is [312,168,10]
+Deleted the root and updated the tree
+Searching for element [375,125,3] in the tree
+ELement [375,125,3] is present in the Kd tree
+
+root is [312,188,4]
+Deleted the root and updated the tree
+Searching for element [312,188,4] in the tree
+ELement [312,188,4] is not found in the Kd tree
+
+root is [327,168,12]
+Deleted the root and updated the tree
+Searching for element [343,157,5] in the tree
+ELement [343,157,5] is present in the Kd tree
+printing the dot file when there are 12 elements in the tree 
+
+digraph G { 
+null0[shape=point];
+   "327,173,6" -> null0 ;
+   "327,173,6" -> "335,0,13";
+null1[shape=point];
+   "335,0,13" -> null1 ;
+   "335,0,13" -> "375,125,3";
+   "375,125,3" -> "331,250,14";
+   "331,250,14" -> "343,157,5";
+   "343,157,5" -> "332,188,16";
+   "332,188,16" -> "332,157,17";
+null2[shape=point];
+   "332,157,17" -> null2 ;
+   "332,157,17" -> "332,173,18";
+   "332,173,18" -> "343,168,11";
+   "343,168,11" -> "333,125,15";
+null3[shape=point];
+   "333,125,15" -> null3 ;
+null4[shape=point];
+   "333,125,15" -> null4 ;
+null5[shape=point];
+   "343,168,11" -> null5 ;
+null6[shape=point];
+   "332,173,18" -> null6 ;
+null7[shape=point];
+   "332,188,16" -> null7 ;
+   "343,157,5" -> "375,167,9";
+null8[shape=point];
+   "375,167,9" -> null8 ;
+null9[shape=point];
+   "375,167,9" -> null9 ;
+null10[shape=point];
+   "331,250,14" -> null10 ;
+   "375,125,3" -> "500,165,7";
+null11[shape=point];
+   "500,165,7" -> null11 ;
+null12[shape=point];
+   "500,165,7" -> null12 ;
+}
+
+
+root is [327,173,6]
+Deleted the root and updated the tree
+Searching for element [327,173,6] in the tree
+ELement [327,173,6] is not found in the Kd tree
+
+root is [331,250,14]
+Deleted the root and updated the tree
+Searching for element [500,165,7] in the tree
+ELement [500,165,7] is present in the Kd tree
+
+root is [332,157,17]
+Deleted the root and updated the tree
+Searching for element [250,169,8] in the tree
+ELement [250,169,8] is not found in the Kd tree
+
+root is [332,173,18]
+Deleted the root and updated the tree
+Searching for element [375,167,9] in the tree
+ELement [375,167,9] is present in the Kd tree
+
+root is [332,188,16]
+Deleted the root and updated the tree
+Searching for element [312,168,10] in the tree
+ELement [312,168,10] is not found in the Kd tree
+
+root is [333,125,15]
+Deleted the root and updated the tree
+Searching for element [343,168,11] in the tree
+ELement [343,168,11] is present in the Kd tree
+printing the dot file when there are 6 elements in the tree 
+
+digraph G { 
+null13[shape=point];
+   "335,0,13" -> null13 ;
+   "335,0,13" -> "375,125,3";
+null14[shape=point];
+   "375,125,3" -> null14 ;
+   "375,125,3" -> "500,165,7";
+   "500,165,7" -> "343,157,5";
+null15[shape=point];
+   "343,157,5" -> null15 ;
+   "343,157,5" -> "375,167,9";
+   "375,167,9" -> "343,168,11";
+null16[shape=point];
+   "343,168,11" -> null16 ;
+null17[shape=point];
+   "343,168,11" -> null17 ;
+null18[shape=point];
+   "375,167,9" -> null18 ;
+null19[shape=point];
+   "500,165,7" -> null19 ;
+}
+
+
+root is [335,0,13]
+Deleted the root and updated the tree
+Searching for element [327,168,12] in the tree
+ELement [327,168,12] is not found in the Kd tree
+
+root is [343,168,11]
+Deleted the root and updated the tree
+Searching for element [335,0,13] in the tree
+ELement [335,0,13] is not found in the Kd tree
+
+root is [343,157,5]
+Deleted the root and updated the tree
+Searching for element [331,250,14] in the tree
+ELement [331,250,14] is not found in the Kd tree
+
+root is [375,167,9]
+Deleted the root and updated the tree
+Searching for element [333,125,15] in the tree
+ELement [333,125,15] is not found in the Kd tree
+
+root is [375,125,3]
+Deleted the root and updated the tree
+Searching for element [332,188,16] in the tree
+ELement [332,188,16] is not found in the Kd tree
+
+root is [500,165,7]
+Deleted the root and updated the tree
+Searching for element [332,157,17] in the tree
+ELement [332,157,17] is not found in the Kd tree
+
+
+*****End of Testcase8 Execution*****
+
+This file contains additional implementation details for Binary Search Tree and Kd Tree.
+
+The difference in implementation of BST and KD tree lies in considering the dimension in kd unlike BST.
+In BST tree implementation we are free to find the min in right tree or max in left sub tree. We then
+replace the root with that node and recursively go for deletion of the root.
+
+In KD tree deletion we have to pass depth parameter for search and deletion operation since we donot
+know if the required node lies in the left subtree or right subtree
+
+If the current dimension is same as to be searched node , we are sure that the node only lies to the left of 
+the tree. Otherwise we need to traverse in both the directions.
+For KD tree deletion we check the min element in the right subtree in the same dimenion.
+We then recursively delete the node in the right tree.
+If the right tree is null, we find minimum in the left tree , we then swap the left and right trees
+We perform the deletion of node in the let subtree and assign it to th right child. We then make
+the left child null. This completes the swaping of trees and deletion of nodes if the right child is null.
+
+For searching in the kdtree if the current node is in the same dimension as the node to be searched , we only traversal
+in one direction based on key value is greater or less.The bst implementation is straight forward i.e., same as kd tree but just ignore the dimension factor.
+
+
+
+digraph G { 
+null0[shape=point];
+   "0,0" -> null0 ;
+   "0,0" -> "1000,1";
+   "1000,1" -> "500,2";
+null1[shape=point];
+   "500,2" -> null1 ;
+   "500,2" -> "750,3";
+   "750,3" -> "625,4";
+null2[shape=point];
+   "625,4" -> null2 ;
+   "625,4" -> "687,5";
+   "687,5" -> "656,6";
+null3[shape=point];
+   "656,6" -> null3 ;
+   "656,6" -> "671,7";
+   "671,7" -> "663,8";
+null4[shape=point];
+   "663,8" -> null4 ;
+   "663,8" -> "667,9";
+   "667,9" -> "665,10";
+   "665,10" -> "665,12";
+   "665,12" -> "665,13";
+   "665,13" -> "665,14";
+   "665,14" -> "665,15";
+null5[shape=point];
+   "665,15" -> null5 ;
+null6[shape=point];
+   "665,15" -> null6 ;
+null7[shape=point];
+   "665,14" -> null7 ;
+null8[shape=point];
+   "665,13" -> null8 ;
+null9[shape=point];
+   "665,12" -> null9 ;
+   "665,10" -> "666,11";
+null10[shape=point];
+   "666,11" -> null10 ;
+null11[shape=point];
+   "666,11" -> null11 ;
+null12[shape=point];
+   "667,9" -> null12 ;
+null13[shape=point];
+   "671,7" -> null13 ;
+null14[shape=point];
+   "687,5" -> null14 ;
+null15[shape=point];
+   "750,3" -> null15 ;
+null16[shape=point];
+   "1000,1" -> null16 ;
+}
+digraph G { 
+null0[shape=point];
+   "0,500,0" -> null0 ;
+   "0,500,0" -> "500,0,1";
+null1[shape=point];
+   "500,0,1" -> null1 ;
+   "500,0,1" -> "250,250,2";
+null2[shape=point];
+   "250,250,2" -> null2 ;
+   "250,250,2" -> "375,125,3";
+null3[shape=point];
+   "375,125,3" -> null3 ;
+   "375,125,3" -> "312,188,4";
+null4[shape=point];
+   "312,188,4" -> null4 ;
+   "312,188,4" -> "343,157,5";
+null5[shape=point];
+   "343,157,5" -> null5 ;
+   "343,157,5" -> "327,173,6";
+null6[shape=point];
+   "327,173,6" -> null6 ;
+   "327,173,6" -> "335,165,7";
+null7[shape=point];
+   "335,165,7" -> null7 ;
+   "335,165,7" -> "331,169,8";
+null8[shape=point];
+   "331,169,8" -> null8 ;
+   "331,169,8" -> "333,167,9";
+null9[shape=point];
+   "333,167,9" -> null9 ;
+   "333,167,9" -> "332,168,10";
+   "332,168,10" -> "332,168,11";
+   "332,168,11" -> "332,168,12";
+   "332,168,12" -> "332,168,13";
+   "332,168,13" -> "332,168,14";
+   "332,168,14" -> "332,168,15";
+null10[shape=point];
+   "332,168,15" -> null10 ;
+null11[shape=point];
+   "332,168,15" -> null11 ;
+null12[shape=point];
+   "332,168,14" -> null12 ;
+null13[shape=point];
+   "332,168,13" -> null13 ;
+null14[shape=point];
+   "332,168,12" -> null14 ;
+null15[shape=point];
+   "332,168,11" -> null15 ;
+null16[shape=point];
+   "332,168,10" -> null16 ;
+}
+digraph G { 
+   "667,9" -> "500,12";
+null0[shape=point];
+   "500,12" -> null0 ;
+null1[shape=point];
+   "500,12" -> null1 ;
+   "667,9" -> "750,3";
+   "750,3" -> "687,5";
+   "687,5" -> "671,7";
+   "671,7" -> "671,17";
+null2[shape=point];
+   "671,17" -> null2 ;
+null3[shape=point];
+   "671,17" -> null3 ;
+   "671,7" -> "687,15";
+null4[shape=point];
+   "687,15" -> null4 ;
+null5[shape=point];
+   "687,15" -> null5 ;
+   "687,5" -> "750,13";
+null6[shape=point];
+   "750,13" -> null6 ;
+null7[shape=point];
+   "750,13" -> null7 ;
+   "750,3" -> "1000,11";
+null8[shape=point];
+   "1000,11" -> null8 ;
+null9[shape=point];
+   "1000,11" -> null9 ;
+}
+digraph G { 
+null0[shape=point];
+   "327,173,6" -> null0 ;
+   "327,173,6" -> "335,0,13";
+null1[shape=point];
+   "335,0,13" -> null1 ;
+   "335,0,13" -> "375,125,3";
+   "375,125,3" -> "331,250,14";
+   "331,250,14" -> "343,157,5";
+   "343,157,5" -> "332,188,16";
+   "332,188,16" -> "332,157,17";
+null2[shape=point];
+   "332,157,17" -> null2 ;
+   "332,157,17" -> "332,173,18";
+   "332,173,18" -> "343,168,11";
+   "343,168,11" -> "333,125,15";
+null3[shape=point];
+   "333,125,15" -> null3 ;
+null4[shape=point];
+   "333,125,15" -> null4 ;
+null5[shape=point];
+   "343,168,11" -> null5 ;
+null6[shape=point];
+   "332,173,18" -> null6 ;
+null7[shape=point];
+   "332,188,16" -> null7 ;
+   "343,157,5" -> "375,167,9";
+null8[shape=point];
+   "375,167,9" -> null8 ;
+null9[shape=point];
+   "375,167,9" -> null9 ;
+null10[shape=point];
+   "331,250,14" -> null10 ;
+   "375,125,3" -> "500,165,7";
+null11[shape=point];
+   "500,165,7" -> null11 ;
+null12[shape=point];
+   "500,165,7" -> null12 ;
+}
+digraph G { 
+null13[shape=point];
+   "335,0,13" -> null13 ;
+   "335,0,13" -> "375,125,3";
+null14[shape=point];
+   "375,125,3" -> null14 ;
+   "375,125,3" -> "500,165,7";
+   "500,165,7" -> "343,157,5";
+null15[shape=point];
+   "343,157,5" -> null15 ;
+   "343,157,5" -> "375,167,9";
+   "375,167,9" -> "343,168,11";
+null16[shape=point];
+   "343,168,11" -> null16 ;
+null17[shape=point];
+   "343,168,11" -> null17 ;
+null18[shape=point];
+   "375,167,9" -> null18 ;
+null19[shape=point];
+   "500,165,7" -> null19 ;
+}

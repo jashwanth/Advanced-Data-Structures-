@@ -1,0 +1,332 @@
+--------------------------------Test case 1--------------------------------------------------
+generated dot file after 10 random vetex inserion 1a.dot and png 1a.png
+generated dot file after 20 random vetex inserion 1b.dot and png 1b.png
+
+
+
+
+generated dot file after 20 edges (1,2), .., (i,i+1), ... , (19,20), (20, 1)edges  1c.dot and png 1c.png
+
+
+
+
+
+generated dot file after 20 edges (1,3), .., (i,i+2), ... , (18,20), (19, 1), (20, 2)edges  1d.dot and png 1d.png
+Deleted edges and generating 1edot and 1e.png
+
+
+
+--------------------------------Test case 2--------------------------------------------------
+generated dot file after 10 random vetex inserion 2a.dot and png 2a.png
+generated dot file after 20 random vetex inserion 2b.dot and png 2b.png
+
+
+
+
+
+
+generated dot file after 20 edges (1,2), .., (i,i+1), ... , (19,20), (20, 1)edges  2c.dot and png 2c.png
+
+
+
+
+
+
+
+generated dot file after 20 edges (1,3), .., (i,i+2), ... , (18,20), (19, 1), (20, 2)edges  2d.dot and png 2d.png
+Deleted edges and generating 2e.dot and 2e.png
+
+
+
+------------------------Test case 3-----------------------------
+generated dot file after reading csv  : 3a.dot and png 3a.png
+
+
+
+
+
+
+generated dot file after adding random n edges   : 3b.dot and png 3b.png
+
+
+
+
+
+------------------------Test case 4-----------------------------
+generated dot file after reading directed csv  : 4a.dot and png 4a.png
+
+
+
+
+
+
+
+generated dot file after adding random n edges   : 4b.dot and png 4b.png
+
+
+
+
+
+
+
+
+
+
+generated dot file after deleting random n edges   : 4c.dot and png 4c.png
+
+-----------------------Test case 5--------------------------------------------------
+For unfirected weighted graph
+selected Vertex 6 as source and the shortest distance are as below
+Vertex   Distance from Source
+1                1
+2                3
+3                3
+4                3
+5                2
+7                5
+8                3
+9                2
+10               3
+11               3
+12               2
+13               2
+14               5
+15               1
+16               3
+17               4
+18               3
+19               3
+20               3
+removing all edges to 5
+Vertex   Distance from Source
+1                1
+2                3
+3                3
+4                3
+5                2
+7                5
+8                3
+9                2
+10               3
+11               3
+12               2
+13               2
+14               5
+15               1
+16               3
+17               4
+18               3
+19               3
+20               3
+---------------------------Test case 6 directed graph --------------------------------------------------
+For directed weighted graph
+selected Vertex 6 as source and the shortest distance are as below
+Vertex   Distance from Source
+1               4
+2               2
+3               3
+4               4
+5               3
+7               2
+8               3
+9               2
+10              1
+11              2
+12              3
+13              2
+14              3
+15              1
+16              2
+17              5
+18              3
+19              4
+20              3
+removing all edges to 5 and showing infinite value to 5 since no edges to it
+Vertex   Distance from Source
+1               4
+2               2
+3               3
+4               4
+5               2147483647
+7               2
+8               3
+9               2
+10              1
+11              2
+12              3
+13              2
+14              3
+15              1
+16              2
+17              5
+18              3
+19              4
+20              3
+
+
+---------------------------Test case 7 undirected graph --------------------------------------------------
+For undirected weighted graph
+selected Vertex 8 as source and  shortest path to other vertices are as below
+
+Vertex1:                        8<---4<---12<---
+
+Vertex2:                        8<---
+
+Vertex3:                        8<---9<---
+
+Vertex4:                        8<---
+
+Vertex5:                        8<---16<---
+
+Vertex6:                        8<---11<---15<---
+
+Vertex7:                        8<---11<---
+
+Vertex9:                        8<---
+
+Vertex10:                       8<---11<---9<---
+
+Vertex11:                       8<---
+
+Vertex12:                       8<---11<---
+
+Vertex13:                       8<---11<---
+
+Vertex14:                       8<---2<---10<---
+
+Vertex15:                       8<---9<---
+
+Vertex16:                       8<---11<---
+
+Vertex17:                       8<---4<---19<---
+
+Vertex18:                       8<---
+
+Vertex19:                       8<---20<---
+
+Vertex20:                       8<---9<---2<---
+removing 1/4[E] and resulting paths are as below
+
+Vertex1:                        8<---4<---12<---
+
+Vertex2:                        8<---
+
+Vertex3:                        8<---9<---
+
+Vertex4:                        8<---
+
+Vertex5:                        8<---16<---
+
+Vertex6:                        8<---11<---15<---
+
+Vertex7:                        8<---11<---
+
+Vertex9:                        8<---
+
+Vertex10:                       8<---11<---9<---
+
+Vertex11:                       8<---
+
+Vertex12:                       8<---11<---
+
+Vertex13:                       8<---11<---
+
+Vertex14:                       8<---2<---10<---
+
+Vertex15:                       8<---9<---
+
+Vertex16:                       8<---11<---
+
+Vertex17:                       8<---4<---19<---
+
+Vertex18:                       8<---
+
+Vertex19:                       8<---20<---
+
+Vertex20:                       8<---9<---2<---
+
+---------------------------Test case 8 directed graph --------------------------------------------------
+For directed weighted graph
+selected Vertex 15 as source and  shortest path to other vertices are as below
+
+Vertex1:                        15<---13<---2<---
+
+Vertex2:                        15<---
+
+Vertex3:                        15<---
+
+Vertex4:                        15<---9<---
+
+Vertex5:                        15<---9<---
+
+Vertex6:                        15<---
+
+Vertex7:                        15<---
+
+Vertex8:                        15<---2<---
+
+Vertex9:                        15<---
+
+Vertex10:                       15<---13<---7<---
+
+Vertex11:                       15<---9<---
+
+Vertex12:                       15<---7<---
+
+Vertex13:                       15<---
+
+Vertex14:                       15<---13<---
+
+Vertex16:                       15<---
+
+Vertex17:                       15<---13<---5<---
+
+Vertex18:                       15<---13<---
+
+Vertex19:                       15<---13<---
+
+Vertex20:                       15<---13<---
+removing 1/4[E] and resulting paths are as below
+
+Vertex1:                        15<---13<---2<---
+
+Vertex2:                        15<---
+
+Vertex3:                        15<---
+
+Vertex4:                        15<---9<---
+
+Vertex5:                        15<---9<---
+
+Vertex6:                        15<---
+
+Vertex7:                        15<---
+
+Vertex8:                        15<---2<---
+
+Vertex9:                        15<---
+
+Vertex10:                       15<---13<---7<---
+
+Vertex11:                       15<---9<---
+
+Vertex12:                       15<---7<---
+
+Vertex13:                       15<---
+
+Vertex14:                       15<---13<---
+
+Vertex16:                       15<---
+
+Vertex17:                       15<---13<---5<---
+
+Vertex18:                       15<---13<---
+
+Vertex19:                       15<---13<---
+
+Vertex20:                       15<---13<---
+
+---------------------------Test case 9 undirected graph --------------------------------------------------
+generated dot file 9.dot and png 9.png
+---------------------------Test case 10 directed graph --------------------------------------------------
+generated dot file 10.dot and png 10.png

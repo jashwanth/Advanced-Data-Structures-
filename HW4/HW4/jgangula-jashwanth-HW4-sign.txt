@@ -1,0 +1,1488 @@
+U,r,s,t,u,v,w,x,y
+r,0,1,0,0,1,0,0,0
+s,1,0,0,0,0,1,0,0
+t,0,0,0,1,0,1,1,0
+u,0,0,1,0,0,0,1,1
+v,1,0,0,0,0,0,0,0
+w,0,1,1,0,0,0,1,0
+x,0,0,1,1,0,1,0,1
+y,0,0,0,1,0,0,1,0
+D,1,2,3,4,5,6
+1,0,1,0,1,0,0
+2,0,0,0,0,1,0
+3,0,0,0,0,1,1
+4,0,1,0,0,0,0
+5,0,0,0,1,0,0
+6,0,0,0,0,0,1
+D,s,t,x,y,z
+s,0,1,0,1,0
+t,0,0,1,1,0
+x,0,0,0,0,1
+y,0,1,1,0,1
+z,1,0,1,0,0
+W,s,t,x,y,z
+s,-1,10,-1,5,-1
+t,-1,-1,1,2,-1
+x,-1,-1,-1,-1,4
+y,-1,3,9,-1,2
+z,7,-1,6,-1,-1
+#include "graph.h"
+#include <string>
+using namespace std;
+#define left(i)   2*i+1
+#define right(i)  (2*i+2)
+
+/* parent index of a node */
+#define parent(i) ((i % 2 == 0) ? (i-1)/2 : i/2)
+
+
+void graph::initarr()
+{
+  for (int i = 0; i < count; i++)
+  {
+    arr[i].vertex = vname(i+1);
+    // a very large int 
+    arr[i].key    = 100000;
+  }
+}
+
+void graph::percolateDown(int index, int size)
+{
+  if (index >= size)
+    return;
+  int leftInd = left(index);
+  int rightInd = right(index);
+  int smaller = index;
+  if ((leftInd < size) && (arr[index].key > arr[leftInd].key))
+  { 
+    smaller = leftInd;
+  }
+  if ((rightInd < size) && (arr[smaller].key > arr[rightInd].key))
+  {
+    smaller = rightInd;
+  }
+  swapnodes(index, smaller);
+  if (index != smaller)
+  {
+     percolateDown(smaller, size);
+  }
+}
+
+void graph::swapnodes(int index1, int index2)
+{
+  graphedge swap;
+  swap.vertex = arr[index1].vertex;
+  swap.key   = arr[index1].key;
+  swap.pred  = arr[index1].pred;
+  arr[index1].vertex = arr[index2].vertex;
+  arr[index1].key    = arr[index2].key;
+  arr[index1].pred   = arr[index2].pred;
+  arr[index2].vertex = swap.vertex;
+  arr[index2].key    = swap.key;
+  arr[index2].pred   = swap.pred;
+}
+
+void graph::minheapify(int index)
+{
+  if (index < 0)
+    return;
+  int parentInd = parent(index);
+  /* Swap the parent with greater of the two children */
+  if ((parentInd >= 0) && (arr[parentInd].key > arr[index].key))
+  {
+    swapnodes(parentInd, index);
+    minheapify(parentInd);
+  }
+}
+
+int graph::findarrIndex(string vertex, int size)
+{
+  for (int i = 0; i< size ; i++)
+  {
+    if (arr[i].vertex.compare(vertex) == 0)
+      return i;
+  }
+  return -1;
+}
+
+void graph::updateDistance(string vertex, int val, int size, string pred)
+{
+  int i = findarrIndex(vertex,  size);
+  if ( i == -1)
+  {
+//    cout << vertex << " Vertex not found: " << endl;
+    return;
+  }
+  if (arr[i].key > val)
+  {
+    arr[i].key = val;
+    arr[i].pred = pred;
+    minheapify(i);
+  }
+}
+
+void graph::printpath(string vertex)
+{
+   int index = findarrIndex(vertex, count);
+   if (arr[index].vertex.compare("invalid") == 0)
+     return;
+   if (arr[index].pred.compare("invalid") == 0)
+   {
+     cout << arr[index].vertex << "--->";
+     return;
+   }
+   printpath(arr[index].pred);
+   cout << arr[index].vertex << "--->";
+}
+
+void graph::printdistarr()
+{
+  for (int i = 0; i < count; i++)
+  {
+    printpath(arr[i].vertex);
+    cout << endl << "vertex = " << arr[i].vertex << "Distance = " << arr[i].key << "pred = " << arr[i].pred << endl;
+  }
+}
+
+void graph::dijkstra(string vertex)
+{
+  int index;
+  if (mv.find(vertex) != mv.end())
+    index = mv.find(vertex)->second;
+  else
+  { 
+    return;
+  }
+
+  // cout << endl << "Dijkstra for vertex " << vertex << " " << index << endl;
+  /* start vertex weight as zero */
+  int size = count;
+  updateDistance(vertex, 0, size, "invalid");
+  while (size > 0)
+  {
+    int index = mv.find(arr[0].vertex)->second;
+    int w1   = arr[0].key;
+    swapnodes(0,size-1);
+    size--;
+    percolateDown(0, size);
+    for (vector<edge>::iterator it1  = adjList[index].begin(); it1 !=  adjList[index].end(); it1++)
+    {
+      int index2 = it1->v;
+      int weight = it1->w + w1;
+      updateDistance(vname(index2), weight, size, vname(index));
+    }
+//  minheapify(arr, );
+  }
+//  printdistarr();
+/*  if (i == index)
+  {
+    cout << "found the vertex index " << index << endl;
+    mindist[i].dist = 0;
+  } */
+}
+
+void graph::insertvertex(string str)
+{
+  if (mv.find(str) != mv.end())
+  {
+    cout << "Vertext already exists in the graph" << endl;
+    return;
+  }
+  count++;
+  mv.insert(std::pair<string,int>(str,count));
+}
+
+void graph::removeedge(string str1, string str2, int weight)
+{
+  int index1 = mv[str1];
+  int index2 = mv[str2];
+  for(vector<edge>::iterator e  = adjList[index1].begin(); e != adjList[index1].end(); e++)
+  {
+    if (e->v == index2)
+    {
+      adjList[index1].erase(e);
+      return;
+    }
+  }
+}
+
+void graph::insertedge(string str1, string str2, int weight)
+{
+  if (mv.find(str1) == mv.end())
+  {
+    insertvertex(str1);
+  }
+  if (mv.find(str2) == mv.end())
+  {
+    insertvertex(str2);
+  }
+  int index1 = mv[str1];
+  int index2 = mv[str2];
+  adjList[index1].push_back(edge(index2, weight));
+}
+
+void graph::removevertex(string str)
+{
+  if (mv.find(str) == mv.end())
+  {
+    cout << "cannot find the vertex " << str << "in the graph" << endl;
+    return;
+  }
+  int index = mv[str];
+
+  for(vector<edge>::iterator it1  = adjList[index].begin(); it1 !=  adjList[index].end(); )
+  {
+    /* undirected graph remove both the edges */
+    if (flag == 0)
+    {
+      int index2 = it1->v;
+      for(vector<edge>::iterator it2  = adjList[index2].begin(); it2 !=  adjList[index2].end(); it2++)
+      {
+        if (it2->v == index)
+        {
+	 // edge e1(adjList[index2][f].vertex(), adjList[index2][f].weight());
+          adjList[index2].erase(it2);
+	  break;
+        }
+      }
+    }
+//    edge e2(adjList[index][e].vertex(), adjList[index][e].weight());
+    it1 = adjList[index].erase(it1);
+  }
+  /* Remove incoming edges to the vertex */
+  if (flag == 1)
+  {
+    for (std::map<string,int>::iterator item = mv.begin(); item != mv.end(); item++)
+    {
+      for(vector<edge>::iterator ite  = adjList[item->second].begin(); ite != adjList[item->second].end(); ite++)
+      {
+	if (ite->v == index)
+        {
+          adjList[item->second].erase(ite);
+	  break;
+        }
+      }
+    }
+  }
+  /* We have removed all the relevant edges 
+   Now remove the vertex too */
+  mv.erase(mv.find(str));
+  count--;
+}
+
+/*void graph::removeedge(int index1, int index2)
+{
+  for(vector<edge>::iterator e  = adjList[index1].begin(); e != adjList[index1].end(); e++)
+  {
+    if (e->v == index2)
+    {
+//      edge e3(adjList[index1][e].vertex(), adjList[index1][e].weight());
+      adjList[index1].erase(e);
+      return;
+    }
+  }
+}*/
+
+/*void graph::updatecolorflag(string vertex1, string vertex2)
+{
+  int index = mv[str];
+
+  for(vector<edge>::iterator it  = adjList[index].begin(); it1 !=  adjList[index].end(); )
+  {
+    
+  }
+}*/
+
+void graph::createcolorfile(string name)
+{
+  stringstream ss;
+  string arrow, str1, str2;
+  /* undirected graph */
+  if (flag == 0)
+  {
+    arrow = "--";
+    ss << " strict graph {  \n node [shape= ellipse];\n";
+  }
+  else
+  {
+    arrow = "->";
+    ss << " strict digraph {  \n node [shape= ellipse];\n";
+  }
+  for (std::map<string,int>::iterator it = mv.begin(); it != mv.end(); it++)
+  {
+    str1 = it->first;
+    ss << str1 << "\t";
+  }
+  for (int i = 0; i < count; i++)
+  {
+    if ((arr[i].pred.compare("invalid") == 0) || (arr[i].vertex.compare("invalid") == 0))
+    {
+      continue;
+    }
+    ss << arr[i].pred << arrow << arr[i].vertex;
+    ss << "[color=red, label=" << (arr[i].key - arr[findarrIndex(arr[i].pred, count)].key) << "];\n";
+  }
+
+  ss << endl;
+  for (std::map<string,int>::iterator i = mv.begin(); i != mv.end(); i++)
+  {
+    for(vector<edge>::size_type e  = 0; e < adjList[i->second].size(); e++)
+    {
+      str1 = i->first;
+      str2 = vname(adjList[i->second][e].vertex());
+      //	cout << ch1 << "--" << ch2 << ";\n";
+      int index2 = findarrIndex(str2, count);
+      if ((index2 != -1) && (arr[index2].pred.compare(str1) == 0))
+      {
+	continue;
+      }
+
+      ss << str1 << arrow << str2 ;
+      if ((flag == 2) || (adjList[i->second][e].weight() > 1))
+      {
+        ss << "[ label=" << adjList[i->second][e].weight() << "]";
+      }
+      ss << ";\n"; 
+    }
+  }
+  ss << "}\n";
+  fstream fs;
+  remove(name.c_str());
+  fs.open(name.c_str(), std::fstream::in|std::fstream::out|std::fstream::app);
+  fs << ss.str();
+  fs.close();
+  ss.str("");
+
+
+}
+
+void graph::createdotfile(string name)
+{
+  stringstream ss;
+  string arrow, str1, str2;
+  /* undirected graph */
+  if (flag == 0)
+  {
+    arrow = "--";
+    ss << " strict graph {  \n node [shape= ellipse];\n";
+  }
+  else
+  {
+    arrow = "->";
+    ss << " strict digraph {  \n node [shape= ellipse];\n";
+  }
+  for (std::map<string,int>::iterator it = mv.begin(); it != mv.end(); it++)
+  {
+    str1 = it->first;
+    ss << str1 << "\t";
+  }
+
+  ss << endl;
+  for (std::map<string,int>::iterator i = mv.begin(); i != mv.end(); i++)
+  {
+    for(vector<edge>::size_type e  = 0; e < adjList[i->second].size(); e++)
+    {
+      str1 = i->first;
+      str2 = vname(adjList[i->second][e].vertex());
+      //	cout << ch1 << "--" << ch2 << ";\n";
+      ss << str1 << arrow << str2 ;
+      if ((flag == 2) || (adjList[i->second][e].weight() > 1))
+      {
+        ss << "[ label=" << adjList[i->second][e].weight() << "]";
+      }
+      ss << ";\n"; 
+    }
+  }
+  ss << "}\n";
+  fstream fs;
+  remove(name.c_str());
+  fs.open(name.c_str(), std::fstream::in|std::fstream::out|std::fstream::app);
+  fs << ss.str();
+  fs.close();
+  ss.str("");
+
+}
+
+string graph::vname(int index)
+{
+  for (std::map<string,int>::iterator it = mv.begin(); it != mv.end(); it++)
+  {
+    if (it->second == index)
+      return it->first;
+  }
+/*    cout << it->first << ", " << it->second << "   ";
+  }
+  for (int i = 1; i <= count; i++)
+  {
+    if (mv[i] == index)
+    {
+      return mv[i];
+    }
+  }*/
+  return "0";
+}
+
+void graph::addWeights(string name)
+{
+  fstream f;
+  f.open(name.c_str());
+  string line;
+  getline(f, line);
+  if (line[0] == 'W')
+  {
+    /* Weighted graph */
+    flag = 2;
+  }
+  int row = 1, j = 1;
+  while (getline (f, line))
+  {
+    int val;
+    j = 1;
+    stringstream ss(line);
+    char ch;
+    ss >> ch;
+    while(ss >> ch)
+    {
+      ss >> val;
+//      cout << val << " ";
+      if (val != -1)
+      {
+	  /* find the vector<edge> corresponding to j and update weight */
+//        adjList[row][j].setWeight(val);
+	for(vector<edge>::size_type e  = 0; e < adjList[row].size(); e++)
+	{
+          if (adjList[row][e].vertex() == j)
+	  {
+	    adjList[row][e].setWeight(val);
+	    break;
+	  }
+	}
+      }
+      j++;
+    }
+    row++;
+    ss.clear();
+//    cout << endl;
+  }
+}
+
+void graph::constructGraph(string name)
+{
+   mv.clear();
+   for (int i = 0; i < adjList.size(); i++)
+   {
+     adjList[i].clear();
+   }
+   fstream f1;
+   f1.open(name.c_str());
+   string line;
+   getline(f1, line);
+   int index = 1;
+   /* Undirected graph */
+   if (line[0] == 'U')
+      flag = 0;
+   else flag = 1;
+   
+   for (int i = 1; i < line.length(); i++)
+   {
+     if (line[i] != ',')
+     {
+       string mystr;
+       mystr.push_back(line[i]);
+       mv[mystr] = index;
+       index++;
+     }
+   }
+   count = index-1;
+   int row = 1;
+   while (getline (f1, line))
+   {
+     int j = 1;
+     for (int i = 1; i < line.length(); i++)
+     {
+       if (line[i] == ',')
+         continue;
+       if (line[i] == '0')
+       {
+         j++;
+         continue;
+       }
+       adjList[row].push_back(edge(j,line[i]-48));
+       j++;
+     }
+     row++;
+   }
+   f1.close();
+}
+
+#ifndef graph_h
+#define graph_h
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <map>
+
+using namespace std;
+
+/*struct vertex
+{
+  char ch;
+  vertex* next;
+};*/
+
+class graphedge
+{
+  public:
+  string vertex;
+  /* here key is the distance/weight */
+  int key;
+  string pred;
+//  int color = 0;
+  graphedge()
+  {
+    vertex = "invalid";
+    key = 100000;
+    pred = "invalid";
+  }
+};
+
+class edge
+{
+  public:
+  int v;
+  int w;
+  edge(int vertex, int weigh)
+  {
+    v = vertex;
+    w = weigh;
+  }
+  void setWeight(int weigh)
+  {
+    w = weigh;
+  }
+  int vertex()
+  {
+    return v;
+  }
+  int weight()
+  {
+    return w;
+  }
+};
+
+class graph
+{
+  public:
+    /* To map vertices to indices */
+  graphedge arr[20];
+  map<std::string,int> mv;
+  vector<vector<edge> > adjList = vector<vector<edge> >(20);
+  /* to check whether undirected or directed graph */
+  int flag;
+  /* toal vertices count */
+  int count;
+  /* */
+  void constructGraph(string name);
+  void printpath(string vertex);
+  void addWeights(string name);
+  string vname(int index);
+  void createcolorfile(string name);
+  void createdotfile(string name);
+  void removeedge(string str1, string str2, int weight);
+//  void removeedge(int i1, int i2);
+  void insertedge(string str1, string str2, int weight);
+  void insertvertex(string str);
+  void removevertex(string str);
+  int findarrIndex(string vertex, int size);
+  void printdistarr();
+  void percolateDown(int index, int size);
+  void swapnodes(int i, int j);
+  void initarr();
+  void minheapify(int i);
+  void updateDistance(string vertex, int val, int size, string pred);
+  void dijkstra(string vertex);
+};
+
+#endif
+#include "graph.h"
+#include <algorithm>
+#include <sstream>
+
+void testcase1()
+{
+  cout << endl << endl << "*****Begin of Testcase1 Execution*****" << endl << endl;
+  graph g1;
+  g1.constructGraph("fig1.csv");
+  cout << "Constructed graph from file fig1.csv" << endl;
+  cout << "list of all vertices is " << endl;
+  for (std::map<string,int>::iterator it = g1.mv.begin(); it != g1.mv.end(); it++)
+  {
+    cout << it->first << ", " << it->second << "   ";
+  }
+  cout << endl << "Adjaceny list is " << endl;
+  for (int i = 1 ; i <= g1.count ; i++)
+  {
+    cout << i << "-->";
+    for (vector<edge>::size_type e = 0; e < g1.adjList[i].size(); e++)
+    {
+      cout << g1.adjList[i][e].vertex() << "(" << g1.adjList[i][e].weight() << ")";
+      (e == g1.adjList[i].size()-1) ? cout << endl : cout << ", ";
+    }
+    cout << endl;
+  }
+  g1.createdotfile("t1.dot");
+  cout << "Created dot file t1.dot " << endl;
+  cout << endl << endl << "*****End of Testcase1 Execution*****" << endl << endl;
+}
+
+void testcase2()
+{
+  cout << endl << endl << "*****Begin of Testcase2 Execution*****" << endl << endl;
+  graph g2;
+  g2.constructGraph("fig2.csv");
+  cout << "Constructed graph from file fig2.csv" << endl;
+  cout << "list of all vertices is " << endl;
+  for (std::map<string,int>::iterator it = g2.mv.begin(); it != g2.mv.end(); it++)
+  {
+    cout << it->first << ", " << it->second << "   ";
+  }
+  cout << endl << "Adjaceny list is " << endl;
+  for (int i = 1 ; i <= g2.count ; i++)
+  {
+    cout << i << "-->";
+    for (vector<edge>::size_type e = 0; e < g2.adjList[i].size(); e++)
+    {
+      cout << g2.adjList[i][e].vertex() << "(" << g2.adjList[i][e].weight() << ")";
+      (e == g2.adjList[i].size()-1) ? cout << endl : cout << ", ";
+    }
+    cout << endl;
+  }
+  g2.createdotfile("t2.dot");
+  cout << "Created dot file t2.dot " << endl;
+  cout << endl << endl << "*****End of Testcase2 Execution*****" << endl << endl;
+}
+
+void testcase3()
+{
+  cout << endl << endl << "*****Begin of Testcase3 Execution*****" << endl << endl;
+  graph g3;
+  g3.constructGraph("fig3.csv");
+  cout << "constructed graph from fig3.csv file" << endl;
+  cout << "list of all vertices is " << endl;
+  for (std::map<string,int>::iterator it = g3.mv.begin(); it != g3.mv.end(); it++)
+  {
+    cout << it->first << ", " << it->second << "   ";
+  }
+  cout << endl << "Adjaceny list is " << endl;
+  for (int i = 1 ; i <= g3.count ; i++)
+  {
+    cout << i << "-->";
+    for (vector<edge>::size_type e = 0; e < g3.adjList[i].size(); e++)
+    {
+      cout << g3.adjList[i][e].vertex() << "(" << g3.adjList[i][e].weight() << ")";
+      (e == g3.adjList[i].size()-1) ? cout << endl : cout << ", ";
+    }
+    cout << endl;
+  }
+  g3.addWeights("fig3-w.csv");
+  cout << "Adding weights to the graph from fig3-w.csv" << endl;
+  cout << endl << "Adjaceny list is " << endl;
+  for (int i = 1 ; i <= g3.count ; i++)
+  {
+    cout << i << "-->";
+    for (vector<edge>::size_type e = 0; e < g3.adjList[i].size(); e++)
+    {
+      cout << g3.adjList[i][e].vertex() << "(" << g3.adjList[i][e].weight() << ")";
+      (e == g3.adjList[i].size()-1) ? cout << endl : cout << ", ";
+    }
+    cout << endl;
+  }
+  g3.createdotfile("t3.dot");
+  cout << "Created dot file t3.dot " << endl;
+  cout << endl << endl << "*****End of Testcase3 Execution*****" << endl << endl;
+}
+
+void testcase4()
+{
+  cout << endl << endl << "*****Begin of Testcase4 Execution*****" << endl << endl;
+  graph g4;
+  g4.constructGraph("fig1.csv");
+  cout << "list of all vertices is " << endl;
+  for (std::map<string,int>::iterator it = g4.mv.begin(); it != g4.mv.end(); it++)
+  {
+    cout << it->first << ", " << it->second << "   ";
+  }
+  cout << endl << "Adjaceny list is " << endl;
+  for (int i = 1 ; i <= g4.count ; i++)
+  {
+    cout << i << "-->";
+    for (vector<edge>::size_type e = 0; e < g4.adjList[i].size(); e++)
+    {
+      cout << g4.adjList[i][e].vertex() << "(" << g4.adjList[i][e].weight() << ")";
+      (e == g4.adjList[i].size()-1) ? cout << endl : cout << ", ";
+    }
+    cout << endl;
+  }
+//  g4.createdotfile("t1.dot");
+  g4.insertvertex("z");
+  cout << "Added the vertex \"z\" to the graph" << endl;
+  g4.insertedge("z", "w", 1);
+  g4.insertedge("w", "z", 1);
+  cout << "Inserted the edge between \"z\" and \"w\" " << endl;
+  g4.insertedge("z", "x", 1);
+  g4.insertedge("x", "z", 1);
+  cout << "Inserted the edge between \"z\" and \"x\" " << endl;
+  g4.insertedge("z", "y", 1);
+  g4.insertedge("y", "z", 1);
+  cout << "Inserted the edge between \"z\" and \"y\" " << endl;
+  g4.createdotfile("t4a.dot");
+  cout << "Created dot file t4a.dot" << endl;
+  g4.removevertex("s");
+  cout << "Removed the vertext \"s\" from the graph " << endl;
+  g4.removevertex("x");
+  cout << "Removed the vertext \"x\" from the graph " << endl;
+  g4.removeedge("u","t",1);
+  g4.removeedge("t","u",1);
+  cout << "Removed the edge between \"u\" and \"t\" from the graph" << endl;
+  g4.createdotfile("t4b.dot");
+  cout << "Created dot file t4b.dot" << endl;
+  cout << endl << endl << "*****End of Testcase4 Execution*****" << endl << endl;
+
+}
+
+void testcase5()
+{
+  cout << endl << endl << "*****Begin of Testcase5 Execution*****" << endl << endl;
+  graph g5;
+  g5.count = 0;
+  g5.flag = 0;
+  g5.insertedge("6","7",1);
+  g5.insertedge("7","6",1);
+  cout << "Inserted a new edge between \"6\" and \"7\" to the graph" << endl;
+  g5.insertedge("7","8",1);
+  g5.insertedge("8","7",1);
+  cout << "Inserted a new edge between \"7\" and \"8\" to the graph" << endl;
+  g5.insertedge("8","9",1);
+  g5.insertedge("9","8",1);
+  cout << "Inserted a new edge between \"8\" and \"9\" to the graph" << endl;
+  g5.insertedge("9","10",1);
+  g5.insertedge("10","9",1);
+  cout << "Inserted a new edge between \"9\" and \"10\" to the graph" << endl;
+  g5.insertedge("10","6",1);
+  g5.insertedge("6","10",1);
+  cout << "Inserted a new edge between \"6\" and \"10\" to the graph" << endl;
+  g5.insertvertex("1");
+  g5.insertvertex("2");
+  g5.insertvertex("3");
+  g5.insertvertex("4");
+  g5.insertvertex("5");
+  cout << "Inserted vertices 1,2,3,4,5 to the graph" << endl;
+  g5.insertedge("1","6",1);
+  g5.insertedge("6","1",1);
+  cout << "Inserted a new edge between \"6\" and \"1\" to the graph" << endl;
+  g5.insertedge("2","7",1);
+  g5.insertedge("7","2",1);
+  cout << "Inserted a new edge between \"2\" and \"7\" to the graph" << endl;
+  g5.insertedge("3","8",1);
+  g5.insertedge("8","3",1);
+  cout << "Inserted a new edge between \"3\" and \"8\" to the graph" << endl;
+  g5.insertedge("4","9",1);
+  g5.insertedge("9","4",1);
+  cout << "Inserted a new edge between \"4\" and \"9\" to the graph" << endl;
+  g5.insertedge("5","10",1);
+  g5.insertedge("10","5",1);
+  cout << "Inserted a new edge between \"5\" and \"10\" to the graph" << endl;
+  g5.createdotfile("t5a.dot");
+  cout << "Created dot file t5a.dot" << endl;
+  g5.removevertex("8");
+  cout << "Removed the vertex \"8\" from the graph" << endl;
+  g5.removevertex("6");
+  cout << "Removed the vertex \"6\" from the graph" << endl;
+  g5.createdotfile("t5b.dot");
+  cout << "Created dot file t5b.dot" << endl;
+  cout << endl << endl << "*****End of Testcase5 Execution*****" << endl << endl;
+
+}
+
+void testcase6()
+{
+  cout << endl << endl << "*****Begin of Testcase6 Execution*****" << endl << endl;
+  graph g6;
+  g6.count = 0;
+  /* Make the grph directed */
+  g6.flag = 1;
+  g6.insertvertex("2");
+  g6.insertvertex("4");
+  g6.insertvertex("6");
+  g6.insertvertex("8");
+  g6.insertvertex("10");
+  cout << "Inserted vertices 2,4,6,8,10 to the graph" << endl;
+  g6.insertedge("2","4",1);
+  cout << "Inserted a new edge between \"2\" and \"4\" to the graph" << endl;
+  g6.insertedge("2","6",1);
+  cout << "Inserted a new edge between \"2\" and \"6\" to the graph" << endl;
+  g6.insertedge("4","6",1);
+  cout << "Inserted a new edge between \"4\" and \"6\" to the graph" << endl;
+  g6.insertedge("4","8",1);
+  cout << "Inserted a new edge between \"4\" and \"8\" to the graph" << endl;
+  g6.insertedge("6","8",1);
+  cout << "Inserted a new edge between \"6\" and \"8\" to the graph" << endl;
+  g6.insertedge("6","10",1);
+  cout << "Inserted a new edge between \"6\" and \"10\" to the graph" << endl;
+  g6.insertedge("8","10",1);
+  cout << "Inserted a new edge between \"8\" and \"10\" to the graph" << endl;
+  g6.insertedge("8","2",1);
+  cout << "Inserted a new edge between \"8\" and \"2\" to the graph" << endl;
+  g6.insertvertex("1");
+  g6.insertvertex("3");
+  g6.insertvertex("5");
+  g6.insertvertex("7");
+  g6.insertvertex("9");
+  cout << "Inserted vertices 1,3,5,7,9 to the graph" << endl;
+  g6.insertedge("1","2",1);
+  cout << "Inserted a new edge between \"1\" and \"2\" to the graph" << endl;
+  g6.insertedge("3","4",1);
+  cout << "Inserted a new edge between \"3\" and \"4\" to the graph" << endl;
+  g6.insertedge("5","6",1);
+  cout << "Inserted a new edge between \"5\" and \"6\" to the graph" << endl;
+  g6.insertedge("7","8",1);
+  cout << "Inserted a new edge between \"7\" and \"8\" to the graph" << endl;
+  g6.insertedge("9","10",1);
+  cout << "Inserted a new edge between \"9\" and \"10\" to the graph" << endl;
+  g6.createdotfile("t6a.dot");
+  cout << "Created a dot file t6a.dot " << endl;
+  g6.removevertex("2");
+  cout << "Removed vertex \"2\" from the graph" << endl;
+  g6.removevertex("7");
+  cout << "Removed vertex \"7\" from the graph" << endl;
+  g6.createdotfile("t6b.dot");
+  cout << "Created a dot file t6b.dot " << endl;
+  cout << endl << endl << "*****End of Testcase6 Execution*****" << endl << endl;
+}
+
+void testcase7()
+{
+  cout << endl << endl << "*****Begin of Testcase7 Execution*****" << endl << endl;
+  graph g7;
+  g7.constructGraph("fig3.csv");
+  cout << "constructed graph from fig3.csv file" << endl;
+  cout << "list of all vertices is " << endl;
+  cout << "-----------------------------------" << endl;
+  for (std::map<string,int>::iterator it = g7.mv.begin(); it != g7.mv.end(); it++)
+  {
+    cout.width(6);cout << it->first;
+   // cout.width(6);cout << it->first << "(" << it->second << ")";
+  }
+  cout << endl << "------------------------------------" << endl;
+  g7.addWeights("fig3-w.csv");
+//  g7.arr = (graphedge *)malloc(sizeof(graphedge)*(g7.count));
+  g7.initarr();
+  for (std::map<string,int>::iterator it = g7.mv.begin(); it != g7.mv.end(); it++)
+  {
+    cout << endl << it->first << " ";
+    string vertexname = it->first;
+    g7.dijkstra(vertexname);
+    for (std::map<string,int>::iterator it2 = g7.mv.begin(); it2 != g7.mv.end(); it2++)
+    {
+      int findindex = g7.findarrIndex(it2->first, g7.count);
+      cout.width(6); cout << g7.arr[findindex].key;
+    }
+//    cout << endl << it->first << " ";
+/*    for (int i = 0; i < mindist.size(); i++)
+    {
+      cout.width(8);cout << mindist[i].dist;
+    }*/
+    g7.initarr();
+  }
+  cout << endl << "Adjaceny list is " << endl;
+  for (int i = 1 ; i <= g7.count ; i++)
+  {
+    cout << i << "-->";
+    for (vector<edge>::size_type e = 0; e < g7.adjList[i].size(); e++)
+    {
+      cout << g7.adjList[i][e].vertex() << "(" << g7.adjList[i][e].weight() << ")";
+      (e == g7.adjList[i].size()-1) ? cout << endl : cout << ", ";
+    }
+    cout << endl;
+  }
+
+  cout << endl << endl << "*****End of Testcase7 Execution*****" << endl << endl;
+
+}
+
+void testcase8()
+{
+  cout << endl << endl << "*****Begin of Testcase8 Execution*****" << endl << endl;
+  graph g8;
+  g8.flag = 0;
+  g8.insertvertex("s");
+  g8.insertvertex("t");
+  g8.insertvertex("x");
+  g8.insertvertex("y");
+  g8.insertvertex("z");
+  g8.insertedge("s", "t",10);
+  g8.insertedge("t", "s",10);
+  g8.insertedge("s","y",5);
+  g8.insertedge("y","s",5);
+  g8.insertedge("s","z",7);
+  g8.insertedge("z","s",7);
+  g8.insertedge("t","x",1);
+  g8.insertedge("x","t",1);
+  g8.insertedge("t","y",2);
+  g8.insertedge("y","t",2);
+  g8.insertedge("y","x",9);
+  g8.insertedge("x","y",9);
+  g8.insertedge("y","z",2);
+  g8.insertedge("z","y",2);
+  g8.insertedge("z","x",4);
+  g8.insertedge("x","z",4);
+  g8.createdotfile("t8a.dot");
+  g8.initarr();
+  cout << "list of all vertices is " << endl;
+  cout << "-----------------------------------" << endl;
+  for (std::map<string,int>::iterator it = g8.mv.begin(); it != g8.mv.end(); it++)
+  {
+    cout.width(6);cout << it->first;
+   // cout.width(6);cout << it->first << "(" << it->second << ")";
+  }
+  cout << endl << "------------------------------------" << endl;
+  for (std::map<string,int>::iterator it = g8.mv.begin(); it != g8.mv.end(); it++)
+  {
+    cout << it->first << " ";
+    string vertexname = it->first;
+    g8.dijkstra(vertexname);
+    for (std::map<string,int>::iterator it2 = g8.mv.begin(); it2 != g8.mv.end(); it2++)
+    {
+      int findindex = g8.findarrIndex(it2->first, g8.count);
+      cout.width(6); cout << g8.arr[findindex].key;
+    }
+    cout << endl;
+    g8.initarr();
+  }
+  cout << endl << endl << "*****End of Testcase8 Execution*****" << endl << endl;
+}
+
+void testcase9()
+{
+  cout << endl << endl << "*****Begin of Testcase9 Execution*****" << endl << endl;
+  graph g9;
+  g9.constructGraph("fig3.csv");
+  g9.addWeights("fig3-w.csv");
+  g9.initarr();
+  g9.dijkstra("s");
+  cout << endl << "------------------------------------------" << endl;
+          cout << "Vertex   The path from source vertex s    " << endl;
+          cout << "         to this vertex in G3             " << endl;
+          cout << "------------------------------------------" << endl;
+  for (std::map<string,int>::iterator it = g9.mv.begin(); it != g9.mv.end(); it++)
+  {
+    cout << it->first << "     ";
+    stringstream ss;
+    int findIndex = g9.findarrIndex(it->first, g9.count);
+    ss.str("");
+    while(g9.arr[findIndex].pred.compare("invalid") != 0)
+    {
+       ss << g9.arr[findIndex].pred << "---";
+       findIndex = g9.findarrIndex(g9.arr[findIndex].pred, g9.count);
+       if (findIndex == -1)
+	 break;
+    }
+    string mystr(ss.str());
+    reverse(mystr.begin(), mystr.end());
+    mystr.erase(0,3);
+    mystr.append("---");
+    mystr.append(it->first);
+    if (it->first.compare("s") == 0)
+    {
+      mystr = "nil";
+    }
+    cout << mystr << endl;
+  }
+  g9.initarr();
+  g9.dijkstra("z");
+  cout << endl << "------------------------------------------" << endl;
+          cout << "Vertex   The path from source vertex z    " << endl;
+          cout << "         to this vertex in G3             " << endl;
+          cout << "------------------------------------------" << endl;
+  for (std::map<string,int>::iterator it2 = g9.mv.begin(); it2 != g9.mv.end(); it2++)
+  {
+    cout << it2->first << "     ";
+    stringstream ss2;
+    int findIndex = g9.findarrIndex(it2->first, g9.count);
+    ss2.str("");
+    while(g9.arr[findIndex].pred.compare("invalid") != 0)
+    {
+       ss2 << g9.arr[findIndex].pred << "---";
+       findIndex = g9.findarrIndex(g9.arr[findIndex].pred, g9.count);
+       if (findIndex == -1)
+	 break;
+    }
+    string mystr2(ss2.str());
+    reverse(mystr2.begin(), mystr2.end());
+    mystr2.erase(0,3);
+    mystr2.append("---");
+    mystr2.append(it2->first);
+    if (it2->first.compare("z") == 0)
+    {
+      mystr2 = "nil";
+    }
+    cout << mystr2 << endl;
+  }
+
+
+  cout << endl << endl << "*****End of Testcase9 Execution*****" << endl << endl;
+}
+
+void testcase10()
+{
+  cout << endl << endl << "*****Begin of Testcase10 Execution*****" << endl << endl;
+  graph g10;
+  g10.flag = 0;
+  g10.insertvertex("s");
+  g10.insertvertex("t");
+  g10.insertvertex("x");
+  g10.insertvertex("y");
+  g10.insertvertex("z");
+  g10.insertedge("s", "t",10);
+  g10.insertedge("t", "s",10);
+  g10.insertedge("s","y",5);
+  g10.insertedge("y","s",5);
+  g10.insertedge("s","z",7);
+  g10.insertedge("z","s",7);
+  g10.insertedge("t","x",1);
+  g10.insertedge("x","t",1);
+  g10.insertedge("t","y",2);
+  g10.insertedge("y","t",2);
+  g10.insertedge("y","x",9);
+  g10.insertedge("x","y",9);
+  g10.insertedge("y","z",2);
+  g10.insertedge("z","y",2);
+  g10.insertedge("z","x",4);
+  g10.insertedge("x","z",4);
+//  g10.createdotfile("t10a.dot");
+  g10.initarr();
+  g10.dijkstra("s");
+  cout << endl << "------------------------------------------" << endl;
+          cout << "Vertex   The path from source vertex s    " << endl;
+          cout << "         to this vertex in G4             " << endl;
+          cout << "------------------------------------------" << endl;
+  for (std::map<string,int>::iterator it = g10.mv.begin(); it != g10.mv.end(); it++)
+  {
+    cout << it->first << "     ";
+    stringstream ss;
+    int findIndex = g10.findarrIndex(it->first, g10.count);
+    ss.str("");
+    while(g10.arr[findIndex].pred.compare("invalid") != 0)
+    {
+       ss << g10.arr[findIndex].pred << "---";
+       findIndex = g10.findarrIndex(g10.arr[findIndex].pred, g10.count);
+       if (findIndex == -1)
+	 break;
+    }
+    string mystr(ss.str());
+    reverse(mystr.begin(), mystr.end());
+    mystr.erase(0,3);
+    mystr.append("---");
+    mystr.append(it->first);
+    if (it->first.compare("s") == 0)
+    {
+      mystr = "nil";
+    }
+    cout << mystr << endl;
+  }
+  g10.initarr();
+  g10.dijkstra("z");
+  cout << endl << "------------------------------------------" << endl;
+          cout << "Vertex   The path from source vertex z    " << endl;
+          cout << "         to this vertex in G4             " << endl;
+          cout << "------------------------------------------" << endl;
+  for (std::map<string,int>::iterator it2 = g10.mv.begin(); it2 != g10.mv.end(); it2++)
+  {
+    cout << it2->first << "     ";
+    stringstream ss2;
+    int findIndex = g10.findarrIndex(it2->first, g10.count);
+    ss2.str("");
+    while(g10.arr[findIndex].pred.compare("invalid") != 0)
+    {
+       ss2 << g10.arr[findIndex].pred << "---";
+       findIndex = g10.findarrIndex(g10.arr[findIndex].pred, g10.count);
+       if (findIndex == -1)
+	 break;
+    }
+    string mystr2(ss2.str());
+    reverse(mystr2.begin(), mystr2.end());
+    mystr2.erase(0,3);
+    mystr2.append("---");
+    mystr2.append(it2->first);
+    if (it2->first.compare("z") == 0)
+    {
+      mystr2 = "nil";
+    }
+    cout << mystr2 << endl;
+  }
+  cout << endl << endl << "*****End of Testcase10 Execution*****" << endl << endl;
+
+}
+
+void testcase11()
+{
+  cout << endl << endl << "*****Begin of Testcase11 Execution*****" << endl << endl;
+  graph g11;
+  g11.constructGraph("fig3.csv");
+  g11.addWeights("fig3-w.csv");
+  g11.initarr();
+  graphedge ge;
+  ge.key = 0;
+  ge.vertex = "invalid";
+  string source="invalid";
+  for (std::map<string,int>::iterator it = g11.mv.begin(); it != g11.mv.end(); it++)
+  {
+  //  cout << it->first << " ";
+    string vertexname = it->first;
+    g11.dijkstra(vertexname);
+    for (int i = 0; i < g11.count; i++)
+    {
+      if ((g11.arr[i].key != 100000) &&(g11.arr[i].key > ge.key))
+      {
+        source = it->first;
+        ge.key = g11.arr[i].key;
+        ge.vertex = g11.arr[i].vertex;
+      }
+    }
+    g11.initarr();
+  }
+  g11.initarr();
+  g11.dijkstra(source);
+  cout << "Final longest cost path between two vertices is " << endl;
+  int findIndex = g11.findarrIndex(ge.vertex, g11.count);
+  stringstream s;
+  s.str("");
+  while(g11.arr[findIndex].vertex.compare("invalid") != 0)
+  {
+    s << g11.arr[findIndex].vertex << "---";
+    findIndex = g11.findarrIndex(g11.arr[findIndex].pred, g11.count);
+    if (findIndex == -1)
+      break;
+  }
+  string mystr(s.str());
+  reverse(mystr.begin(), mystr.end());
+  mystr.erase(0,3);
+/*  mystr.append("---");
+  mystr.append(it2->first);*/
+  cout << endl << mystr << endl;
+  g11.createcolorfile("t11.dot");
+  cout << endl << endl << "*****End of Testcase11 Execution*****" << endl << endl;
+}
+
+void testcase12()
+{
+  cout << endl << endl << "*****Begin of Testcase12 Execution*****" << endl << endl;
+  graph g12;
+  g12.flag = 0;
+  g12.insertvertex("s");
+  g12.insertvertex("t");
+  g12.insertvertex("x");
+  g12.insertvertex("y");
+  g12.insertvertex("z");
+  g12.insertedge("s", "t",10);
+  g12.insertedge("t", "s",10);
+  g12.insertedge("s","y",5);
+  g12.insertedge("y","s",5);
+  g12.insertedge("s","z",7);
+  g12.insertedge("z","s",7);
+  g12.insertedge("t","x",1);
+  g12.insertedge("x","t",1);
+  g12.insertedge("t","y",2);
+  g12.insertedge("y","t",2);
+  g12.insertedge("y","x",9);
+  g12.insertedge("x","y",9);
+  g12.insertedge("y","z",2);
+  g12.insertedge("z","y",2);
+  g12.insertedge("z","x",4);
+  g12.insertedge("x","z",4);
+//  g12.createdotfile("t12a.dot");
+  g12.initarr();
+  graphedge ge;
+  ge.key = 0;
+  ge.vertex = "invalid";
+  string source = "invalid";
+  for (std::map<string,int>::iterator it = g12.mv.begin(); it != g12.mv.end(); it++)
+  {
+    string vertexname = it->first;
+    g12.dijkstra(vertexname);
+    for (int i = 0; i < g12.count; i++)
+    {
+       if ((g12.arr[i].key != 100000) && (g12.arr[i].key > ge.key))
+       {
+         source = it->first;
+         ge.key = g12.arr[i].key;
+         ge.vertex = g12.arr[i].vertex;
+       }
+     }
+     g12.initarr();
+   }
+  g12.initarr();
+  g12.dijkstra(source);
+  cout << "Final longest cost path between two vertices is " << endl;
+  int findIndex = g12.findarrIndex(ge.vertex, g12.count);
+  stringstream s;
+  s.str("");
+  while(g12.arr[findIndex].vertex.compare("invalid") != 0)
+  {
+    s << g12.arr[findIndex].vertex << "---";
+    findIndex = g12.findarrIndex(g12.arr[findIndex].pred, g12.count);
+    if (findIndex == -1)
+      break;
+  }
+  string mystr(s.str());
+  reverse(mystr.begin(), mystr.end());
+  mystr.erase(0,3);
+/*  mystr.append("---");
+  mystr.append(it2->first);*/
+  cout << endl << mystr << endl;
+  g12.createcolorfile("t12.dot");
+
+  cout << endl << endl << "*****End of Testcase12 Execution*****" << endl << endl;
+}
+
+int main()
+{
+  testcase1();
+  testcase2();
+  testcase3();
+  testcase4();
+  testcase5();
+  testcase6();
+  testcase7();
+  testcase8();
+  testcase9();
+  testcase10();
+  testcase11();
+  testcase12();
+}
+The graph implementation contains the csv files and the adjaceny list
+is created from it. Both the directed and undirected graphs can be constructed 
+based on adjacency matrix created.
+The dijkstra alogirthm which is greedy based inserts a new
+vertex into the set, uses the priority queue to update the distances of
+popped vertcies at each stage. All the dot files were generated to verify the 
+implementation. The vertices were named as string used a map to convert the name to 
+vertex numbers for ease of implementation
+ strict digraph {  
+ node [shape= ellipse];
+s	t	x	y	z	y->t[color=red, label=3];
+s->y[color=red, label=5];
+z->s[color=red, label=7];
+x->z[color=red, label=4];
+
+s->t[ label=10];
+t->x[ label=1];
+t->y[ label=2];
+y->x[ label=9];
+y->z[ label=2];
+z->x[ label=6];
+}
+ strict graph {  
+ node [shape= ellipse];
+s	t	x	y	z	t--x[color=red, label=1];
+y--t[color=red, label=2];
+s--z[color=red, label=7];
+s--y[color=red, label=5];
+
+s--t[ label=10];
+t--s[ label=10];
+t--y[ label=2];
+x--t;
+x--y[ label=9];
+x--z[ label=4];
+y--s[ label=5];
+y--x[ label=9];
+y--z[ label=2];
+z--s[ label=7];
+z--y[ label=2];
+z--x[ label=4];
+}
+ strict graph {  
+ node [shape= ellipse];
+r	s	t	u	v	w	x	y	
+r--s;
+r--v;
+s--r;
+s--w;
+t--u;
+t--w;
+t--x;
+u--t;
+u--x;
+u--y;
+v--r;
+w--s;
+w--t;
+w--x;
+x--t;
+x--u;
+x--w;
+x--y;
+y--u;
+y--x;
+}
+ strict digraph {  
+ node [shape= ellipse];
+1	2	3	4	5	6	
+1->2;
+1->4;
+2->5;
+3->5;
+3->6;
+4->2;
+5->4;
+6->6;
+}
+ strict digraph {  
+ node [shape= ellipse];
+s	t	x	y	z	
+s->t[ label=10];
+s->y[ label=5];
+t->x[ label=1];
+t->y[ label=2];
+x->z[ label=4];
+y->t[ label=3];
+y->x[ label=9];
+y->z[ label=2];
+z->s[ label=7];
+z->x[ label=6];
+}
+ strict graph {  
+ node [shape= ellipse];
+r	s	t	u	v	w	x	y	z	
+r--s;
+r--v;
+s--r;
+s--w;
+t--u;
+t--w;
+t--x;
+u--t;
+u--x;
+u--y;
+v--r;
+w--s;
+w--t;
+w--x;
+w--z;
+x--t;
+x--u;
+x--w;
+x--y;
+x--z;
+y--u;
+y--x;
+y--z;
+z--w;
+z--x;
+z--y;
+}
+ strict graph {  
+ node [shape= ellipse];
+r	t	u	v	w	y	z	
+r--v;
+t--w;
+u--y;
+v--r;
+w--t;
+w--z;
+y--u;
+y--z;
+z--w;
+z--y;
+}
+ strict graph {  
+ node [shape= ellipse];
+1	10	2	3	4	5	6	7	8	9	
+1--6;
+10--9;
+10--6;
+10--5;
+2--7;
+3--8;
+4--9;
+5--10;
+6--7;
+6--10;
+6--1;
+7--6;
+7--8;
+7--2;
+8--7;
+8--9;
+8--3;
+9--8;
+9--10;
+9--4;
+}
+ strict graph {  
+ node [shape= ellipse];
+1	10	2	3	4	5	7	9	
+10--9;
+10--5;
+2--7;
+4--9;
+5--10;
+7--2;
+9--10;
+9--4;
+}
+ strict digraph {  
+ node [shape= ellipse];
+1	10	2	3	4	5	6	7	8	9	
+1->2;
+2->4;
+2->6;
+3->4;
+4->6;
+4->8;
+5->6;
+6->8;
+6->10;
+7->8;
+8->10;
+8->2;
+9->10;
+}
+ strict digraph {  
+ node [shape= ellipse];
+1	10	3	4	5	6	8	9	
+3->4;
+4->6;
+4->8;
+5->6;
+6->8;
+6->10;
+8->10;
+9->10;
+}
+ strict graph {  
+ node [shape= ellipse];
+s	t	x	y	z	
+s--t[ label=10];
+s--y[ label=5];
+s--z[ label=7];
+t--s[ label=10];
+t--x;
+t--y[ label=2];
+x--t;
+x--y[ label=9];
+x--z[ label=4];
+y--s[ label=5];
+y--t[ label=2];
+y--x[ label=9];
+y--z[ label=2];
+z--s[ label=7];
+z--y[ label=2];
+z--x[ label=4];
+}

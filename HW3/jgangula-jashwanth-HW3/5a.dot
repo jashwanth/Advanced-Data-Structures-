@@ -1,0 +1,33 @@
+digraph G { 
+null0[shape=point];
+   "0,0" -> null0 ;
+   "0,0" -> "665,15";
+   "665,15" -> "625,4";
+null1[shape=point];
+   "625,4" -> null1 ;
+   "625,4" -> "665,14";
+   "665,14" -> "665,12";
+   "665,12" -> "663,8";
+null2[shape=point];
+   "663,8" -> null2 ;
+null3[shape=point];
+   "663,8" -> null3 ;
+null4[shape=point];
+   "665,12" -> null4 ;
+null5[shape=point];
+   "665,14" -> null5 ;
+   "665,15" -> "666,11";
+null6[shape=point];
+   "666,11" -> null6 ;
+   "666,11" -> "750,3";
+   "750,3" -> "671,7";
+   "671,7" -> "667,9";
+null7[shape=point];
+   "667,9" -> null7 ;
+null8[shape=point];
+   "667,9" -> null8 ;
+null9[shape=point];
+   "671,7" -> null9 ;
+null10[shape=point];
+   "750,3" -> null10 ;
+}
